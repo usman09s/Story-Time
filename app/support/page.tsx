@@ -109,16 +109,16 @@ export default function Support() {
     />
 
     <label htmlFor="link">
-      <Image src={'/assets/Link.png'} alt="Link Icon" width={30} height={30} className="top-2  absolute cursor-pointer"/>
+      <Image src={'/assets/Link.jpg'} alt="Link Icon" width={30} height={30} className="top-2  absolute cursor-pointer"/>
     </label>
     <input
       type="text"
       id="link"
       placeholder="Type a message..."
-      className="bg-backGroundColor rounded-md p-2 flex-grow mr-2 border-none px-20 p-10"
+      className="bg-backGroundColor rounded-md  flex-grow mr-2 border-none px-20 p-10"
     />
 
-    <Image src={'/assets/Send.png'} alt="Send Icon" width={45} height={30} className="right-5 absolute cursor-pointer"/>
+    <Image src={'/assets/send.png'} alt="Send Icon" width={45} height={30} className="right-5 absolute cursor-pointer"/>
   </div>
 </div>
 </div>

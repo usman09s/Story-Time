@@ -63,7 +63,7 @@ Save
       <div className="w-2/5   bg-white mx-2 p-10 mt-2 border-l-2 border-dashed border-[#E4E4E4] rounded-lg">
         <p className="mb-5  font-bold text-3xl">Update Logs</p>
         <p className="text-md">April 23, 2023</p>
-        <div className="p-4 bg-black">
+        <div className="p-4 ">
 
         </div>
         <div className="flex flex-col space-y-2  p-3">

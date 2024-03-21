@@ -1,12 +1,14 @@
 "use client";
-import React from "react";
-import DashboardLayout from "../layouts/Dashboard";
-import CategoryLayout from "../layouts/CategoryLayout";
 import { Card } from "@/components/Card";
-import { getCategories } from "@/API/categories.api";
+import DashboardLayout from "@/app/layouts/Dashboard";
+import CategoryLayout from "@/app/layouts/CategoryLayout";
 import { useQuery } from "@tanstack/react-query";
+import { getSubCategories } from "@/API/categories.api";
 
 interface Params {
+  params: {
+    parentId: string;
+  };
   searchParams: {
     page: number;
     limit: number;
@@ -14,30 +16,35 @@ interface Params {
   };
 }
 
-export default function Category({ searchParams }: Params) {
+export default function SubCategory({ params, searchParams }: Params) {
+  const { parentId } = params;
   const { page, limit, search } = searchParams;
 
   // const { data, isLoading } = useQuery({
-  //   queryKey: ["categories", page, limit, search],
-  //   queryFn: () => getCategories({ page, limit, search }),
+  //   queryKey: ["sub-categories", page, limit, search, parentId],
+  //   queryFn: () => getSubCategories({ id: parentId, page, limit, search }),
   // });
 
   return (
     <DashboardLayout active={2}>
       <div>
-        <CategoryLayout title="Category" buttonText="Add a Category" isCategory>
+        <CategoryLayout
+          title="Sub-Category"
+          buttonText="Add a Sub-Category"
+          isCategory={false}
+        >
           <Card
             status="Updated last 28 augest 2023"
             title="Work"
             image="work"
-            naviagtion
+            naviagtion={false}
           />
 
           <Card
             status="Updated last 28 augest 2023"
             title="Food"
             image="food"
-            naviagtion
+            naviagtion={false}
           />
         </CategoryLayout>
       </div>

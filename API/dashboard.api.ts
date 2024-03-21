@@ -2,18 +2,20 @@ import api from "./middleware";
 
 export const getUsers = async ({
   page,
+  limit,
   search,
-  filter,
+  status,
 }: {
   page: number;
+  limit: number;
   search: string;
-  filter: string;
+  status: string;
 }) => {
   try {
     const { data } = await api.get(
-      `/users?limit=15&page=${page || 1}&search=${search || ""}&filter=${
-        filter || "atoz"
-      }`
+      `/user/get-users?limit=${limit || 15}&page=${page || 1}&search=${
+        search || ""
+      }&status=${status || ""}`
     );
     return {
       success: true,

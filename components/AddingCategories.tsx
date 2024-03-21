@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -7,9 +6,12 @@ import Image from "next/image";
 import { Label } from "./ui/label";
 import { X } from "lucide-react";
 
-export default function AddingCategories({ title }: { title: string }) {
+export default function AddingCategories({ text }: { text: string }) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   // const [image, setImage] = useState<File | undefined>(undefined);
+
+  const [title, setTitle] = useState("");
+  const [file, setFile] = useState<File | undefined>(undefined);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -31,8 +33,8 @@ export default function AddingCategories({ title }: { title: string }) {
   return (
     <div className="mx-10">
       <section className="flex justify-between mt-7 h-10  items-center">
-        <h1 className="text-4xl font-bold text-[#093732]">{title}</h1>
-        <Button className={"bg-[#395E66] hover:bg-[#395e66d7] px-7 py-6"}>
+        <h1 className="text-4xl font-bold text-[#093732]">{text}</h1>
+        <Button className={"bg-primaryCol hover:bg-[#395e66d7] px-7 py-6"}>
           Save
         </Button>
       </section>

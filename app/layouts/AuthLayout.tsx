@@ -1,11 +1,6 @@
 import Image from "next/image";
 import React, { FC } from "react";
 import backgroundPicture from "@/public/assets/backgroundPicture.png";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import AuthButton from "@/components/ui/AuthButton/AuthButton";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -25,8 +20,8 @@ const AuthLayout: FC<AuthLayoutProps> = ({
       <div className="flex">
         <div className="w-1/2 relative z-10 h-screen flex justify-center items-center">
           <div className="flex flex-col gap-3 w-[340px]">
-            <h1 className="text-3xl text-[#395E66] font-bold">{title}</h1>
-            <h6 className="text-[#395E66]">{subTitle}</h6>
+            <h1 className="text-3xl text-primaryCol font-bold">{title}</h1>
+            <h6 className="text-primaryCol">{subTitle}</h6>
             {children}
 
           </div>

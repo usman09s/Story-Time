@@ -53,3 +53,23 @@ export const getSubCategories = async ({
     };
   }
 };
+
+export const createCategory = async (formData: FormData) => {
+  try {
+    const response = await api.post("/category", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return {
+      success: true,
+      response: response,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    };
+  }
+};

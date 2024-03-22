@@ -30,14 +30,16 @@ export default function Category({ searchParams }: Params) {
             status="Updated last 28 augest 2023"
             title="Work"
             image="work"
-            naviagtion
+            navigation
+            id="id"
           />
 
           <Card
             status="Updated last 28 augest 2023"
             title="Food"
             image="food"
-            naviagtion
+            navigation
+            id="id"
           />
         </CategoryLayout>
       </div>

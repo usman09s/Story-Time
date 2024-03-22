@@ -10,7 +10,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory } from "@/API/categories.api";
 import { toast } from "sonner";
 
-export default function AddingCategories({ text }: { text: string }) {
+export default function AddingCategories({
+  text,
+  id,
+}: {
+  text: string;
+  id?: string;
+}) {
   const queryClient = useQueryClient();
 
   const [image, setImage] = useState<string>("");
@@ -35,7 +41,10 @@ export default function AddingCategories({ text }: { text: string }) {
   // Creating category
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createCategory,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["category"] }),
+    onSuccess: () => {
+      const queryKey = id ? ["sub-categories"] : ["categories"];
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    }
   });
 
   // Create handler
@@ -47,6 +56,7 @@ export default function AddingCategories({ text }: { text: string }) {
     const formData = new FormData();
     formData.append("name", title);
     formData.append("image", file);
+    id && formData.append("parent", id);
 
     const { success, response } = await mutateAsync(formData);
     if (!success) return toast.error(response);
@@ -127,14 +137,18 @@ export default function AddingCategories({ text }: { text: string }) {
               )}
             </div>
           </div>
-          
         </div>
         <div className="mt-10 flex flex-col justify-start ml-5">
           <Button
             variant={"outline"}
-            className="border-[#AAAAAA] py-7  flex gap-2 items-center"
+            className="border-[#AAAAAA] py-7 flex gap-2 items-center"
           >
-            <Pencil className="text-primaryCol" fill="#395E66" stroke="#fff" strokeWidth={1}/>
+            <Pencil
+              className="text-primaryCol"
+              fill="#395E66"
+              stroke="#fff"
+              strokeWidth={1}
+            />
             Editing Draft Version
           </Button>
           <Button

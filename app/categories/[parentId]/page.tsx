@@ -32,19 +32,22 @@ export default function SubCategory({ params, searchParams }: Params) {
           title="Sub-Category"
           buttonText="Add a Sub-Category"
           isCategory={false}
+          id={parentId}
         >
           <Card
             status="Updated last 28 augest 2023"
             title="Work"
             image="work"
-            naviagtion={false}
+            navigation={false}
+            id="id"
           />
 
           <Card
             status="Updated last 28 augest 2023"
             title="Food"
             image="food"
-            naviagtion={false}
+            navigation={false}
+            id="id"
           />
         </CategoryLayout>
       </div>

@@ -9,12 +9,13 @@ interface card {
   image: string;
   title: string;
   status: string;
-  naviagtion: boolean;
+  navigation: boolean;
+  id?: string;
 }
-export const Card: FC<card> = ({ image, status, title, naviagtion }) => {
+export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="w-64 border-2 border-[#DBDBDB]  h-[270px] p-3 rounded-2xl">
+    <div className="w-64 border-2 border-[#DBDBDB] h-[270px] p-3 rounded-2xl flex flex-col justify-between">
       <div className="flex justify-end">
         <Image
           src={`/assets/More.png`}
@@ -27,7 +28,7 @@ export const Card: FC<card> = ({ image, status, title, naviagtion }) => {
       </div>
       {open ? <DeleteCategories /> : null}
       <div className="flex flex-col justify-between items-center">
-        <Link href={`${naviagtion ? "/categories/subCategories" : ""}`}>
+        <Link href={navigation ? `/categories/${id}` : ""}>
           <Image
             alt="Category Picture"
             src={`/assets/${image}.png`}

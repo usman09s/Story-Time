@@ -1,21 +1,22 @@
-"use client";
-import DashboardLayout from "../layouts/Dashboard";
-import Editor from "@/components/Editor";
+"use client"
+import DashboardLayout from "../../layouts/Dashboard";
 import Link from "next/link";
+import Editor from "@/components/Editor";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { createGuideline, getGuideline } from "@/API/guideline.api";
+import { toast } from "sonner";
 
-export default function GuidelinePage() {
+export default function PrivacyPolicy() {
+
   const queryClient = useQueryClient();
   const [value, setValue] = useState("");
 
   // // Fetching content
   // const { data, isLoading } = useQuery({
-  //   queryKey: ["terms"],
-  //   queryFn: () => getGuideline("TermsAndConditions"),
+  //   queryKey: ["privacy-poilcy"],
+  //   queryFn: () => getGuideline("PrivacyPolicy"),
   // });
 
   // useEffect(() => {
@@ -27,15 +28,15 @@ export default function GuidelinePage() {
   // // Creating/updating content
   // const { mutateAsync, isPending } = useMutation({
   //   mutationFn: createGuideline,
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["terms"] }),
+  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["privacy-poilcy"] }),
   // });
 
   // const handleSubmit = async () => {
   //   if (!value) return toast.error("Content is required");
   //   const { success, response } = await mutateAsync({
-  //     type: "TermsAndConditions",
+  //     type: "PrivacyPolicy",
   //     content: value,
-  //     title: "Terms And Conditions",
+  //     title: "Privacy Policy",
   //   });
   //   if (!success) return toast.error(response);
   //   toast.success("Content updated");
@@ -44,20 +45,17 @@ export default function GuidelinePage() {
   return (
     <DashboardLayout active={5}>
       <div className="px-10">
-        <h1 className="text-5xl text-[#093732] font-bold">
-          Terms And Conditions
-        </h1>
+        <h1 className="text-5xl text-[#093732] font-bold">Privacy Policy</h1>
 
         <div className="flex gap-20 my-14">
-          <h4 className="font-bold  border-b-4 border-[#093732]">
-            Terms & Condition
+          <h4 className="opacity-80">
+            <Link href={"/guideline"}>Terms & Condition</Link>
           </h4>
           <h4 className="opacity-80">
             <Link href={"/guideline/faqs"}>FAQs</Link>
           </h4>
-          <h4 className="opacity-80">
-            <Link href={"/guideline/privacy"}>Privacy Policy</Link>
-          </h4>
+          <h4 className="font-bold  border-b-4 border-[#093732]">Privacy Policy</h4>
+
         </div>
         <div className="flex gap-4">
           <div className="w-3/4">

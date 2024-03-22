@@ -1,21 +1,21 @@
 "use client";
-import DashboardLayout from "../layouts/Dashboard";
-import Editor from "@/components/Editor";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { createGuideline, getGuideline } from "@/API/guideline.api";
+import DashboardLayout from "../../layouts/Dashboard";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import Editor from "@/components/Editor";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-export default function GuidelinePage() {
+export default function Faqs() {
   const queryClient = useQueryClient();
   const [value, setValue] = useState("");
 
   // // Fetching content
   // const { data, isLoading } = useQuery({
-  //   queryKey: ["terms"],
-  //   queryFn: () => getGuideline("TermsAndConditions"),
+  //   queryKey: ["faqs"],
+  //   queryFn: () => getGuideline("FAQs"),
   // });
 
   // useEffect(() => {
@@ -27,15 +27,15 @@ export default function GuidelinePage() {
   // // Creating/updating content
   // const { mutateAsync, isPending } = useMutation({
   //   mutationFn: createGuideline,
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["terms"] }),
+  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["faqs"] }),
   // });
 
   // const handleSubmit = async () => {
   //   if (!value) return toast.error("Content is required");
   //   const { success, response } = await mutateAsync({
-  //     type: "TermsAndConditions",
+  //     type: "FAQs",
   //     content: value,
-  //     title: "Terms And Conditions",
+  //     title: "FAQs",
   //   });
   //   if (!success) return toast.error(response);
   //   toast.success("Content updated");
@@ -44,17 +44,13 @@ export default function GuidelinePage() {
   return (
     <DashboardLayout active={5}>
       <div className="px-10">
-        <h1 className="text-5xl text-[#093732] font-bold">
-          Terms And Conditions
-        </h1>
+        <h1 className="text-5xl text-[#093732] font-bold">FAQs</h1>
 
         <div className="flex gap-20 my-14">
-          <h4 className="font-bold  border-b-4 border-[#093732]">
-            Terms & Condition
-          </h4>
           <h4 className="opacity-80">
-            <Link href={"/guideline/faqs"}>FAQs</Link>
+            <Link href={"/guideline"}>Terms & Condition</Link>
           </h4>
+          <h4 className="font-bold  border-b-4 border-[#093732]">FAQs</h4>
           <h4 className="opacity-80">
             <Link href={"/guideline/privacy"}>Privacy Policy</Link>
           </h4>

@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import AuthLayout from "../layouts/AuthLayout";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";

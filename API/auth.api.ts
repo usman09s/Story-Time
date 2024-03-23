@@ -41,9 +41,50 @@ export const getCurrentUser = async () => {
   }
 };
 
-export const generateOTP = async (email: string) => {
+export const forgetPass = async (email: string) => {
   try {
-    const { data } = await api.post("/auth/otp", { email });
+    const { data } = await api.put("/auth/forget-password", { email });
+
+    return {
+      success: true,
+      response: data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    };
+  }
+};
+
+export const verifyResetToken = async (resetToken: string) => {
+  try {
+    const { data } = await api.put("/auth/verify-reset-token", { resetToken });
+
+    return {
+      success: true,
+      response: data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    };
+  }
+};
+
+export const resetPass = async ({
+  newPassword,
+  confirmPassword,
+}: {
+  newPassword: string;
+  confirmPassword: string;
+}) => {
+  try {
+    const { data } = await api.put("/auth/reset-password", {
+      newPassword,
+      confirmPassword,
+    });
 
     return {
       success: true,

@@ -3,7 +3,6 @@
 import {
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -19,7 +18,7 @@ import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export const ProfileSlider = ({}) => {
   const [EditMode, setEditMode] = useState(false);
@@ -41,7 +40,7 @@ export const ProfileSlider = ({}) => {
             Edit Details
           </div>
         </SheetTitle>
-        <SheetDescription className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col items-center justify-center">
           <div className="mt-16">
             <Image
               src={"/assets/user.png"}
@@ -75,56 +74,58 @@ export const ProfileSlider = ({}) => {
               </div>
             </div>
           ) : (
-            <form className="flex flex-col gap-4 mt-20 w-64">
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="firstname">First Name</Label>
-                <Input
-                  type="text"
-                  id="firstname"
-                  placeholder="First Name"
-                  className=""
-                  value={"Jason"}
-                />
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="lastname">Last Name</Label>
-                <Input
-                  type="text"
-                  id="lastname"
-                  placeholder="Last Name"
-                  value={"Griffin"}
-                />
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  type="text"
-                  id="username"
-                  placeholder="Username"
-                  value={"jaxongriff101"}
-                />
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  placeholder="Email"
-                  value={"jasongriffin@admin.com"}
-                />
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  type="password"
-                  id="password"
-                  placeholder="Password"
-                  value={"****************"}
-                />
-              </div>
-            </form>
+            <div>
+              <form className="flex flex-col gap-4 mt-20 w-64">
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="firstname">First Name</Label>
+                  <Input
+                    type="text"
+                    id="firstname"
+                    placeholder="First Name"
+                    className=""
+                    value={"Jason"}
+                  />
+                </div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="lastname">Last Name</Label>
+                  <Input
+                    type="text"
+                    id="lastname"
+                    placeholder="Last Name"
+                    value={"Griffin"}
+                  />
+                </div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    type="text"
+                    id="username"
+                    placeholder="Username"
+                    value={"jaxongriff101"}
+                  />
+                </div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    type="email"
+                    id="email"
+                    placeholder="Email"
+                    value={"jasongriffin@admin.com"}
+                  />
+                </div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    value={"****************"}
+                  />
+                </div>
+              </form>
+            </div>
           )}
-        </SheetDescription>
+        </div>
       </SheetHeader>
       {EditMode ? (
         <AlertDialog>
@@ -134,8 +135,7 @@ export const ProfileSlider = ({}) => {
             </Button>
           </AlertDialogTrigger>
           <ConfirmModal
-            text="Are you sure you want to discard 
-your edits?"
+            text="Are you sure you want to discard your edits?"
             title="Discard Edits"
           />
         </AlertDialog>
@@ -170,9 +170,9 @@ export function ConfirmModal({ text, title }: { text: string; title: string }) {
       <AlertDialogHeader>
         <AlertDialogDescription className="flex flex-col  gap-3 items-center mt-5 justify-center">
           <h1 className="text-3xl text-[#093732] font-bold">Save Edit</h1>
-          <p className="text-center mt-5 font-extrabold text-xl opacity-70 text-black">
+          <span className="text-center mt-5 font-extrabold text-xl opacity-70 text-black">
             {text}
-          </p>
+          </span>
           <AlertDialog>
             <AlertDialogTrigger asChild onClick={func}>
               <Button className=" rounded-2xl bg-[#395E66] hover:bg-[#395e66ce]  px-24 py-7 text-lg">

@@ -1,5 +1,5 @@
 "use client";
-import AuthLayout from "../layouts/AuthLayout";
+import AuthLayout from "../../layouts/AuthLayout";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import AuthButton from "@/components/ui/AuthButton/AuthButton";
@@ -8,6 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ForgetSchema } from "@/lib/AuthValidation";
 import ErrorMessage from "@/components/ErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { forgetPass } from "@/API/auth.api";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const ForgetPassword = () => {
   const {
@@ -16,9 +21,18 @@ const ForgetPassword = () => {
     formState: { errors, isSubmitting },
   } = useForm<ForgetFields>({ resolver: zodResolver(ForgetSchema) });
 
+  const router = useRouter();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: forgetPass,
+  });
+
   const onSubmit: SubmitHandler<ForgetFields> = async (data) => {
-    // Handle form submission
     console.log(data);
+    // const { success, response } = await mutateAsync(data.email);
+    // if (!success) return toast.error(response);
+    // console.log(response);
+    // router.push("/dashboard");
   };
 
   return (
@@ -40,7 +54,17 @@ const ForgetPassword = () => {
         {errors?.email?.message && (
           <ErrorMessage text={errors?.email?.message} />
         )}
-        <AuthButton buttonTitle={"Reset Password"} isModal={!errors?.email?.message} />
+        {/* <AuthButton
+          buttonTitle={"Reset Password"}
+          isModal={!errors?.email?.message}
+        /> */}
+        <Button
+          className="mt-7 py-7 text-white bg-primaryCol rounded-md text-md w-full hover:bg-[#395e66be]"
+          type="submit"
+          disabled={isPending}
+        >
+          Reset Password
+        </Button>
       </form>
     </AuthLayout>
   );

@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SigninFields } from "@/types/types";
 import { SignInSchema } from "@/lib/AuthValidation";
-import AuthButton from "@/components/ui/AuthButton/AuthButton";
 import ErrorMessage from "@/components/ErrorMessage";
 import { Button } from "@/components/ui/button";
 import { loginMutate } from "@/API/auth.api";
@@ -30,7 +29,6 @@ export default function Home() {
   });
 
   const onSubmit: SubmitHandler<SigninFields> = async (data) => {
-    console.log(data);
     const { success, response } = await mutateAsync({
       email: data.email,
       password: data.password,

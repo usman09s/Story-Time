@@ -2,13 +2,17 @@
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import AuthLayout from "../layouts/AuthLayout";
+import AuthLayout from "../../layouts/AuthLayout";
 import AuthButton from "@/components/ui/AuthButton/AuthButton";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ResetPasswordSchema } from "@/lib/AuthValidation";
 import { ResetPassword } from "@/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@/components/ErrorMessage";
+import { useMutation } from "@tanstack/react-query";
+import { resetPass } from "@/API/auth.api";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const {
@@ -17,8 +21,21 @@ export default function Home() {
     formState: { errors, isSubmitting },
   } = useForm<ResetPassword>({ resolver: zodResolver(ResetPasswordSchema) });
 
+  const router = useRouter();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: resetPass,
+  });
+
   const onSubmit: SubmitHandler<ResetPassword> = async (data) => {
     console.log(data);
+    // const { success, response } = await mutateAsync({
+    //   newPassword: data.password,
+    //   confirmPassword: data.confirmPassword,
+    // });
+    // if (!success) return toast.error(response);
+    // console.log(response);
+    // router.push("/dashboard");
   };
   return (
     <>
@@ -75,7 +92,11 @@ export default function Home() {
           </div>
           {errors?.password?.message || errors?.confirmPassword?.message ? (
             <ErrorMessage
-              text={errors?.confirmPassword?.message ?? errors?.password?.message ?? ""}
+              text={
+                errors?.confirmPassword?.message ??
+                errors?.password?.message ??
+                ""
+              }
             />
           ) : null}
           <AuthButton buttonTitle={"Sign In"} />

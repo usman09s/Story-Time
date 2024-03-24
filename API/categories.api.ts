@@ -11,11 +11,11 @@ export const getCategories = async ({
 }) => {
   try {
     const { data } = await api.get(
-      `/category?limit=${limit || 15}&page=${page || 1}&search=${search || ""}`
+      `/category?limit=${limit || 15}&page=${page || 1}`
     );
     return {
       success: true,
-      response: data,
+      response: data.data,
     };
   } catch (error: any) {
     return {
@@ -38,13 +38,13 @@ export const getSubCategories = async ({
 }) => {
   try {
     const { data } = await api.get(
-      `/category?parent=${id}&limit=${limit || 15}&page=${page || 1}&search=${
-        search || ""
+      `/category?parent=${id}&limit=${limit || 15}&page=${page || 1}${
+        search && `&search=${search}`
       }`
     );
     return {
       success: true,
-      response: data,
+      response: data.data,
     };
   } catch (error: any) {
     return {

@@ -13,9 +13,9 @@ export const getUsers = async ({
 }) => {
   try {
     const { data } = await api.get(
-      `/user/get-users?limit=${limit || 15}&page=${page || 1}&search=${
-        search || ""
-      }&status=${status || ""}`
+      `/user/get-users?limit=${limit || 15}&page=${page || 1}${
+        search && `&search=${search}`
+      }${status && `&status=${status}`}`
     );
     return {
       success: true,

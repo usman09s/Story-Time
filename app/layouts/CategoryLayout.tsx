@@ -30,7 +30,7 @@ export default function CategoryLayout({
           </Button>
         </Link>
       </div>
-      <div className="flex flex-wrap gap-4">{children}</div>
+      <div className="flex flex-wrap gap-4 pb-10">{children}</div>
     </div>
   );
 }

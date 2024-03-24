@@ -14,10 +14,12 @@ import { Button } from "@/components/ui/button";
 import { loginMutate } from "@/API/auth.api";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
+import { useAuth } from "@/store/AuthProvider";
 
 export default function Home() {
   const router = useRouter();
-
+  const { setUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -34,8 +36,16 @@ export default function Home() {
       password: data.password,
     });
     if (!success) return toast.error(response);
-    console.log(response)
-    // router.push("/dashboard");
+    if (response.user.role !== "admin")
+      return toast.error("Unauthorized Access!!!");
+    
+    toast.success("Login success");
+    setUser(response.user);
+    Cookies.set("session_local", response.accessToken, { expires: 7 });
+    Cookies.set("session", response.accessToken, { expires: 7 });
+    localStorage.setItem("access-token", response.accessToken);
+    // localStorage.setItem("refresh-token", response.refreshToken);
+    router.push("/dashboard");
   };
 
   return (

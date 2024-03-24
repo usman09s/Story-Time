@@ -1,16 +1,22 @@
-"use client"
+"use client";
+import { useAuth } from "@/store/AuthProvider";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 export const LogoutBtn = () => {
   const router = useRouter();
-
+  const { setUser } = useAuth();
   const handleLogout = async () => {
-    localStorage.removeItem("token");
-    // Cookies.remove("session");
+
+    setUser(undefined);
+    localStorage.removeItem("access-token");
+    // localStorage.removeItem("refresh-token");
+    Cookies.remove("session_local");
+    Cookies.remove("session");
     toast.success("Logged out successfully");
-    // router.push("/");
+    router.push("/dashboard");
   };
   return (
     <div className="space-y-3">

@@ -129,7 +129,7 @@ export const ProfileSlider = ({}) => {
       </SheetHeader>
       {EditMode ? (
         <AlertDialog>
-          <AlertDialogTrigger asChild>
+          <AlertDialogTrigger asChild className="">
             <Button className="bg-[#395E66] hover:bg-[#395e66df] py-7 text-lg">
               Save Details
             </Button>
@@ -168,8 +168,8 @@ export function ConfirmModal({ text, title }: { text: string; title: string }) {
       className={`h-[35%] w-[25%] ${open ? null : "hidden"} `}
     >
       <AlertDialogHeader>
-        <AlertDialogDescription className="flex flex-col  gap-3 items-center mt-5 justify-center">
-          <h1 className="text-3xl text-[#093732] font-bold">Save Edit</h1>
+        <div className="flex flex-col  gap-3 items-center mt-5 justify-center">
+          <h1 className="text-3xl text-[#093732] font-bold">{title}</h1>
           <span className="text-center mt-5 font-extrabold text-xl opacity-70 text-black">
             {text}
           </span>
@@ -184,7 +184,7 @@ export function ConfirmModal({ text, title }: { text: string; title: string }) {
           <AlertDialogCancel className="text-black" ref={ButtonRef}>
             Cancel
           </AlertDialogCancel>
-        </AlertDialogDescription>
+        </div>
       </AlertDialogHeader>
     </AlertDialogContent>
   );
@@ -194,20 +194,18 @@ export function DoneModal({ CloseFunction }: { CloseFunction: () => void }) {
   return (
     <AlertDialogContent className="h-[18%] w-[20%]  ">
       <AlertDialogHeader>
-        <AlertDialogDescription className="flex flex-col  gap-3 items-center mt-5 justify-center">
+        <div className="flex flex-col  gap-3 items-center mt-5 justify-center">
           <h1 className="text-2xl text-[#093732] font-bold">
             Successfully Saved
           </h1>
 
-          <AlertDialogCancel>
-            <Button
-              className=" rounded-2xl bg-[#395E66] hover:bg-[#395e66ce]  px-24 py-7 text-lg"
-              onClick={CloseFunction}
-            >
-              Back
-            </Button>
-          </AlertDialogCancel>
-        </AlertDialogDescription>
+          <Button
+            className=" rounded-2xl bg-[#395E66] hover:bg-[#395e66ce]  px-24 py-7 text-lg"
+            onClick={CloseFunction}
+          >
+            Back
+          </Button>
+        </div>
       </AlertDialogHeader>
     </AlertDialogContent>
   );

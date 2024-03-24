@@ -20,31 +20,31 @@ export function middleware(request: NextRequest) {
   ];
   const isPrivatePath = privatePaths.includes(path);
 
-  const token = request.cookies.get("session")?.value;
+  const token = request.cookies.get("session_local")?.value;
 
-  // if (isPublicPath && token) {
-  //   return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
-  // }
+  if (isPublicPath && token) {
+    return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
+  }
 
-  // if (isPrivatePath && !token) {
-  //   return NextResponse.redirect(new URL("/", request.nextUrl));
-  // }
+  if (isPrivatePath && !token) {
+    return NextResponse.redirect(new URL("/", request.nextUrl));
+  }
 }
 
 export const config = {
   matcher: [
     "/",
-    // "/forget-password",
-    // "/reset-password",
-    // "/about-us",
-    // "/categories",
-    // "/categories/addCategories",
-    // "/categories/addSubCategories",
-    // "/categories/subCategories",
-    // "/dashboard",
-    // "/faqs",
-    // "/guideline",
-    // "/push_notification",
-    // "/support",
+    "/forget-password",
+    "/reset-password",
+    "/about-us",
+    "/categories",
+    "/categories/addCategories",
+    "/categories/addSubCategories",
+    "/categories/subCategories",
+    "/dashboard",
+    "/faqs",
+    "/guideline",
+    "/push_notification",
+    "/support",
   ],
 };

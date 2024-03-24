@@ -1,31 +1,37 @@
-import z from 'zod'
+import z from "zod";
 
 export interface AuthModule {
-    title: string;
-    subText: string;
-    children: React.ReactNode;
-    additionalText?: string;
+  title: string;
+  subText: string;
+  children: React.ReactNode;
+  additionalText?: string;
 }
 
-
- interface SiginFields {
-email:string,
-password:string
+interface SiginFields {
+  email: string;
+  password: string;
 }
 
-export type SigninFields = z.infer<typeof SignInSchema>
+export type SigninFields = z.infer<typeof SignInSchema>;
 
-
- interface ForgetFields{
-    email:string
+interface ForgetFields {
+  email: string;
 }
 
-export type ForgetFields = z.infer<typeof ForgetSchema>
+export type ForgetFields = z.infer<typeof ForgetSchema>;
 
 interface ResetPassword {
-    password:string,
-    confirmPassword:string
+  password: string;
+  confirmPassword: string;
 }
 
-export type ResetPassword = z.infer<typeof ResetPasswordSchema>
+export type ResetPassword = z.infer<typeof ResetPasswordSchema>;
 
+export interface CategoryType {
+  _id: string;
+  image: string;
+  name: string;
+  parent: string | null;
+  updatedAt?: string;
+  createdAt: string;
+}

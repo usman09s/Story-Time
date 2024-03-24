@@ -12,34 +12,34 @@ export default function GuidelinePage() {
   const queryClient = useQueryClient();
   const [value, setValue] = useState("");
 
-  // // Fetching content
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["terms"],
-  //   queryFn: () => getGuideline("TermsAndConditions"),
-  // });
+  // Fetching content
+  const { data, isLoading } = useQuery({
+    queryKey: ["terms"],
+    queryFn: () => getGuideline("TermsAndConditions"),
+  });
+  console.log(data)
+  useEffect(() => {
+    if (!isLoading && data && data.success) {
+      setValue(data?.response?.content);
+    }
+  }, [data]);
 
-  // useEffect(() => {
-  //   if (!isLoading && data && data.success) {
-  //     setValue(data?.response?.content);
-  //   }
-  // }, [data]);
+  // Creating/updating content
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: createGuideline,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["terms"] }),
+  });
 
-  // // Creating/updating content
-  // const { mutateAsync, isPending } = useMutation({
-  //   mutationFn: createGuideline,
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["terms"] }),
-  // });
-
-  // const handleSubmit = async () => {
-  //   if (!value) return toast.error("Content is required");
-  //   const { success, response } = await mutateAsync({
-  //     type: "TermsAndConditions",
-  //     content: value,
-  //     title: "Terms And Conditions",
-  //   });
-  //   if (!success) return toast.error(response);
-  //   toast.success("Content updated");
-  // };
+  const handleSubmit = async () => {
+    if (!value) return toast.error("Content is required");
+    const { success, response } = await mutateAsync({
+      type: "TermsAndConditions",
+      content: value,
+      title: "Terms And Conditions",
+    });
+    if (!success) return toast.error(response);
+    toast.success("Content updated");
+  };
 
   return (
     <DashboardLayout active={5}>

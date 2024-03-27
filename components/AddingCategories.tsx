@@ -43,7 +43,7 @@ export default function AddingCategories({
     mutationFn: createCategory,
     onSuccess: () => {
       const queryKey = id ? ["sub-categories"] : ["categories"];
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: queryKey });
     }
   });
 

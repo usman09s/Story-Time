@@ -23,7 +23,7 @@ export default function GuidelinePage() {
       setValue(data?.response?.content);
     }
   }, [data]);
-
+  
   // Creating/updating content
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createGuideline,
@@ -43,7 +43,7 @@ export default function GuidelinePage() {
 
   return (
     <DashboardLayout active={5}>
-      <div className="px-10">
+      <div className="px-10 pb-10">
         <h1 className="text-5xl text-[#093732] font-bold">
           Terms And Conditions
         </h1>

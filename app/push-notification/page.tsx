@@ -1,34 +1,84 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/Dashboard";
 import PushInfomation from "@/components/PushInfomation";
 import { Button } from "@/components/ui/button";
 import Editor from "@/components/Editor";
 import { DatePicker } from "@/components/DatePicker";
-import QuillToolbar from "@/components/Toolbar";
-import { notificationData } from "@/types/data";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { getNotifications, pushNotification } from "@/API/notiifications";
 
 export default function NotificationPage() {
+  const queryClient = useQueryClient();
+  const [value, setValue] = useState("");
+  const [title, setTitle] = useState("");
+  const [sendToAll, setSendToAll] = useState(false);
+  const [date, setDate] = useState<Date | undefined>();
+
+  // Fetching all notifications
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["notifications"],
+  //   queryFn: () => getNotifications(),
+  // });
+  // // console.log(data);
+  // useEffect(() => {
+  //   if (!isLoading && data && data.success) {
+  //     setValue(data?.response?.content);
+  //   }
+  // }, [data]);
+
+  // Pushing Notification
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: pushNotification,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["notifications"] }),
+  });
+
+  const handleSubmit = async () => {
+    if (!value) return toast.error("Content is required");
+    if (!title) return toast.error("Title is required");
+    const { success, response } = await mutateAsync({
+      title,
+      message: value,
+      sendToAll,
+    });
+    if (!success) return toast.error(response);
+    toast.success("Notification sent");
+  };
+
   return (
     <DashboardLayout active={3}>
-      <div className="  p-7 flex justify-between ">
-        <h1 className="text-4xl  text-[#093732] font-bold">Push Notification</h1>
+      <div className="p-7 flex justify-between ">
+        <h1 className="text-4xl  text-primaryCol font-bold">
+          Push Notification
+        </h1>
       </div>
-      <div className="flex border-[#E4E4E4] rounded-lg border-2 m-5">
+      <div className="flex border-[#E4E4E4] rounded-lg border-2 m-5 mt-0">
         <div className="mt-2 w-full ml-2 rounded-lg   flex-col border-[#E4E4E4] border">
           <div className="bg-white  pb-6 rounded-md ">
-            <PushInfomation />
+            <PushInfomation
+              date={date}
+              sendToAll={sendToAll}
+              setDate={setDate}
+              setSendToAll={setSendToAll}
+              setTitle={setTitle}
+              title={title}
+            />
           </div>
 
-          <div className="p-5 mt-6 bg-white  ">
+          <div className="p-5 bg-white  ">
             <div className="min-h-[530px]  border-2 border-[#E4E4E4]">
-              <QuillToolbar />
-
-              <Editor value={notificationData as string} />
+              <Editor value={value} setValue={setValue} />
             </div>
           </div>
 
           <div className="flex justify-center mt-5">
-            <Button className="bg-[#395E66]  px-20 hover:bg-[#395e66b9]">
+            <Button
+              onClick={handleSubmit}
+              disabled={isPending}
+              className="bg-primaryCol  px-20 hover:bg-[#395e66b9]"
+            >
               Push Now
             </Button>
           </div>

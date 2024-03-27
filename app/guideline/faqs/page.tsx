@@ -43,7 +43,7 @@ export default function Faqs() {
 
   return (
     <DashboardLayout active={5}>
-      <div className="px-10">
+      <div className="px-10 pb-10">
         <h1 className="text-5xl text-[#093732] font-bold">FAQs</h1>
 
         <div className="flex gap-20 my-14">

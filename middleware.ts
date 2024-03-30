@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
   ];
   const isPrivatePath = privatePaths.includes(path);
 
-  const token = request.cookies.get("session_local")?.value;
+  const token = request.cookies.get("session")?.value;
 
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL("/dashboard", request.nextUrl));

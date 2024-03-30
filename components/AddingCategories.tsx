@@ -9,6 +9,7 @@ import { convertImage } from "@/lib/convertImage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory } from "@/API/categories.api";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function AddingCategories({
   text,
@@ -22,6 +23,8 @@ export default function AddingCategories({
   const [image, setImage] = useState<string>("");
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | undefined>(undefined);
+
+  const router = useRouter();
 
   const handleFileChange = async (file: any) => {
     try {
@@ -44,7 +47,7 @@ export default function AddingCategories({
     onSuccess: () => {
       const queryKey = id ? ["sub-categories"] : ["categories"];
       queryClient.invalidateQueries({ queryKey: queryKey });
-    }
+    },
   });
 
   // Create handler
@@ -60,7 +63,9 @@ export default function AddingCategories({
 
     const { success, response } = await mutateAsync(formData);
     if (!success) return toast.error(response);
+    console.log(response);
     toast.success("Category added");
+    router.push("/categories");
   };
 
   return (
@@ -69,6 +74,7 @@ export default function AddingCategories({
         <h1 className="text-4xl font-bold text-[#093732]">{text}</h1>
         <Button
           onClick={handleSubmit}
+          disabled={isPending}
           className={"bg-primaryCol hover:bg-[#395e66d7] px-7 py-6"}
         >
           Save

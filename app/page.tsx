@@ -38,13 +38,11 @@ export default function Home() {
     if (!success) return toast.error(response);
     if (response.user.role !== "admin")
       return toast.error("Unauthorized Access!!!");
-    
+
     toast.success("Login success");
     setUser(response.user);
-    Cookies.set("session_local", response.accessToken, { expires: 7 });
     Cookies.set("session", response.accessToken, { expires: 7 });
     localStorage.setItem("access-token", response.accessToken);
-    // localStorage.setItem("refresh-token", response.refreshToken);
     router.push("/dashboard");
   };
 

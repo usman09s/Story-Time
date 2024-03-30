@@ -17,13 +17,13 @@ export default function GuidelinePage() {
     queryKey: ["terms"],
     queryFn: () => getGuideline("TermsAndConditions"),
   });
-  console.log(data)
+
   useEffect(() => {
     if (!isLoading && data && data.success) {
-      setValue(data?.response?.content);
+      setValue(data?.response?.guidelines[0].content);
     }
   }, [data]);
-  
+
   // Creating/updating content
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createGuideline,
@@ -65,7 +65,7 @@ export default function GuidelinePage() {
 
             <div className="flex justify-center mt-5">
               <Button
-                // onClick={handleSubmit}
+                onClick={handleSubmit}
                 className="bg-[#395E66] px-24 py-6 hover:bg-[#395e66b9]"
               >
                 Save

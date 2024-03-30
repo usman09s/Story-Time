@@ -51,6 +51,10 @@ export default function Category({ searchParams }: Params) {
         {data && data.success && data.response && data.response.pagination && (
           <Pagination data={data.response.pagination} />
         )}
+        {!data ||
+          (!data.response && (
+            <h2 className="text-black text-4xl font-bold ml-10">No results</h2>
+          ))}
       </div>
     </DashboardLayout>
   );

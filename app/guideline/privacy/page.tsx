@@ -13,34 +13,34 @@ export default function PrivacyPolicy() {
   const queryClient = useQueryClient();
   const [value, setValue] = useState("");
 
-  // // Fetching content
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["privacy-poilcy"],
-  //   queryFn: () => getGuideline("PrivacyPolicy"),
-  // });
+  // Fetching content
+  const { data, isLoading } = useQuery({
+    queryKey: ["privacy-poilcy"],
+    queryFn: () => getGuideline("PrivacyPolicy"),
+  });
 
-  // useEffect(() => {
-  //   if (!isLoading && data && data.success) {
-  //     setValue(data?.response?.content);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (!isLoading && data && data.success) {
+      setValue(data?.response?.guidelines[0].content);
+    }
+  }, [data]);
 
-  // // Creating/updating content
-  // const { mutateAsync, isPending } = useMutation({
-  //   mutationFn: createGuideline,
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["privacy-poilcy"] }),
-  // });
+  // Creating/updating content
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: createGuideline,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["privacy-poilcy"] }),
+  });
 
-  // const handleSubmit = async () => {
-  //   if (!value) return toast.error("Content is required");
-  //   const { success, response } = await mutateAsync({
-  //     type: "PrivacyPolicy",
-  //     content: value,
-  //     title: "Privacy Policy",
-  //   });
-  //   if (!success) return toast.error(response);
-  //   toast.success("Content updated");
-  // };
+  const handleSubmit = async () => {
+    if (!value) return toast.error("Content is required");
+    const { success, response } = await mutateAsync({
+      type: "PrivacyPolicy",
+      content: value,
+      title: "Privacy Policy",
+    });
+    if (!success) return toast.error(response);
+    toast.success("Content updated");
+  };
 
   return (
     <DashboardLayout active={5}>
@@ -63,7 +63,7 @@ export default function PrivacyPolicy() {
 
             <div className="flex justify-center mt-5">
               <Button
-                // onClick={handleSubmit}
+                onClick={handleSubmit}
                 className="bg-[#395E66] px-24 py-6 hover:bg-[#395e66b9]"
               >
                 Save

@@ -31,35 +31,38 @@ export default function SubCategory({ params, searchParams }: Params) {
 
   return (
     <DashboardLayout active={2}>
-      <div>
-        <CategoryLayout
-          title={`Sub-Category${name ? `: ${name}` : ""}`}
-          buttonText="Add a Sub-Category"
-          isCategory={false}
-          id={parentId}
-        >
-          {isLoading ? (
-            <CardSkeleton />
-          ) : (
-            data &&
-            data.success &&
-            data.response.categories.length > 0 &&
-            data.response.categories.map((cat: CategoryType) => (
-              <Card
-                key={cat._id}
-                status={cat.createdAt}
-                title={cat.name}
-                image={cat.image}
-                navigation={false}
-                id={cat._id}
-              />
-            ))
-          )}
-        </CategoryLayout>
-        {data && data.success && data.response && data.response.pagination && (
-          <Pagination data={data.response.pagination} />
+      <CategoryLayout
+        title={`Sub-Category${name ? `: ${name}` : ""}`}
+        buttonText="Add a Sub-Category"
+        isCategory={false}
+        id={parentId}
+      >
+        {isLoading ? (
+          <CardSkeleton />
+        ) : (
+          data &&
+          data.success &&
+          data.response &&
+          data.response.categories.length > 0 &&
+          data.response.categories.map((cat: CategoryType) => (
+            <Card
+              key={cat._id}
+              status={cat.createdAt}
+              title={cat.name}
+              image={cat.image}
+              navigation={false}
+              id={cat._id}
+            />
+          ))
         )}
-      </div>
+      </CategoryLayout>
+      {data && data.success && data.response && data.response.pagination && (
+        <Pagination data={data.response.pagination} />
+      )}
+      {!data ||
+        (!data.response && (
+          <h2 className="text-black text-4xl font-bold ml-10">No results</h2>
+        ))}
     </DashboardLayout>
   );
 }

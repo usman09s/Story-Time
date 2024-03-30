@@ -11,7 +11,7 @@ export const getCategories = async ({
 }) => {
   try {
     const { data } = await api.get(
-      `/category?limit=${limit || 15}&page=${page || 1}`
+      `/category?limit=${limit || 15}&page=${page || 1}&search=${search || ""}`
     );
     return {
       success: true,
@@ -38,8 +38,8 @@ export const getSubCategories = async ({
 }) => {
   try {
     const { data } = await api.get(
-      `/category?parent=${id}&limit=${limit || 15}&page=${page || 1}${
-        search && `&search=${search}`
+      `/category?parent=${id}&limit=${limit || 15}&page=${page || 1}&search=${
+        search || ""
       }`
     );
     return {

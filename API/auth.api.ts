@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import api from "./middleware";
 
 export const loginMutate = async ({
@@ -9,17 +8,13 @@ export const loginMutate = async ({
   password: string;
 }) => {
   try {
-    const { data } = await api.post(
-      "/auth/login",
-      {
-        email,
-        password,
-        fcmToken: "fcmtoken12121212",
-      }
-      // {
-      //  withCredentials: true
-      // }
-    );
+    const { data } = await api.post("/auth/login", {
+      email,
+      password,
+      fcmToken: "fcmtoken12121212",
+    }, {
+      withCredentials: true
+    });
 
     return {
       success: true,

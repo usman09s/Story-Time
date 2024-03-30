@@ -12,34 +12,34 @@ export default function Faqs() {
   const queryClient = useQueryClient();
   const [value, setValue] = useState("");
 
-  // // Fetching content
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["faqs"],
-  //   queryFn: () => getGuideline("FAQs"),
-  // });
+  // Fetching content
+  const { data, isLoading } = useQuery({
+    queryKey: ["faqs"],
+    queryFn: () => getGuideline("FAQs"),
+  });
 
-  // useEffect(() => {
-  //   if (!isLoading && data && data.success) {
-  //     setValue(data?.response?.content);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (!isLoading && data && data.success) {
+      setValue(data?.response?.guidelines[0].content);
+    }
+  }, [data]);
 
-  // // Creating/updating content
-  // const { mutateAsync, isPending } = useMutation({
-  //   mutationFn: createGuideline,
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["faqs"] }),
-  // });
+  // Creating/updating content
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: createGuideline,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["faqs"] }),
+  });
 
-  // const handleSubmit = async () => {
-  //   if (!value) return toast.error("Content is required");
-  //   const { success, response } = await mutateAsync({
-  //     type: "FAQs",
-  //     content: value,
-  //     title: "FAQs",
-  //   });
-  //   if (!success) return toast.error(response);
-  //   toast.success("Content updated");
-  // };
+  const handleSubmit = async () => {
+    if (!value) return toast.error("Content is required");
+    const { success, response } = await mutateAsync({
+      type: "FAQs",
+      content: value,
+      title: "FAQs",
+    });
+    if (!success) return toast.error(response);
+    toast.success("Content updated");
+  };
 
   return (
     <DashboardLayout active={5}>
@@ -61,7 +61,7 @@ export default function Faqs() {
 
             <div className="flex justify-center mt-5">
               <Button
-                // onClick={handleSubmit}
+                onClick={handleSubmit}
                 className="bg-[#395E66] px-24 py-6 hover:bg-[#395e66b9]"
               >
                 Save

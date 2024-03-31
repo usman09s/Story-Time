@@ -64,3 +64,34 @@ export interface PaginationProps {
   totalItems: number;
   totalPages: number;
 }
+
+export interface ChatListType {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  lastMessage: {
+    text: string;
+  };
+  status: string;
+  user: {
+    firstName: string;
+    lastName: string;
+    _id: string;
+    username: string;
+  };
+}
+
+export interface ChatMessage {
+  createdAt: string;
+  updatedAt: string;
+  chat: string
+  _id: string;
+  text: string;
+  user: {
+    firstName: string;
+    lastName: string;
+    _id: string;
+    username: string;
+  };
+  media: string[]
+}

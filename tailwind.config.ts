@@ -21,6 +21,7 @@ const config = {
       colors: {
         primaryCol: "#395E66",
         text: "#395E66",
+        borderCol: "#e4e4e4e",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

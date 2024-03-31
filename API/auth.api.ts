@@ -8,13 +8,17 @@ export const loginMutate = async ({
   password: string;
 }) => {
   try {
-    const { data } = await api.post("/auth/login", {
-      email,
-      password,
-      fcmToken: "fcmtoken12121212",
-    }, {
-      withCredentials: true
-    });
+    const { data } = await api.post(
+      "/auth/login",
+      {
+        email,
+        password,
+        fcmToken: "fcmtoken12121212",
+      },
+      {
+        withCredentials: true,
+      }
+    );
 
     return {
       success: true,
@@ -30,11 +34,11 @@ export const loginMutate = async ({
 
 export const getCurrentUser = async () => {
   try {
-    const response = await api.get("/auth/getCurrentUser");
+    const { data } = await api.get("/user/profile");
 
     return {
       success: true,
-      response: response.data,
+      response: data.data,
     };
   } catch (error: any) {
     return {
@@ -88,6 +92,28 @@ export const resetPass = async ({
       newPassword,
       confirmPassword,
     });
+
+    return {
+      success: true,
+      response: data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    };
+  }
+};
+
+export const updateProfile = async (info: {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+}) => {
+  try {
+    const { data } = await api.put("/user/admin-info", info);
 
     return {
       success: true,

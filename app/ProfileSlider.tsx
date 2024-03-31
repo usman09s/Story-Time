@@ -1,39 +1,89 @@
 "use client";
-
 import {
   SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTrigger,
-  AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { useAuth } from "@/store/AuthProvider";
+import { MoveLeft } from "lucide-react";
+import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateProfile } from "@/API/auth.api";
 
 export const ProfileSlider = ({}) => {
+  const queryClient = useQueryClient();
   const [EditMode, setEditMode] = useState(false);
+  const { user } = useAuth();
+
+  const [info, setInfo] = useState({
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    username: user?.username || "",
+    email: user?.email || "",
+    password: user?.decryptedPassword || "",
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    if (user) {
+      setInfo({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+        password: user.decryptedPassword,
+      });
+    }
+  }, [user]);
+
+  // Update Profile
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: updateProfile,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["current-user"] });
+    },
+  });
+
+  const handleProfileUpdate = async (e: FormEvent) => {
+    e.preventDefault();
+    if (
+      !info.firstName ||
+      !info.lastName ||
+      !info.username ||
+      !info.email ||
+      !info.password
+    )
+      return toast.error("All fields are required");
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(info.email))
+      return toast.error("Invalid Email address");
+
+    const { success, response } = await mutateAsync(info);
+    if (!success) return toast.error(response);
+    setEditMode(false);
+    toast.success("Profile updated");
+  };
+
   return (
     <SheetContent className="flex flex-col justify-between">
       <SheetHeader>
         <SheetTitle className="">
           <div className="flex justify-start items-center gap-24">
             <SheetClose asChild>
-              <Image
-                src={"/assets/ArrowSlider.png"}
-                alt="Arrow Icon"
-                width={19}
-                height={10}
-                className="cursor-pointer"
+              <MoveLeft
+                className="size-6 cursor-pointer"
                 onClick={() => setEditMode(false)}
               />
             </SheetClose>
@@ -43,7 +93,7 @@ export const ProfileSlider = ({}) => {
         <div className="flex flex-col items-center justify-center">
           <div className="mt-16">
             <Image
-              src={"/assets/user.png"}
+              src={"/assets/dummy-user.webp"}
               alt="Profile Picture"
               width={120}
               height={100}
@@ -54,28 +104,31 @@ export const ProfileSlider = ({}) => {
             <div className="flex flex-col gap-6 mt-20 w-64">
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">First Name</Label>
-                <p className="font-bold text-xl">Jason</p>
+                <p className="font-bold text-xl">{user?.firstName}</p>
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">Last Name</Label>
-                <p className="font-bold text-xl">Griffin</p>
+                <p className="font-bold text-xl">{user?.lastName}</p>
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">Username</Label>
-                <p className="font-bold text-xl">jaxongriff101</p>
+                <p className="font-bold text-xl">{user?.username}</p>
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">Email</Label>
-                <p className="font-bold text-xl">jasongriffin@admin.com</p>
+                <p className="font-bold text-xl">{user?.email}</p>
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">Password</Label>
-                <p className="font-bold text-xl">****************</p>
+                <p className="font-bold text-xl">{user?.decryptedPassword}</p>
               </div>
             </div>
           ) : (
             <div>
-              <form className="flex flex-col gap-4 mt-20 w-64">
+              <form
+                onSubmit={handleProfileUpdate}
+                className="flex flex-col gap-4 mt-20 w-64"
+              >
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                   <Label htmlFor="firstname">First Name</Label>
                   <Input
@@ -83,7 +136,9 @@ export const ProfileSlider = ({}) => {
                     id="firstname"
                     placeholder="First Name"
                     className=""
-                    value={"Jason"}
+                    name="firstName"
+                    value={info.firstName}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -92,7 +147,9 @@ export const ProfileSlider = ({}) => {
                     type="text"
                     id="lastname"
                     placeholder="Last Name"
-                    value={"Griffin"}
+                    name="lastName"
+                    value={info.lastName}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -101,7 +158,9 @@ export const ProfileSlider = ({}) => {
                     type="text"
                     id="username"
                     placeholder="Username"
-                    value={"jaxongriff101"}
+                    name="username"
+                    value={info.username}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -110,7 +169,9 @@ export const ProfileSlider = ({}) => {
                     type="email"
                     id="email"
                     placeholder="Email"
-                    value={"jasongriffin@admin.com"}
+                    name="email"
+                    value={info.email}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -119,7 +180,9 @@ export const ProfileSlider = ({}) => {
                     type="password"
                     id="password"
                     placeholder="Password"
-                    value={"****************"}
+                    name="password"
+                    value={info.password}
+                    onChange={handleChange}
                   />
                 </div>
               </form>
@@ -128,20 +191,16 @@ export const ProfileSlider = ({}) => {
         </div>
       </SheetHeader>
       {EditMode ? (
-        <AlertDialog>
-          <AlertDialogTrigger asChild className="">
-            <Button className="bg-[#395E66] hover:bg-[#395e66df] py-7 text-lg">
-              Save Details
-            </Button>
-          </AlertDialogTrigger>
-          <ConfirmModal
-            text="Are you sure you want to discard your edits?"
-            title="Discard Edits"
-          />
-        </AlertDialog>
+        <Button
+          disabled={isPending}
+          onClick={handleProfileUpdate}
+          className="bg-primaryCol hover:bg-[#395e66df] py-7 text-lg"
+        >
+          Save Details
+        </Button>
       ) : (
         <Button
-          className="bg-[#395E66] hover:bg-[#395e66df] py-7 text-lg"
+          className="bg-primaryCol hover:bg-[#395e66df] py-7 text-lg"
           onClick={() => setEditMode(true)}
         >
           Edit Details
@@ -150,63 +209,3 @@ export const ProfileSlider = ({}) => {
     </SheetContent>
   );
 };
-
-export function ConfirmModal({ text, title }: { text: string; title: string }) {
-  const ButtonRef = useRef<HTMLButtonElement>(null);
-
-  const CloseDialog = () => {
-    ButtonRef.current?.click();
-  };
-
-  const [open, setOpen] = useState(true);
-
-  const func = () => {
-    setOpen(false);
-  };
-  return (
-    <AlertDialogContent
-      className={`h-[35%] w-[25%] ${open ? null : "hidden"} `}
-    >
-      <AlertDialogHeader>
-        <div className="flex flex-col  gap-3 items-center mt-5 justify-center">
-          <h1 className="text-3xl text-[#093732] font-bold">{title}</h1>
-          <span className="text-center mt-5 font-extrabold text-xl opacity-70 text-black">
-            {text}
-          </span>
-          <AlertDialog>
-            <AlertDialogTrigger asChild onClick={func}>
-              <Button className=" rounded-2xl bg-[#395E66] hover:bg-[#395e66ce]  px-24 py-7 text-lg">
-                Confirm
-              </Button>
-            </AlertDialogTrigger>
-            <DoneModal CloseFunction={CloseDialog} />
-          </AlertDialog>
-          <AlertDialogCancel className="text-black" ref={ButtonRef}>
-            Cancel
-          </AlertDialogCancel>
-        </div>
-      </AlertDialogHeader>
-    </AlertDialogContent>
-  );
-}
-
-export function DoneModal({ CloseFunction }: { CloseFunction: () => void }) {
-  return (
-    <AlertDialogContent className="h-[18%] w-[20%]  ">
-      <AlertDialogHeader>
-        <div className="flex flex-col  gap-3 items-center mt-5 justify-center">
-          <h1 className="text-2xl text-[#093732] font-bold">
-            Successfully Saved
-          </h1>
-
-          <Button
-            className=" rounded-2xl bg-[#395E66] hover:bg-[#395e66ce]  px-24 py-7 text-lg"
-            onClick={CloseFunction}
-          >
-            Back
-          </Button>
-        </div>
-      </AlertDialogHeader>
-    </AlertDialogContent>
-  );
-}

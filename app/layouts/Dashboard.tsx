@@ -1,8 +1,13 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { AdminProfile } from "@/components/AdminProfile";
 import { navLinks } from "@/types/data";
 import { LogoutBtn } from "@/components/helpers/LogoutBtn";
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentUser } from "@/API/auth.api";
+import { useEffect } from "react";
+import { useAuth } from "@/store/AuthProvider";
 
 export default function DashboardLayout({
   active,
@@ -11,6 +16,20 @@ export default function DashboardLayout({
   children?: React.ReactNode;
   active?: number;
 }) {
+  const { user, setUser } = useAuth();
+  // Fetching current User
+  const { data, isLoading } = useQuery({
+    queryKey: ["current-user"],
+    queryFn: () => getCurrentUser(),
+    initialData: user ? { success: true, response: user } : undefined,
+  });
+
+  useEffect(() => {
+    if (!isLoading && data && data.success && data.response) {
+      setUser(data.response);
+    }
+  }, [data]);
+
   return (
     <>
       <aside className="fixed min-h-screen w-64 flex-col overflow-y-auto  py-8 z-10 bg-[#395E66] ">
@@ -47,7 +66,7 @@ export default function DashboardLayout({
                 </Link>
               </div>
             ))}
-            <LogoutBtn/>
+            <LogoutBtn />
           </nav>
         </div>
       </aside>

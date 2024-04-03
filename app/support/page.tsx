@@ -263,6 +263,7 @@ const MessageBox = ({
         media.length > 0 &&
         media.map((img, idx) => (
           <Image
+            key={idx}
             src="/assets/dummy-user.webp"
             alt="image"
             width={400}

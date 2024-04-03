@@ -42,7 +42,7 @@ export default function SearchBar() {
   return (
     <div className="w-96 relative">
       <Input
-        placeholder="Search User"
+        placeholder="Search"
         className="px-10 border-black placeholder:text-black placeholder:font-semibold focus:border-none placeholder:opacity-70"
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => search(e.target.value)}

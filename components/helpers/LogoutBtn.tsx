@@ -12,8 +12,6 @@ export const LogoutBtn = () => {
 
     setUser(undefined);
     localStorage.removeItem("access-token");
-    // localStorage.removeItem("refresh-token");
-    Cookies.remove("session_local");
     Cookies.remove("session");
     toast.success("Logged out successfully");
     router.push("/dashboard");

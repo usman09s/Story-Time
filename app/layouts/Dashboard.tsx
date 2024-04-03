@@ -8,6 +8,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getCurrentUser } from "@/API/auth.api";
 import { useEffect } from "react";
 import { useAuth } from "@/store/AuthProvider";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function DashboardLayout({
   active,
@@ -16,6 +19,7 @@ export default function DashboardLayout({
   children?: React.ReactNode;
   active?: number;
 }) {
+  const router = useRouter();
   const { user, setUser } = useAuth();
   // Fetching current User
   const { data, isLoading } = useQuery({
@@ -23,7 +27,12 @@ export default function DashboardLayout({
     queryFn: () => getCurrentUser(),
     initialData: user ? { success: true, response: user } : undefined,
   });
-
+  if (!isLoading && data && !data.success) {
+    localStorage.removeItem("access-token");
+    Cookies.remove("session");
+    toast.success(data.response);
+    router.push("/dashboard");
+  }
   useEffect(() => {
     if (!isLoading && data && data.success && data.response) {
       setUser(data.response);

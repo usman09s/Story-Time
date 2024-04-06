@@ -6,7 +6,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Paperclip, Search, SendHorizontal } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getChatMessages, getChatsList, sendMessage } from "@/API/chats.api";
-import { ChatListType, ChatMessage } from "@/types/types";
+import {
+  ChatListType,
+  ChatMessage,
+  ChatTypes,
+  ChatsListType,
+  SupportChatOverview,
+} from "@/types/types";
 import { dateFormat } from "@/lib/dateFormat";
 import { ChatListSkeleton } from "@/components/skeletons/ChatListSkeleton";
 import { usePathname, useRouter } from "next/navigation";
@@ -31,19 +37,19 @@ export default function Support({ searchParams }: Params) {
   const [file, setFile] = useState<File | undefined>();
 
   // Fetching all chats
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<ChatsListType>({
     queryKey: ["chats-list"],
     queryFn: () => getChatsList({ page, limit }),
   });
 
   // Fetching single chats
-  const { data: chat, isLoading: isChatLoading } = useQuery({
+  const { data: chat, isLoading: isChatLoading } = useQuery<ChatTypes>({
     queryKey: ["chat", chatId],
     queryFn: () => getChatMessages({ page, limit, id: chatId }),
     enabled: !!chatId,
   });
 
-  // Update Profile
+  // Send message
   const { mutateAsync, isPending } = useMutation({
     mutationFn: sendMessage,
     onSuccess: () => {
@@ -86,7 +92,7 @@ export default function Support({ searchParams }: Params) {
               data.success &&
               data.response &&
               data.response.supportChats.length > 0 &&
-              data.response.supportChats.map((chat: ChatListType) => (
+              data.response.supportChats.map((chat) => (
                 <UserMessageList key={chat._id} chat={chat} />
               ))
             )}
@@ -123,18 +129,15 @@ export default function Support({ searchParams }: Params) {
                           <ChatMessageSkeleton />
                         ) : (
                           chat.response.supportMessages.length > 0 &&
-                          chat.response.supportMessages.map(
-                            (msg: ChatMessage) => (
-                              <MessageBox
-                                key={msg._id}
-                                content={msg.text}
-                                media={msg.media}
-                                role={
-                                  msg.user?._id === userId ? "user" : "admin"
-                                }
-                              />
-                            )
-                          )
+                          chat.response.supportMessages.map((msg) => (
+                            <MessageBox
+                              key={msg._id}
+                              id={msg._id}
+                              content={msg.text}
+                              media={msg.media}
+                              role={msg.user?._id === userId ? "user" : "admin"}
+                            />
+                          ))
                         )}
                       </div>
                     </div>
@@ -198,7 +201,49 @@ export default function Support({ searchParams }: Params) {
   );
 }
 
-function UserMessageList({ chat }: { chat: ChatListType }) {
+const MessageBox = ({
+  content,
+  media,
+  role,
+  id,
+}: {
+  content: string;
+  media: string[];
+  role: string;
+  id: string;
+}) => {
+  return (
+    <div
+      className={
+        role === "user" ? "self-end max-w-[60%]" : "self-start max-w-[60%]"
+      }
+    >
+      <p
+        className={`${
+          role === "user"
+            ? "bg-primaryCol text-white"
+            : "bg-gray-200 text-neutral-800"
+        } p-4 text-sm rounded-xl`}
+      >
+        {content}
+      </p>
+      {media &&
+        media.length > 0 &&
+        media.map((img, idx) => (
+          <Image
+            key={`${id}-image-${idx}-${img}`}
+            src="/assets/dummy-user.webp"
+            alt="image"
+            width={400}
+            height={400}
+            className="object-cover rounded-lg size-60 mt-1"
+          />
+        ))}
+    </div>
+  );
+};
+
+function UserMessageList({ chat }: { chat: SupportChatOverview }) {
   const router = useRouter();
   const pathname = usePathname();
   const openChat = () => {
@@ -221,7 +266,9 @@ function UserMessageList({ chat }: { chat: ChatListType }) {
           </p>
           <div className="flex items-end justify-between w-full">
             <p className="text-xs font-semibold">{chat.lastMessage.text}</p>
-            <p className="text-xs mr-5">{dateFormat(chat.updatedAt)}</p>
+            <p className="text-xs mr-5">
+              {dateFormat(chat.updatedAt || chat.createdAt)}
+            </p>
           </div>
         </div>
         <div className="mt-6 pl-2"></div>
@@ -234,43 +281,3 @@ function UserMessageList({ chat }: { chat: ChatListType }) {
     </div>
   );
 }
-
-const MessageBox = ({
-  content,
-  media,
-  role,
-}: {
-  content: string;
-  media: string[];
-  role: string;
-}) => {
-  return (
-    <div
-      className={
-        role === "user" ? "self-end max-w-[60%]" : "self-start max-w-[60%]"
-      }
-    >
-      <p
-        className={`${
-          role === "user"
-            ? "bg-primaryCol text-white"
-            : "bg-gray-200 text-neutral-800"
-        } p-4 text-sm rounded-xl`}
-      >
-        {content}
-      </p>
-      {media &&
-        media.length > 0 &&
-        media.map((img, idx) => (
-          <Image
-            key={idx}
-            src="/assets/dummy-user.webp"
-            alt="image"
-            width={400}
-            height={400}
-            className="object-cover rounded-lg size-60 mt-1"
-          />
-        ))}
-    </div>
-  );
-};

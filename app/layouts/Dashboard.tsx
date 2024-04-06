@@ -11,6 +11,7 @@ import { useAuth } from "@/store/AuthProvider";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { DashboardTypes } from "@/types/types";
 
 export default function DashboardLayout({
   active,
@@ -22,15 +23,16 @@ export default function DashboardLayout({
   const router = useRouter();
   const { user, setUser } = useAuth();
   // Fetching current User
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<DashboardTypes>({
     queryKey: ["current-user"],
     queryFn: () => getCurrentUser(),
     initialData: user ? { success: true, response: user } : undefined,
   });
+
   if (!isLoading && data && !data.success) {
     localStorage.removeItem("access-token");
     Cookies.remove("session");
-    toast.success(data.response);
+    toast.error("Session expired");
     router.push("/dashboard");
   }
   useEffect(() => {

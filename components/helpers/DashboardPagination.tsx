@@ -1,10 +1,10 @@
 "use client";
 
-import { PaginationProps } from "@/types/types";
+import { PaginationTypes } from "@/types/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export const DashboardPagination = ({ data }: { data: PaginationProps }) => {
+export const DashboardPagination = ({ data }: { data: PaginationTypes }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -14,9 +14,6 @@ export const DashboardPagination = ({ data }: { data: PaginationProps }) => {
     hasPrevPage,
     perPage,
     totalItems,
-    totalPages,
-    nextPage,
-    prevPage,
   } = data;
 
   const handlePageChange = (pageNumber: number) => {
@@ -45,7 +42,7 @@ export const DashboardPagination = ({ data }: { data: PaginationProps }) => {
         </button>
         <button
           disabled={!hasNextPage}
-          className="cursor-pointer"
+          className="disabled:opacity-60 cursor-pointer"
           onClick={() => handlePageChange(currentPage + 1)}
         >
           <ChevronRight className="size-5" />

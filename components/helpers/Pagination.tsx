@@ -1,9 +1,9 @@
 "use client";
-import { PaginationProps } from "@/types/types";
+import { PaginationTypes } from "@/types/types";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export default function Pagination({ data }: { data: PaginationProps }) {
+export default function Pagination({ data }: { data: PaginationTypes }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();

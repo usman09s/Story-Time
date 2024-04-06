@@ -61,7 +61,7 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
             </TableHead>
             {TableHeading.map((heading, index) => (
               <TableHead
-                key={index}
+                key={`${heading}-${index}`}
                 className="font-bold text-white text-center"
               >
                 {heading}
@@ -72,7 +72,7 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
         </TableHeader>
         <TableBody>
           {TableData.map((row, index) => (
-            <TableRow key={index} className="text-center">
+            <TableRow key={row._id} className="text-center">
               <TableCell className="w-52">
                 <div className="flex items-center gap-6">
                   <input

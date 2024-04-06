@@ -6,7 +6,7 @@ import { Card } from "@/components/Card";
 import { getCategories } from "@/API/categories.api";
 import { useQuery } from "@tanstack/react-query";
 import { CardSkeleton } from "@/components/skeletons/CardSkeleton";
-import { CategoryType } from "@/types/types";
+import { CategoryData } from "@/types/types";
 import Pagination from "@/components/helpers/Pagination";
 
 interface Params {
@@ -20,7 +20,7 @@ interface Params {
 export default function Category({ searchParams }: Params) {
   const { page, limit, search } = searchParams;
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<CategoryData>({
     queryKey: ["categories", page, limit, search],
     queryFn: () => getCategories({ page, limit, search }),
   });
@@ -36,7 +36,7 @@ export default function Category({ searchParams }: Params) {
             data.success &&
             data.response &&
             data.response.categories.length > 0 &&
-            data.response.categories.map((cat: CategoryType) => (
+            data.response.categories.map((cat) => (
               <Card
                 key={cat._id}
                 status={cat.createdAt}

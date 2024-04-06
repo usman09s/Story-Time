@@ -12,6 +12,7 @@ import { DashboardPagination } from "@/components/helpers/DashboardPagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { UserSkeleton } from "@/components/skeletons/UserSkeleton";
+import { DashboardTypes } from "@/types/types";
 
 interface Params {
   searchParams: {
@@ -25,8 +26,8 @@ interface Params {
 export default function Dashboard({ searchParams }: Params) {
   const { page, limit, search, status } = searchParams;
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["categories", page, limit, search, status],
+  const { data, isLoading } = useQuery<DashboardTypes>({
+    queryKey: ["users", page, limit, search, status],
     queryFn: () => getUsers({ page, limit, search, status: status || "" }),
   });
 
@@ -99,7 +100,7 @@ export default function Dashboard({ searchParams }: Params) {
             </section>
           </div>
           <div className="flex justify-between px-10 mt-5 my-2">
-            <SearchBar />
+            <SearchBar initialValue={search || ""}/>
             <div>
               <Button
                 variant={"outline"}

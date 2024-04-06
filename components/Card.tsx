@@ -9,7 +9,7 @@ interface card {
   title: string;
   status: string;
   navigation: boolean;
-  id?: string;
+  id: string;
 }
 export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
           onClick={() => setOpen(!open)}
         />
       </div>
-      {open ? <DeleteCategories /> : null}
+      {open ? <DeleteCategories id={id} setOpen={setOpen} /> : null}
       <div className="flex flex-col justify-between items-center">
         <div className={navigation ? "cursor-pointer" : ""} onClick={navigate}>
           <Image

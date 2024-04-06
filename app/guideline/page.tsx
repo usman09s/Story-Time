@@ -7,13 +7,14 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { createGuideline, getGuideline } from "@/API/guideline.api";
+import { GuidelinesData } from "@/types/types";
 
 export default function GuidelinePage() {
   const queryClient = useQueryClient();
   const [value, setValue] = useState("");
 
   // Fetching content
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<GuidelinesData>({
     queryKey: ["terms"],
     queryFn: () => getGuideline("TermsAndConditions"),
   });

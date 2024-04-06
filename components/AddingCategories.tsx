@@ -63,7 +63,6 @@ export default function AddingCategories({
 
     const { success, response } = await mutateAsync(formData);
     if (!success) return toast.error(response);
-    console.log(response);
     toast.success("Category added");
     router.push("/categories");
   };

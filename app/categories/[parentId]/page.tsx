@@ -5,7 +5,7 @@ import CategoryLayout from "@/app/layouts/CategoryLayout";
 import { useQuery } from "@tanstack/react-query";
 import { getSubCategories } from "@/API/categories.api";
 import { CardSkeleton } from "@/components/skeletons/CardSkeleton";
-import { CategoryType } from "@/types/types";
+import { CategoryData } from "@/types/types";
 import Pagination from "@/components/helpers/Pagination";
 
 interface Params {
@@ -24,7 +24,7 @@ export default function SubCategory({ params, searchParams }: Params) {
   const { parentId } = params;
   const { page, limit, search, name } = searchParams;
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<CategoryData>({
     queryKey: ["sub-categories", page, limit, search, parentId],
     queryFn: () => getSubCategories({ id: parentId, page, limit, search }),
   });
@@ -44,7 +44,7 @@ export default function SubCategory({ params, searchParams }: Params) {
           data.success &&
           data.response &&
           data.response.categories.length > 0 &&
-          data.response.categories.map((cat: CategoryType) => (
+          data.response.categories.map((cat) => (
             <Card
               key={cat._id}
               status={cat.createdAt}

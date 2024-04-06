@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createGuideline, getGuideline } from "@/API/guideline.api";
 import { toast } from "sonner";
+import { GuidelinesData } from "@/types/types";
 
 export default function PrivacyPolicy() {
 
@@ -14,7 +15,7 @@ export default function PrivacyPolicy() {
   const [value, setValue] = useState("");
 
   // Fetching content
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<GuidelinesData>({
     queryKey: ["privacy-poilcy"],
     queryFn: () => getGuideline("PrivacyPolicy"),
   });

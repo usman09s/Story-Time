@@ -8,13 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getNotifications, pushNotification } from "@/API/notiifications";
 import { dateFormat } from "@/lib/dateFormat";
-
-interface Notification {
-  createdAt: string;
-  title: string;
-  message: string;
-  _id: string;
-}
+import { NotificationType } from "@/types/types";
 
 export default function NotificationPage() {
   const queryClient = useQueryClient();
@@ -24,16 +18,10 @@ export default function NotificationPage() {
   const [date, setDate] = useState<Date | undefined>();
 
   // Fetching all notifications
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<NotificationType>({
     queryKey: ["notifications"],
     queryFn: () => getNotifications(),
   });
-  console.log(data?.response.notifications);
-  useEffect(() => {
-    if (!isLoading && data && data.success) {
-      setValue(data?.response?.content);
-    }
-  }, [data]);
 
   // Pushing Notification
   const { mutateAsync, isPending } = useMutation({
@@ -94,18 +82,22 @@ export default function NotificationPage() {
         <div className="w-2/5 h-screen  bg-white mx-2 p-10 mt-2 border-2 border-[#E4E4E4] rounded-lg">
           <p className="mb-5 text-lg font-semibold">History</p>
           <div className="flex flex-col space-y-4 border-l-2 border-dashed p-3">
-            {data &&
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : (
+              data &&
               data.success &&
               data.response &&
               data.response.notifications.length > 0 &&
-              data.response.notifications.map((notif: Notification) => (
+              data.response.notifications.map((notif) => (
                 <div key={notif._id} className="flex items-center gap-4 px-3">
                   <p className="text-xs">{dateFormat(notif.createdAt)}</p>
                   <p className="text-xs text-subTitleSecondaryColor">
                     {notif.title}
                   </p>
                 </div>
-              ))}
+              ))
+            )}
           </div>
         </div>
       </div>

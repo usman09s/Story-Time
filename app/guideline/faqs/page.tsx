@@ -7,13 +7,14 @@ import { toast } from "sonner";
 import Editor from "@/components/Editor";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { GuidelinesData } from "@/types/types";
 
 export default function Faqs() {
   const queryClient = useQueryClient();
   const [value, setValue] = useState("");
 
   // Fetching content
-  const { data, isLoading } = useQuery({
+  const { data, isLoading } = useQuery<GuidelinesData>({
     queryKey: ["faqs"],
     queryFn: () => getGuideline("FAQs"),
   });

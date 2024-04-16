@@ -2,7 +2,6 @@ import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -16,17 +15,25 @@ import Image from "next/image";
 interface AuthButtonProps {
   buttonTitle: string;
   isModal?: boolean;
-    onClick?: () => void;
-    disable?:boolean
+  onClick?: () => void;
+  disable?: boolean;
 }
 
-const AuthButton: FC<AuthButtonProps> = ({ buttonTitle, isModal,onClick,disable = true }) => {
+const AuthButton: FC<AuthButtonProps> = ({
+  buttonTitle,
+  isModal,
+  onClick,
+  disable = true,
+}) => {
   return (
     <>
       {isModal ? (
-        <AlertDialog >
+        <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button className="mt-7  py-7  text-white bg-[#395E66] rounded-md text-md w-full hover:bg-[#395e66be]" type="submit">
+            <Button
+              className="mt-7  py-7  text-white bg-[#395E66] rounded-md text-md w-full hover:bg-[#395e66be]"
+              type="submit"
+            >
               {buttonTitle}
             </Button>
           </AlertDialogTrigger>
@@ -50,17 +57,19 @@ const AuthButton: FC<AuthButtonProps> = ({ buttonTitle, isModal,onClick,disable 
                   width={150}
                   height={50}
                 />
-                <p className="font-semibold text-3xl text-center text-[#393939]">
+                <span className="font-semibold text-3xl text-center text-[#393939]">
                   Your reset password link has been sent to your email.
-                </p>
+                </span>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter></AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       ) : (
-        <Button  
-        className="mt-7  py-7  text-white bg-[#395E66] rounded-md text-md w-full hover:bg-[#395e66be]" type="submit">
+        <Button
+          className="mt-7 py-7 text-white bg-[#395E66] rounded-md text-md w-full hover:bg-[#395e66be]"
+          type="submit"
+        >
           {buttonTitle}
         </Button>
       )}

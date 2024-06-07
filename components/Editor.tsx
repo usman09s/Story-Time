@@ -17,7 +17,7 @@ export default function Editor({ value, isFaq, isNotification, onStateChange }: 
   const debouncedHandleStateChange = debounce((newValue: string) => {
     setContext(newValue);
     onStateChange(newValue);
-  }, 400); // Adjust the debounce delay as per your requirement
+  }, 400); 
 
   const handleStateChange = (newValue: string) => {
     debouncedHandleStateChange(newValue);
@@ -30,7 +30,7 @@ export default function Editor({ value, isFaq, isNotification, onStateChange }: 
         onChange={handleStateChange}
         modules={modules}
         formats={formats}
-        className={`!border-none  ${isFaq ? ' bg-backColor min-h-[300px] ' : ' '}  text-white  placeholder:text-TextColor3 ${isNotification ? 'min-h-[300px]   text-white ' : 'bg-DarkLight '}`}
+        className={`${isFaq ? ' bg-backColor min-h-[300px] ' : ' '}  text-black  placeholder:text-TextColor3 ${isNotification ? 'min-h-[300px]   text-white ' : 'bg-DarkLight '}`}
         value={context}
       />
     </div>

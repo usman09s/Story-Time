@@ -46,14 +46,11 @@ export default function Dashboard({ searchParams }: Params) {
 
 
   return (
-    <DashboardLayout active={1}>
+    <DashboardLayout active={1} title="Dashboard & Users">
       <div className="flex flex-col min-h-screen">
         <div className="flex-1 overflow-y-auto">
           <div className="pl-10">
             <section>
-              <h1 className="text-4xl font-bold text-[#093732]">
-                Dashboard & Users
-              </h1>
               <div className="flex w-full items-center gap-10 my-6">
                 <States iconPath="done" title="total Download" total="1.4k" />
                 <States iconPath="mark2" title="Guests" total="350" />

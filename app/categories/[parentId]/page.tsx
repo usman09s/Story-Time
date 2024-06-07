@@ -30,7 +30,7 @@ export default function SubCategory({ params, searchParams }: Params) {
   });
 
   return (
-    <DashboardLayout active={2}>
+    <DashboardLayout active={2} title="Sub-Category">
       <CategoryLayout
         title={`Sub-Category${name ? `: ${name}` : ""}`}
         buttonText="Add a Sub-Category"

@@ -15,10 +15,12 @@ import { DashboardTypes } from "@/types/types";
 
 export default function DashboardLayout({
   active,
+  title,
   children,
 }: {
   children?: React.ReactNode;
   active?: number;
+  title:string
 }) {
   const router = useRouter();
   const { user, setUser } = useAuth();
@@ -58,9 +60,8 @@ export default function DashboardLayout({
             {navLinks.map((item) => (
               <div className="space-y-3 " key={item.id}>
                 <Link
-                  className={`py-3 flex transform items-center r px-3 ml-4 rounded-l-3xl text-white transition-colors duration-300  ${
-                    active == item.id ? "bg-[#427682]" : null
-                  }`}
+                  className={`py-3 flex transform items-center r px-3 ml-4 rounded-l-3xl text-white transition-colors duration-300  ${active == item.id ? "bg-[#427682]" : null
+                    }`}
                   href={item.path}
                 >
                   <Image
@@ -85,10 +86,14 @@ export default function DashboardLayout({
       {/* Add the main content here */}
       <div className=" overflow-x-hidden overflow-y-auto ">
         {/* Your main content goes here */}
-        <nav className="relative  items-center flex justify-end  gap-7 px-9 pt-9  mr-1 pb-2">
-          <Image src={"/assets/bell.png"} alt="Icon" width={30} height={20} />
-
-          <AdminProfile />
+        <nav className="relative gap-7 px-9 pt-9  mr-1 pb-2 bg-[#FAFAFA] h-44">
+          <div className="flex justify-end items-center gap-5">
+            <Image src={"/assets/bell.png"} alt="Icon" width={30} height={20} />
+            <AdminProfile />
+          </div>
+          <div className="px-[265px] pt-6">
+            <h1 className="text-5xl font-bold text-[#093732]">{title}</h1>
+          </div>
         </nav>
         <div className="flex-1 overflow-x-hidden overflow-y-auto ml-64 bg-backGroundColor  ">
           {children}

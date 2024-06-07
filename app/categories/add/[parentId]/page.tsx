@@ -9,7 +9,7 @@ export default function AddSubCategories({
   const { parentId } = params;
 
   return (
-    <DashboardLayout active={2}>
+    <DashboardLayout active={2} title="Create a Sub Category">
       <AddingCategories text="Create a Sub Category" id={parentId} />
     </DashboardLayout>
   );

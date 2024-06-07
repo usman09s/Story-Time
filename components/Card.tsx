@@ -3,11 +3,12 @@ import Image from "next/image";
 import { FC, useState } from "react";
 import DeleteCategories from "./DeleteCategories";
 import { useRouter } from "next/navigation";
+import { formatDate } from "@/lib/utils";
 
 interface card {
   image: string;
   title: string;
-  status: string;
+  status: Date;
   navigation: boolean;
   id: string;
 }
@@ -42,7 +43,7 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
         </div>
         <div className="text-center mt-4">
           <p className="font-bold text-black text-lg">{title}</p>
-          <p className="text-black opacity-35 text-sm">{status}</p>
+          <p className="text-black opacity-35 text-sm">{formatDate(status)}</p>
         </div>
       </div>
     </div>

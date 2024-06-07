@@ -17,7 +17,7 @@ interface Props {
 
 export function DatePicker({ date, setDate }: Props) {
   return (
-    <Popover>
+    <Popover >
       <PopoverTrigger asChild>
         <Image
           className="cursor-pointer mr-2 "
@@ -27,8 +27,13 @@ export function DatePicker({ date, setDate }: Props) {
           height={45}
         />
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className=" p-0">
         <Calendar
+        
+        modifiersStyles={{
+          selected: { borderRadius: "100px" },
+          today: { borderRadius: "100px" },
+        }}
           mode="single"
           selected={date}
           onSelect={setDate}

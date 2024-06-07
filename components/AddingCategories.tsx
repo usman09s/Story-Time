@@ -67,10 +67,15 @@ export default function AddingCategories({
     router.push("/categories");
   };
 
+  const handleDelete = () => {
+    console.log("Delete");
+    setImage("");
+    setTitle("");
+    setFile(undefined);
+  }
   return (
     <div className="mx-10">
-      <section className="flex justify-between mt-7 h-10  items-center">
-        <h1 className="text-4xl font-bold text-[#093732]">{text}</h1>
+      <section className="flex justify-end mt-7 h-10  items-center">
         <Button
           onClick={handleSubmit}
           disabled={isPending}
@@ -159,6 +164,7 @@ export default function AddingCategories({
           <Button
             className="mt-3 border-[#AAAAAA] text-red-600 flex gap-1 items-center"
             variant={"outline"}
+            onClick={handleDelete}
           >
             <Image src={"/assets/icon.png"} alt="" width={18} height={10} />{" "}
             Delete this entry

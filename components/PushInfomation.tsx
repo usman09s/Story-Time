@@ -31,6 +31,7 @@ export default function PushInfomation({
                 <input
                   type="checkbox"
                   id="all-users"
+                   className="rounded-sm text-[#395E66] focus:ring-[#395e66ca] h-5 w-5"
                   checked={sendToAll}
                   onChange={() => setSendToAll(true)}
                 />
@@ -43,6 +44,7 @@ export default function PushInfomation({
                 <input
                   type="checkbox"
                   id="all-active-users"
+                  className="rounded-sm text-[#395E66] focus:ring-[#395e66ca] h-5 w-5"
                   checked={!sendToAll}
                   onChange={() => setSendToAll(false)}
                 />
@@ -56,14 +58,14 @@ export default function PushInfomation({
           </div>
         </div>
       </div>
-      <div className="mt-2">
-        <div className="relative mt-3 px-6 ">
-          <p className="absolute  text-xm text-PrimaryColor px-3 mt-2">Title</p>
+      <div className="">
+        <div className="relative px-6 ">
+          <p className="absolute  text-xm text-primaryCol font-semibold px-3 mt-2 ">Title</p>
           <div className="flex">
             <Input
               type="text"
               placeholder="Title here"
-              className="h-16 rounded-lg bg-InputFieldColor pt-7 text-gray-400 bg-[#EFEFEF]"
+              className="h-16 rounded-lg bg-InputFieldColor pt-7 text-gray-400 bg-[#EFEFEF] "
               value={title}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setTitle(e.target.value)

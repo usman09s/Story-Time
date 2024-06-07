@@ -32,8 +32,8 @@ export interface CategoryType {
   image: string;
   name: string;
   parent: string | null;
-  updatedAt?: string;
-  createdAt: string;
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface CategoryData {

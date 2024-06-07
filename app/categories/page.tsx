@@ -27,7 +27,9 @@ export default function Category({ searchParams }: Params) {
 
   
   return (
-    <DashboardLayout active={2}>
+    <DashboardLayout active={2} 
+    title="Category"
+    >
       <div>
         <CategoryLayout title="Category" buttonText="Add a Category" isCategory>
           {isLoading ? (
@@ -40,7 +42,7 @@ export default function Category({ searchParams }: Params) {
             data.response.categories.map((cat) => (
               <Card
                 key={cat._id}
-                status={cat.createdAt}
+                status={new Date(cat.updatedAt)}
                 title={cat.name}
                 image={cat.image}
                 navigation

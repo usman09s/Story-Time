@@ -45,15 +45,10 @@ export default function NotificationPage() {
   };
 
   return (
-    <DashboardLayout active={3}>
-      <div className="p-7 flex justify-between ">
-        <h1 className="text-4xl  text-primaryCol font-bold">
-          Push Notification
-        </h1>
-      </div>
-      <div className="flex border-[#E4E4E4] rounded-lg border-2 m-5 mt-0">
-        <div className="mt-2 w-full ml-2 rounded-lg   flex-col border-[#E4E4E4] border">
-          <div className="bg-white  pb-6 rounded-md ">
+    <DashboardLayout active={3} title="Push Notification">
+      <div className="flex border-[#E4E4E4] rounded-lg border-2 mx-10 mt-10">
+        <div className="mt-1 w-full ml-1 rounded-lg   flex-col border-[#E4E4E4]">
+          <div className="bg-white  pb-6 rounded-md border-2">
             <PushInfomation
               date={date}
               sendToAll={sendToAll}
@@ -63,16 +58,12 @@ export default function NotificationPage() {
               title={title}
             />
           </div>
-
-        <div className="p-5 bg-white  ">
-            <div className="min-h-[530px]  border-2 border-[#E4E4E4]">
-              
-                <QuillToolbar isNotification/>
-                          <Editor isFaq={false} isNotification  value=""  onStateChange={()=>console.log("hello world")}/>
-
+          <div className="mt-2  rounded-md bg-white border-2">
+            <div className="min-h-[530px]   border-[#E4E4E4]">
+              <QuillToolbar isNotification />
+              <Editor isFaq={false} value="" onStateChange={() => console.log("hello world")} />
             </div>
-          </div> 
-
+          </div>
           <div className="flex justify-center mt-5">
             <Button
               onClick={handleSubmit}
@@ -83,8 +74,7 @@ export default function NotificationPage() {
             </Button>
           </div>
         </div>
-
-        <div className="w-2/5 h-screen  bg-white mx-2 p-10 mt-2 border-2 border-[#E4E4E4] rounded-lg">
+        <div className="w-2/5 h-[746px]  bg-white mx-2 p-10 mt-1 border-2 border-[#E4E4E4] rounded-lg">
           <p className="mb-5 text-lg font-semibold">History</p>
           <div className="flex flex-col space-y-4 border-l-2 border-dashed p-3">
             {isLoading ? (
@@ -98,7 +88,7 @@ export default function NotificationPage() {
                 <div key={notif._id} className="flex items-center gap-4 px-3">
                   <p className="text-xs">{dateFormat(notif.createdAt)}</p>
                   <p className="text-xs text-subTitleSecondaryColor">
-                    {notif.title}
+                  Notification was sent
                   </p>
                 </div>
               ))

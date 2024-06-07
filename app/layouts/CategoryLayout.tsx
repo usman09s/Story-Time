@@ -18,9 +18,7 @@ export default function CategoryLayout({
 }) {
   return (
     <div className="px-10">
-      <section>
-        <h1 className="text-4xl font-bold text-[#093732]">{title}</h1>
-      </section>
+   
 
       <div className="flex justify-between my-10">
         <SearchBar initialValue=""/>

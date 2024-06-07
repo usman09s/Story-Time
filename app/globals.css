@@ -77,7 +77,7 @@
 
 
 
-/* .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
+ .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
   content: 'Normal';
   font-size: 14px !important;
 }
@@ -104,12 +104,12 @@
 
 .ql-toolbar .ql-picker {
 
-} */
+} 
 textarea:focus, input:focus{
     outline: none !important;
 }
 
-/* .ql-toolbar button svg {
+ .ql-toolbar button svg {
   
   height: 160% !important;
 }
@@ -120,7 +120,7 @@ textarea:focus, input:focus{
 .ql-toolbar .ql-formats {
   display: flex !important;
   vertical-align: middle;
-} */
+} 
 
 ::-webkit-scrollbar {
   width: 12px; /* Set the width of the scrollbar */
@@ -139,7 +139,6 @@ textarea:focus, input:focus{
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Change the color of the thumb on hover */
 }
-
 
 .ql-toolbar{ border: none !important;}
 .ql-container.ql-snow{ border: none !important;}

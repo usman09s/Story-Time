@@ -25,6 +25,7 @@ export default function Category({ searchParams }: Params) {
     queryFn: () => getCategories({ page, limit, search }),
   });
 
+  
   return (
     <DashboardLayout active={2}>
       <div>

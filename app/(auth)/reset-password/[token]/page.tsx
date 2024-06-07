@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import AuthLayout from "../../layouts/AuthLayout";
+import AuthLayout from "../../../layouts/AuthLayout";
 import AuthButton from "@/components/ui/AuthButton/AuthButton";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ResetPasswordSchema } from "@/lib/AuthValidation";
@@ -11,14 +11,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { resetPass } from "@/API/auth.api";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
-export default function Home() {
+export default function ResetPasswordPage({params}:{params:{token:string}}) {
+
+  useEffect(() => {
+   localStorage.setItem("access-token", params.token);  
+  }, [])
+  
+  
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting,isSubmitted },
   } = useForm<ResetPassword>({ resolver: zodResolver(ResetPasswordSchema) });
 
   const router = useRouter();
@@ -28,14 +35,14 @@ export default function Home() {
   });
 
   const onSubmit: SubmitHandler<ResetPassword> = async (data) => {
-    console.log(data);
-    // const { success, response } = await mutateAsync({
-    //   newPassword: data.password,
-    //   confirmPassword: data.confirmPassword,
-    // });
-    // if (!success) return toast.error(response);
-    // console.log(response);
-    // router.push("/dashboard");
+    const { success, response } = await mutateAsync({
+      newPassword: data.password,
+      confirmPassword: data.confirmPassword,
+      accessToken: params.token
+    });
+    if (!success) return toast.error(response);
+    console.log(response);
+    router.push("/dashboard");
   };
   return (
     <>
@@ -99,7 +106,7 @@ export default function Home() {
               }
             />
           ) : null}
-          <AuthButton buttonTitle={"Sign In"} />
+          <AuthButton buttonTitle={"Create new Password"}/>
         </form>
       </AuthLayout>
     </>

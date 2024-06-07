@@ -250,6 +250,7 @@ function UserMessageList({ chat }: { chat: SupportChatOverview }) {
     router.push(`${pathname}?chatId=${chat._id}&userId=${chat.user._id}`);
   };
 
+  
   return (
     <div
       onClick={openChat}

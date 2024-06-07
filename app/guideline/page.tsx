@@ -1,6 +1,5 @@
 "use client";
 import DashboardLayout from "../layouts/Dashboard";
-import Editor from "@/components/Editor";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -62,7 +61,7 @@ export default function GuidelinePage() {
         </div>
         <div className="flex gap-4">
           <div className="w-3/4">
-            <Editor value={value} setValue={setValue} />
+            {/* <Editor value={value} setValue={setValue} /> */}
 
             <div className="flex justify-center mt-5">
               <Button

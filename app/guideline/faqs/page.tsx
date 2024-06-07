@@ -4,7 +4,7 @@ import DashboardLayout from "../../layouts/Dashboard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import Editor from "@/components/Editor";
+// import Editor from "@/components/Editor";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { GuidelinesData } from "@/types/types";
@@ -58,7 +58,7 @@ export default function Faqs() {
         </div>
         <div className="flex gap-4">
           <div className="w-3/4">
-            <Editor value={value} setValue={setValue} />
+            {/* <Editor value={value} setValue={setValue} /> */}
 
             <div className="flex justify-center mt-5">
               <Button

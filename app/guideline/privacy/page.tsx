@@ -1,7 +1,7 @@
 "use client"
 import DashboardLayout from "../../layouts/Dashboard";
 import Link from "next/link";
-import Editor from "@/components/Editor";
+// import Editor from "@/components/Editor";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -60,7 +60,7 @@ export default function PrivacyPolicy() {
         </div>
         <div className="flex gap-4">
           <div className="w-3/4">
-            <Editor value={value} setValue={setValue} />
+            {/* <Editor value={value} setValue={setValue} /> */}
 
             <div className="flex justify-center mt-5">
               <Button

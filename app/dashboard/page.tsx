@@ -13,7 +13,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { UserSkeleton } from "@/components/skeletons/UserSkeleton";
 import { DashboardTypes } from "@/types/types";
-
+import { CSVLink, CSVDownload } from "react-csv";
 interface Params {
   searchParams: {
     page: number;
@@ -44,6 +44,7 @@ export default function Dashboard({ searchParams }: Params) {
     [searchParams]
   );
 
+
   return (
     <DashboardLayout active={1}>
       <div className="flex flex-col min-h-screen">
@@ -61,9 +62,8 @@ export default function Dashboard({ searchParams }: Params) {
               {/* Tabs */}
               <div className="flex gap-10 border-b-2 text-center border-[#E44173] pb-4 relative">
                 <button
-                  className={`${
-                    !status ? "font-bold text-primaryCol" : "opacity-50"
-                  } text-center cursor-pointer`}
+                  className={`${!status ? "font-bold text-primaryCol" : "opacity-50"
+                    } text-center cursor-pointer`}
                   onClick={() =>
                     router.push(
                       pathname + "?" + createQueryString("status", "")
@@ -73,9 +73,8 @@ export default function Dashboard({ searchParams }: Params) {
                   All
                 </button>
                 <button
-                  className={`${
-                    status === "active" ? "text-primaryCol" : "opacity-50"
-                  } text-center font-bold cursor-pointer`}
+                  className={`${status === "active" ? "text-primaryCol" : "opacity-50"
+                    } text-center font-bold cursor-pointer`}
                   onClick={() =>
                     router.push(
                       `${pathname}?${createQueryString("status", "active")}`
@@ -85,9 +84,8 @@ export default function Dashboard({ searchParams }: Params) {
                   Active
                 </button>
                 <button
-                  className={`${
-                    status === "inactive" ? "text-primaryCol" : "opacity-50"
-                  } text-center font-bold cursor-pointer`}
+                  className={`${status === "inactive" ? "text-primaryCol" : "opacity-50"
+                    } text-center font-bold cursor-pointer`}
                   onClick={() =>
                     router.push(
                       `${pathname}?${createQueryString("status", "inactive")}`
@@ -100,13 +98,15 @@ export default function Dashboard({ searchParams }: Params) {
             </section>
           </div>
           <div className="flex justify-between px-10 mt-5 my-2">
-            <SearchBar initialValue={search || ""}/>
+            <SearchBar initialValue={search || ""} />
             <div>
               <Button
                 variant={"outline"}
                 className="border-[#395E66] flex gap-2 items-center text-[#395E66]"
               >
-                Export CSV <Download className="size-5" />
+                {data && data.response && (
+                  <CSVLink data={data.response.users} className="flex gap-2 items-center">Export CSV <Download className="size-5" target="_blank" /></CSVLink>
+                )}
               </Button>
             </div>
           </div>

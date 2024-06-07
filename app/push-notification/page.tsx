@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/Dashboard";
 import PushInfomation from "@/components/PushInfomation";
 import { Button } from "@/components/ui/button";
-import Editor from "@/components/Editor";
+// import Editor from "@/components/Editor";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getNotifications, pushNotification } from "@/API/notiifications";
 import { dateFormat } from "@/lib/dateFormat";
 import { NotificationType } from "@/types/types";
+import Editor from "@/components/Editor";
+import QuillToolbar from "@/components/toolbar";
 
 export default function NotificationPage() {
   const queryClient = useQueryClient();
@@ -62,11 +64,14 @@ export default function NotificationPage() {
             />
           </div>
 
-          <div className="p-5 bg-white  ">
+        <div className="p-5 bg-white  ">
             <div className="min-h-[530px]  border-2 border-[#E4E4E4]">
-              <Editor value={value} setValue={setValue} />
+              
+                <QuillToolbar isNotification/>
+                          <Editor isFaq={false} isNotification  value=""  onStateChange={()=>console.log("hello world")}/>
+
             </div>
-          </div>
+          </div> 
 
           <div className="flex justify-center mt-5">
             <Button

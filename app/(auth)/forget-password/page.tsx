@@ -11,17 +11,18 @@ import ErrorMessage from "@/components/ErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { forgetPass } from "@/API/auth.api";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const ForgetPassword = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting,isSubmitted },
   } = useForm<ForgetFields>({ resolver: zodResolver(ForgetSchema) });
 
   const router = useRouter();
+  const [success, setSuccess] = useState<boolean>(false);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: forgetPass,
@@ -29,9 +30,11 @@ const ForgetPassword = () => {
 
   const onSubmit: SubmitHandler<ForgetFields> = async (data) => {
     console.log(data);
-    // const { success, response } = await mutateAsync(data.email);
-    // if (!success) return toast.error(response);
-    // console.log(response);
+    const { success, response } = await mutateAsync(data.email);
+    if (!success) return toast.error(response);
+    if (success) toast.success(response)
+    setSuccess(true);
+    console.log(response);
     // router.push("/dashboard");
   };
 
@@ -54,17 +57,14 @@ const ForgetPassword = () => {
         {errors?.email?.message && (
           <ErrorMessage text={errors?.email?.message} />
         )}
-        {/* <AuthButton
+        <AuthButton
+        isSubmitting={isSubmitting}
+        isSubmitted={isSubmitted}
+        success={success && isSubmitted}
+        isPending={isPending}
           buttonTitle={"Reset Password"}
           isModal={!errors?.email?.message}
-        /> */}
-        <Button
-          className="mt-7 py-7 text-white bg-primaryCol rounded-md text-md w-full hover:bg-[#395e66be]"
-          type="submit"
-          disabled={isPending}
-        >
-          Reset Password
-        </Button>
+        />
       </form>
     </AuthLayout>
   );

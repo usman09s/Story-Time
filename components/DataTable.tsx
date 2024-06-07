@@ -12,6 +12,10 @@ import {
 import { AvatarFallback, AvatarImage, Avatar } from "./ui/avatar";
 import Image from "next/image";
 import { DashboardUser } from "@/types/types";
+import { Button } from "./ui/button";
+import { toggleUserBlock } from "@/API/dashboard.api";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DataTableProps {
   TableHeading: string[];
@@ -19,32 +23,36 @@ interface DataTableProps {
 }
 export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
   const [selectAll, setSelectAll] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
-
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [showModalRowIndex, setShowModalRowIndex] = useState<number | null>(null);
+  const queryClient = useQueryClient()
   const handleCheckboxChange = (index: number) => {
     if (selectAll) {
       setSelectedRows([]);
       setSelectAll(false);
     } else {
       const updatedSelectedRows = [...selectedRows];
-      if (updatedSelectedRows.includes(index as never)) {
-        updatedSelectedRows.splice(
-          updatedSelectedRows.indexOf(index as never),
-          1
-        );
+      if (updatedSelectedRows.includes(index)) {
+        updatedSelectedRows.splice(updatedSelectedRows.indexOf(index), 1);
       } else {
-        updatedSelectedRows.push(index as never);
+        updatedSelectedRows.push(index);
       }
       setSelectedRows(updatedSelectedRows);
     }
   };
 
+  const toggleUser = async (id: string) => {
+    const {success, response} = await toggleUserBlock(id);
+    if(!success) return toast.error(response);
+    if(success)  toast.success(response);
+    queryClient.invalidateQueries({ queryKey: ['users'] })
+  }
   return (
     <div>
       <Table className="mt-3">
         <TableHeader>
           <TableRow className="bg-[#395E66]  hover:bg-[#395e66e2] w-full rounded-sm h-5">
-            <TableHead className="   w-96">
+            <TableHead className="w-96">
               <div className="flex items-center gap-6">
                 <input
                   type="checkbox"
@@ -53,7 +61,6 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
                   className="cursor-pointer h-4 w-4 rounded-3xl shadow checked:bg-[#439A86]  focus:ring-0 checked:text-[#439A86]"
                   onChange={() => setSelectAll(!selectAll)}
                 />
-
                 <label htmlFor="name" className="font-bold text-white">
                   Profile
                 </label>
@@ -72,12 +79,12 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
         </TableHeader>
         <TableBody>
           {TableData.map((row, index) => (
-            <TableRow key={row._id} className="text-center">
+            <TableRow key={row._id} className="text-center relative">
               <TableCell className="w-52">
                 <div className="flex items-center gap-6">
                   <input
                     type="checkbox"
-                    checked={selectAll || selectedRows.includes(index as never)}
+                    checked={selectAll || selectedRows.includes(index)}
                     onChange={() => handleCheckboxChange(index)}
                     className="h-4 w-4 rounded-3xl shadow checked:bg-[#439A86] focus:ring-0 checked:text-[#439A86]"
                   />
@@ -97,11 +104,11 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
                 </div>
               </TableCell>
               <TableCell className="w-60">
-                <div className=" inline-block text-center space-y-2">
+                <div className="inline-block text-center space-y-2">
                   <p className="py-1 rounded-full bg-[#F2F0F9] inline text-center font-bold px-1">
-                    {row.videoStoriesCount} video stroies
+                    {row.videoStoriesCount} video stories
                   </p>
-                  <p className="py-1 rounded-full bg-[#F2F0F9] px-2 text-center font-bold ">
+                  <p className="py-1 rounded-full bg-[#F2F0F9] px-2 text-center font-bold">
                     {row.textStoriesCount} text stories
                   </p>
                 </div>
@@ -118,6 +125,11 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
               </TableCell>
               <TableCell>
                 <Image
+                  onClick={() =>
+                    setShowModalRowIndex(
+                      showModalRowIndex === index ? null : index
+                    )
+                  }
                   src={"/assets/More.png"}
                   alt="Icon"
                   width={6}
@@ -125,6 +137,20 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
                   className="cursor-pointer"
                 />
               </TableCell>
+              {showModalRowIndex === index && (
+                <div className="absolute z-50 right-20 mt-2 w-36 bg-white shadow-lg p-4">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 cursor-pointer" onClick={()=>toggleUser(row._id)}>
+                      <Image src={'/assets/Disable.png'} alt="Disable Button Picture" width={20} height={20}/>
+                      <p className="text-xs ">Disable User</p>
+                      </div>
+                      <div className="flex gap-2 cursor-pointer" onClick={()=>toggleUser(row._id)}>
+                      <Image src={'/assets/Enable.png'} alt="Disable Button Picture" width={20} height={20}/>
+                      <p className="text-xs ">Enable User</p>
+                      </div>
+                  </div>
+                </div>
+              )}
             </TableRow>
           ))}
         </TableBody>

@@ -50,11 +50,14 @@ export const getCurrentUser = async () => {
 
 export const forgetPass = async (email: string) => {
   try {
-    const { data } = await api.put("/auth/forget-password", { email });
+    const  data  = await api.put("/auth/forget-password", { email });
 
+    if(data.status === 400) return {success: false, response: data.data.message}
+    if(data.status === 422) return {success: true, response: data.data.message}
+    
     return {
       success: true,
-      response: data,
+      response: data.data.message,
     };
   } catch (error: any) {
     return {
@@ -83,9 +86,11 @@ export const verifyResetToken = async (resetToken: string) => {
 export const resetPass = async ({
   newPassword,
   confirmPassword,
+  accessToken
 }: {
   newPassword: string;
   confirmPassword: string;
+  accessToken: string;
 }) => {
   try {
     const { data } = await api.put("/auth/reset-password", {

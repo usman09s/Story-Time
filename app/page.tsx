@@ -75,7 +75,7 @@ export default function Home() {
                 Password
               </Label>
               <Link
-                className="font-bold text-primaryCol"
+                className="text-primaryCol"
                 href={"/forget-password"}
               >
                 forget password?

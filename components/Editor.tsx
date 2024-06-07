@@ -1,67 +1,37 @@
-"use client";
-import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
-import { EditorSkeleton } from "./skeletons/EditorSkeleton";
+'use client'
+import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css';
+import { formats, modules } from '../components/toolbar';
+import { useState } from 'react';
+import debounce from 'lodash.debounce';
 
-interface Props {
-  value: string | undefined;
-  setValue: (val: string) => void;
-}
-
-const QuillNoSSRWrapper = dynamic(() => import("react-quill"), {
+const QuillNoSSRWrapper = dynamic(() => import('react-quill'), {
   ssr: false,
-  loading: () => <EditorSkeleton />,
+  loading: () => <p>Loading ...</p>,
 });
 
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    ["bold", "italic", "underline"],
-    [
-      { align: "" },
-      { align: "center" },
-      { align: "right" },
-      { align: "justify" },
-    ],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    ["link"],
-  ],
-  clipboard: {
-    matchVisual: false,
-  },
-};
 
-export const options = [
-  "header",
-  "bold",
-  "size",
-  "italic",
-  "underline",
-  "align",
-  "align",
-  "align",
-  "justify",
-  "link",
-  "list",
-  "bullet",
-  "indent",
-];
+export default function Editor({ value, isFaq, isNotification, onStateChange }: { value: string, isFaq?: boolean, isNotification?: boolean, onStateChange: (newValue: string) => void }) {
+  const [context, setContext] = useState(value);
 
-export default function Editor({ value, setValue }: Props) {
+  const debouncedHandleStateChange = debounce((newValue: string) => {
+    setContext(newValue);
+    onStateChange(newValue);
+  }, 400); // Adjust the debounce delay as per your requirement
+
+  const handleStateChange = (newValue: string) => {
+    debouncedHandleStateChange(newValue);
+  };
+
   return (
-    <div className="max-w-6xl border-2 border-[#E4E4E4] min-h-[730px] ">
+    <div className={`${isFaq ? null : null}`}>
       <QuillNoSSRWrapper
-        theme="snow"
+        theme='snow'
+        onChange={handleStateChange}
         modules={modules}
-        formats={options}
-        className="h-full max-w-6xl w-full px-12 py-5"
-        value={value}
-        onChange={setValue}
+        formats={formats}
+        className={`!border-none  ${isFaq ? ' bg-backColor min-h-[300px] ' : ' '}  text-white  placeholder:text-TextColor3 ${isNotification ? 'min-h-[300px]   text-white ' : 'bg-DarkLight '}`}
+        value={context}
       />
     </div>
   );

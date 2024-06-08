@@ -12,6 +12,7 @@ import {
   ChatTypes,
   ChatsListType,
   SupportChatOverview,
+  SupportMessage,
 } from "@/types/types";
 import { dateFormat } from "@/lib/dateFormat";
 import { ChatListSkeleton } from "@/components/skeletons/ChatListSkeleton";
@@ -21,7 +22,8 @@ import { ChatMessageSkeleton } from "@/components/skeletons/ChatMessageSkeleton"
 import { toast } from "sonner";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { truncateText } from "@/lib/utils";
+import { formatDate, formatShortDuration, truncateText } from "@/lib/utils";
+import useCurrentChatStore from "@/store/currentChat";
 
 interface Params {
   searchParams: {
@@ -51,9 +53,6 @@ export default function Support({ searchParams }: Params) {
     enabled: !!chatId,
   });
 
-  // console.log("CHATTTTTTTTTTTTTTTTTTT",chat);
-  console.log("DATAAAAA",data);
-  
   // Send message
   const { mutateAsync, isPending } = useMutation({
     mutationFn: sendMessage,
@@ -75,18 +74,28 @@ export default function Support({ searchParams }: Params) {
     setText("");
     setFile(undefined);
   };
+  const shouldShowDate = (currentIndex: number, messages: SupportMessage[], lastDisplayedDate: string) => {
+    if (currentIndex === 0) {
+      return true;
+    }
+  
+    const currentMessageDate = new Date(messages[currentIndex].createdAt).toDateString();
+    return currentMessageDate !== lastDisplayedDate;
+  };
+
+  const currentChatUser = useCurrentChatStore((state) => state.currentChatUser);
 
   return (
     <DashboardLayout active={4} title="Support">
       <section className="px-10 mb-20">
         <div className=" border-2 border-borderCol mt-10 h-[800px] flex">
-          <div className="max-w-xs w-full flex flex-col border-2 border-borderCol h-[800px] overflow-y-auto">
+          <div className="max-w-80 overflow-x-hidden w-full flex flex-col border-2 border-borderCol h-[800px] overflow-y-auto">
             <div className="relative border-b-2 border-borderCol">
               <Input
                 placeholder="Search here"
-                className="px-16 mt-2 border-none placeholder:text-lg placeholder:opacity-30"
+                className="px-16 mt-2 py-9 border-none placeholder:text-lg placeholder:opacity-30"
               />
-              <Search className="size-5 text-primaryCol absolute top-5 left-7" />
+              <Search className="size-9 text-primaryCol absolute top-7 left-3" />
             </div>
             {isLoading ? (
               <ChatListSkeleton />
@@ -96,7 +105,7 @@ export default function Support({ searchParams }: Params) {
               data.response &&
               data.response.supportChats.length > 0 &&
               data.response.supportChats.map((chat) => (
-                <UserMessageList key={chat._id} chat={chat} activeChatId={chatId}/>
+                <UserMessageList key={chat._id} chat={chat} activeChatId={chatId} />
               ))
             )}
           </div>
@@ -105,42 +114,50 @@ export default function Support({ searchParams }: Params) {
             {chatId && chat && chat.success && chat.response && (
               <>
                 <div className="p-5 flex gap-1 w-full border-b">
-                  <Avatar>
+                  <Avatar
+                    className="w-12 h-12">
                     <AvatarImage
-                      src="/assets/dummy-user.webp"
+                      src={`http://storytime.yameenyousuf.com/${currentChatUser.profileImage}`}
                       alt="@shadcn"
-                      sizes="30"
                     />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col ">
                     <p className="font-bold text-md">
-                      {/* {chat.user.firstName} {chat.user.lastName} */}
+                      {currentChatUser.firstname} {currentChatUser.lastname}
                     </p>
-                    {/* <p className="text-xs">{chat.user.}</p> */}
+                    <p className="text-md text-[#395E66]">#{chat.response.supportMessages[0].chat}</p>
                   </div>
                 </div>
                 <div className="flex flex-col justify-between w-full">
                   <div className="flex flex-col w-full">
                     <div className="flex-grow p-4 w-full border-gray-300 max-h-[650px] min-h-[650px] overflow-y-auto">
                       {/* Admin Messages on the left */}
-                      <p className="flex justify-center text-xs mb-5">
-                        8:00 AM
-                      </p>
+                   
                       <div className="flex flex-col justify-start gap-y-1">
                         {isChatLoading ? (
                           <ChatMessageSkeleton />
-                        ) : (
-                          chat.response.supportMessages.length > 0 &&
-                          chat.response.supportMessages.map((msg) => (
-                            <MessageBox
-                              key={msg._id}
-                              id={msg._id}
-                              content={msg.text}
-                              media={msg.media}
-                              role={msg.user?._id === userId ? "user" : "admin"}
-                            />
-                          ))
+                        )  : (
+                          chat.response.supportMessages.length > 0 && (() => {
+                            let lastDisplayedDate = '';
+                            return chat.response.supportMessages.map((msg, index, messages) => {
+                              const showDate = shouldShowDate(index, messages, lastDisplayedDate);
+                              const messageDate = new Date(msg.createdAt).toDateString();
+                              if (showDate) {
+                                lastDisplayedDate = messageDate;
+                              }
+                              return (
+                                <MessageBox
+                                  key={msg._id}
+                                  id={msg._id}
+                                  content={msg.text}
+                                  media={msg.media}
+                                  role={msg.user?._id === userId ? "user" : "admin"}
+                                  day={showDate ? formatDate(msg.createdAt) : ''}
+                                  createdAt={formatShortDuration(msg.createdAt)}                                />
+                              );
+                            });
+                          })()
                         )}
                       </div>
                     </div>
@@ -173,7 +190,6 @@ export default function Support({ searchParams }: Params) {
                             onChange={(e) => setFile(e.target.files?.[0])}
                           />
                         </div>
-
                         <Input
                           type="text"
                           id="link"
@@ -206,30 +222,47 @@ export default function Support({ searchParams }: Params) {
 
 const MessageBox = ({
   content,
+  day,
   media,
   role,
   id,
+  createdAt
 }: {
+  day:string
   content: string;
   media: string[];
   role: string;
   id: string;
+  createdAt:string
 }) => {
   return (
+    <>
+     {day && (
+        <div className="flex items-center my-5">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="mx-2 text-xs text-gray-500">{day}</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
+      )}
     <div
       className={
-        role === "user" ? "self-end max-w-[60%]" : "self-start max-w-[60%]"
+        role === "admin" ? "self-end max-w-[60%]" : "self-start max-w-[60%]"
       }
     >
-      <p
-        className={`${
-          role === "user"
-            ? "bg-primaryCol text-white"
-            : "bg-gray-200 text-neutral-800"
-        } p-4 text-sm rounded-xl`}
+     <div className="px-7 mb-2">
+     <p
+        className={`${role === "user"
+          ? " text-[#808191] bg-[#F1F3F6]"
+          : "bg-primaryCol text-white"
+          } p-4 text-sm rounded-xl`}
       >
         {content}
       </p>
+      <p className={`text-xs py-2 text-black p3-4 ${role === 'admin' ? 'text-end' : 'text-start'}`}>
+     {createdAt}
+      </p>
+     </div>
+      
       {media &&
         media.length > 0 &&
         media.map((img, idx) => (
@@ -243,13 +276,23 @@ const MessageBox = ({
           />
         ))}
     </div>
+    </>
+
   );
 };
 
-function UserMessageList({ chat,activeChatId }: { chat: SupportChatOverview,activeChatId:string}) {
+function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverview, activeChatId: string }) {
   const router = useRouter();
   const pathname = usePathname();
+  const setCurrentChatUser = useCurrentChatStore((state) => state.setCurrentChatUser);
+
   const openChat = () => {
+    setCurrentChatUser({
+      firstname: chat.user.firstName,
+      lastname: chat.user.lastName,
+      profileImage: chat.user.profileImage,
+      username: chat.user.username,
+    })
     router.push(`${pathname}?chatId=${chat._id}&userId=${chat.user._id}`);
   };
   return (
@@ -259,19 +302,19 @@ function UserMessageList({ chat,activeChatId }: { chat: SupportChatOverview,acti
     >
       <div className="flex gap-2 w-full">
         <Avatar className="w-14 h-14">
-          <AvatarImage   src={`http://storytime.yameenyousuf.com/${chat.user.profileImage}`}alt={chat.user.username} />
+          <AvatarImage src={`http://storytime.yameenyousuf.com/${chat.user.profileImage}`} alt={chat.user.username} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="flex flex-col  gap-1 w-full">
           <p className="font-bold text-md">
-            {chat.user.firstName + " " + chat.user.lastName} 
+            {chat.user.firstName + " " + chat.user.lastName}
           </p>
           <div className="flex items-end justify-between w-full">
-          <p className="text-xs text-[#09110e80]">
-        {chat.lastMessage && truncateText(chat.lastMessage.text, 3)} 
-      </p>
+            <p className="text-xs text-[#09110e80]">
+              {chat.lastMessage && truncateText(chat.lastMessage.text, 3)}
+            </p>
             <p className="text-xs mr-5 text-[#09110e80]">
-            {formatDistanceToNow(new Date(chat.updatedAt || chat.createdAt), )}
+              {formatDistanceToNow(new Date(chat.updatedAt || chat.createdAt),)}
             </p>
           </div>
         </div>

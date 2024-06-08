@@ -43,7 +43,7 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
         </div>
         <div className="text-center mt-4">
           <p className="font-bold text-black text-lg">{title}</p>
-          <p className="text-black opacity-35 text-sm">{formatDate(status)}</p>
+          <p className="text-black opacity-35 text-sm">Uploaded last {formatDate(status)}</p>
         </div>
       </div>
     </div>

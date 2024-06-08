@@ -135,8 +135,8 @@ export interface GuidelinesData {
       type: string;
       content: string;
       title: string;
-      createdAt: string;
-      updatedAt?: string;
+      createdAt: Date;
+      updatedAt?: Date;
       id: string;
     }[];
     pagination: PaginationTypes;
@@ -150,7 +150,7 @@ export interface NotificationType {
       _id: string;
       title: string;
       message: string;
-      createdAt: string;
+      createdAt: Date;
       id: string;
     }[];
     pagination: PaginationTypes;
@@ -164,10 +164,11 @@ interface SupportChatOverview {
   lastMessage: {
     _id: string;
     chat: string;
-    createdAt: string;
+    createdAt: Date;
+
     media?: string[];
     text: string;
-    updatedAt?: string;
+    updatedAt?: Date;
     user: string;
   };
   status: string;
@@ -192,11 +193,11 @@ export interface ChatsListType {
 export interface SupportMessage {
   _id: string;
   chat: string;
-  createdAt: string;
+  createdAt: Date;
   id: string;
   media: string[];
   text: string;
-  updatedAt?: string;
+  updatedAt?: Date;
   user: {
     _id: string;
     firstName: string;

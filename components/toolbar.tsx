@@ -40,26 +40,26 @@ export const QuillToolbar = ({
   <div id="toolbar" className="flex justify-between">
     <span className="ql-formats pl-5">
       {/* Important declaration to increase icon size */}
-      <button className="relative">
+      <button className="relative mr-3">
         <Image
           src="/assets/text.svg"
           alt=""
-          width={32}
-          height={32}
+          width={42}
+          height={42}
           className="absolute top-[4px] left-1"
         />
       </button>
-      <div className="border-[1.2px] h-7 ml-3 mt-1"></div>
+      <div className="border-[1.2px] h-7 mt-1 mx-2"></div>
 
-      <button className="ql-bold"></button>
-      <button className="ql-italic"></button>
-      <button className="ql-underline"></button>
-      <div className="border-[1.2px] h-7 ml-3 mt-1"></div>
+      <button className="ql-bold mx-1"></button>
+      <button className="ql-italic mx-1"></button>
+      <button className="ql-underline mx-1"></button>
+      <div className="border-[1.2px] h-7 ml-3 mt-1 mx-3"></div>
       <button className="ql-align"></button>
 
-      <button className="ql-align" value="center"></button>
-      <button className="ql-align" value="right"></button>
-      <button className="ql-align" value="justify"></button>
+      <button className="ql-align mx-1" value="center"></button>
+      <button className="ql-align mx-1" value="right"></button>
+      <button className="ql-align mx-1" value="justify"></button>
       <div className="border-[1.2px] h-7 ml-3 mt-1"></div>
         {/* <span className="ql-formats">
           <button className="ql-image"></button>

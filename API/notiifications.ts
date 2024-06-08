@@ -15,7 +15,6 @@ export const pushNotification = async ({
       message,
       sendToAll,
     });
-
     return {
       success: true,
       response: response,

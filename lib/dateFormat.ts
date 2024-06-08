@@ -1,5 +1,5 @@
-import { formatDistanceToNowStrict } from "date-fns";
+import { formatDate } from "date-fns";
 
 export const dateFormat = (date: string) => {
-  return formatDistanceToNowStrict(new Date(date));
+  return formatDate(new Date(date), "yyyy-MM-dd");
 };

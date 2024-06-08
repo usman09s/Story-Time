@@ -176,6 +176,7 @@ interface SupportChatOverview {
     _id: string;
     firstName: string;
     lastName: string;
+    profileImage:string
     username: string;
   };
 }
@@ -200,6 +201,7 @@ export interface SupportMessage {
     _id: string;
     firstName: string;
     lastName: string;
+    profileImage:string
     username: string;
   };
 }

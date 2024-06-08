@@ -80,9 +80,9 @@ export const QuillToolbar = ({
         <span></span>
         <span className="ql-formats flex ">
           {/* Important declaration to increase icon size */}
-          <button className="ql-link"></button>
-          <div className="border-l h-7 ml-2 mt-1"></div>
-          <button className="ql-image"></button>
+          <button className="ql-link mr-1"></button>
+          <div className="border-l h-7 ml-3 mt-1"></div>
+          <button className="ql-image mr-7 ml-2"></button>
         </span>
 
   </div>

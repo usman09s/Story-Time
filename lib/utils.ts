@@ -10,3 +10,8 @@ export const formatDate = (date: Date | undefined): string => {
   if (!date) return 'Date not available'; // Return a placeholder if the date is undefined
   return `Uploaded last ${format(date, 'dd MMM yyyy')}`; // Format as "Uploaded last 28 Aug 2023"
 };
+
+export const truncateText = (text: string, wordsCount: number) => {
+  const words = text.split(' ');
+  return words.slice(0, wordsCount).join(' ');
+};

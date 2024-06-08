@@ -15,11 +15,13 @@ import {
 } from "@/types/types";
 import { dateFormat } from "@/lib/dateFormat";
 import { ChatListSkeleton } from "@/components/skeletons/ChatListSkeleton";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ChatMessageSkeleton } from "@/components/skeletons/ChatMessageSkeleton";
 import { toast } from "sonner";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { truncateText } from "@/lib/utils";
 
 interface Params {
   searchParams: {
@@ -49,6 +51,9 @@ export default function Support({ searchParams }: Params) {
     enabled: !!chatId,
   });
 
+  // console.log("CHATTTTTTTTTTTTTTTTTTT",chat);
+  console.log("DATAAAAA",data);
+  
   // Send message
   const { mutateAsync, isPending } = useMutation({
     mutationFn: sendMessage,
@@ -72,10 +77,8 @@ export default function Support({ searchParams }: Params) {
   };
 
   return (
-    <DashboardLayout active={4}>
+    <DashboardLayout active={4} title="Support">
       <section className="px-10 mb-20">
-        <h1 className="text-4xl text-primaryCol font-bold">Support</h1>
-
         <div className=" border-2 border-borderCol mt-10 h-[800px] flex">
           <div className="max-w-xs w-full flex flex-col border-2 border-borderCol h-[800px] overflow-y-auto">
             <div className="relative border-b-2 border-borderCol">
@@ -93,7 +96,7 @@ export default function Support({ searchParams }: Params) {
               data.response &&
               data.response.supportChats.length > 0 &&
               data.response.supportChats.map((chat) => (
-                <UserMessageList key={chat._id} chat={chat} />
+                <UserMessageList key={chat._id} chat={chat} activeChatId={chatId}/>
               ))
             )}
           </div>
@@ -243,32 +246,32 @@ const MessageBox = ({
   );
 };
 
-function UserMessageList({ chat }: { chat: SupportChatOverview }) {
+function UserMessageList({ chat,activeChatId }: { chat: SupportChatOverview,activeChatId:string}) {
   const router = useRouter();
   const pathname = usePathname();
   const openChat = () => {
     router.push(`${pathname}?chatId=${chat._id}&userId=${chat.user._id}`);
   };
-
-  
   return (
     <div
       onClick={openChat}
-      className="relative p-5 bg-primaryCol bg-opacity-10 cursor-pointer"
+      className={`relative py-8 px-5  bg-opacity-10 cursor-pointer ${chat._id === activeChatId ? 'bg-primaryCol' : 'bg-white'}`}
     >
       <div className="flex gap-2 w-full">
-        <Avatar>
-          <AvatarImage src="/assets/dummy-user.webp" alt={chat.user.username} />
+        <Avatar className="w-14 h-14">
+          <AvatarImage   src={`http://storytime.yameenyousuf.com/${chat.user.profileImage}`}alt={chat.user.username} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col  gap-1 w-full">
           <p className="font-bold text-md">
-            {chat.user.firstName} {chat.user.lastName}
+            {chat.user.firstName + " " + chat.user.lastName} 
           </p>
           <div className="flex items-end justify-between w-full">
-            <p className="text-xs font-semibold">{chat.lastMessage.text}</p>
-            <p className="text-xs mr-5">
-              {dateFormat(chat.updatedAt || chat.createdAt)}
+          <p className="text-xs text-[#09110e80]">
+        {chat.lastMessage && truncateText(chat.lastMessage.text, 3)} 
+      </p>
+            <p className="text-xs mr-5 text-[#09110e80]">
+            {formatDistanceToNow(new Date(chat.updatedAt || chat.createdAt), )}
             </p>
           </div>
         </div>

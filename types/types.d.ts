@@ -172,7 +172,7 @@ interface SupportChatOverview {
     user: string;
   };
   status: string;
-  updatedAt?: string;
+  updatedAt?: Date;
   user: {
     _id: string;
     firstName: string;

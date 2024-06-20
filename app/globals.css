@@ -75,7 +75,10 @@
   }
 }
 
-
+.ql-editor p{
+  font-size: 16px;
+  line-height: 1.5;
+}
 
  .ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
   content: 'Normal';

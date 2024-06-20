@@ -6,7 +6,7 @@ import { Heading } from "@/types/data";
 import SearchBar from "@/components/SearchBar";
 import States from "@/components/states";
 import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "@/API/dashboard.api";
+import { getUsers, userCount } from "@/API/dashboard.api";
 import { Download } from "lucide-react";
 import { DashboardPagination } from "@/components/helpers/DashboardPagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -22,13 +22,17 @@ interface Params {
     status: "active" | "inactive" | undefined;
   };
 }
-
 export default function Dashboard({ searchParams }: Params) {
   const { page, limit, search, status } = searchParams;
 
   const { data, isLoading } = useQuery<DashboardTypes>({
     queryKey: ["users", page, limit, search, status],
     queryFn: () => getUsers({ page, limit, search, status: status || "" }),
+  });
+
+  const {data:count} = useQuery({
+    queryKey: ["user-count"],
+    queryFn: userCount
   });
 
   const pathname = usePathname();
@@ -44,7 +48,6 @@ export default function Dashboard({ searchParams }: Params) {
     [searchParams]
   );
 
-
   return (
     <DashboardLayout active={1} title="Dashboard & Users">
       <div className="flex flex-col min-h-screen">
@@ -53,10 +56,9 @@ export default function Dashboard({ searchParams }: Params) {
             <section>
               <div className="flex w-full items-center gap-10 my-6">
                 <States iconPath="done" title="total Download" total="1.4k" />
-                <States iconPath="mark2" title="Guests" total="350" />
-                <States iconPath="star2" title="Premium Users" total="1.4k" />
+                <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
+                <States iconPath="star2" title="Premium Users" total={`${count?.response.userCount}`} />
               </div>
-              {/* Tabs */}
               <div className="flex gap-10 border-b-2 text-center border-[#E44173] pb-4 relative">
                 <button
                   className={`${!status ? "font-bold text-primaryCol" : "opacity-50"

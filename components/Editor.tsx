@@ -22,16 +22,22 @@ export default function Editor({ value, isFaq, isNotification, onStateChange }: 
   const handleStateChange = (newValue: string) => {
     debouncedHandleStateChange(newValue);
   };
-
+  
   return (
-    <div className={`${isFaq ? null : null}`}>
+    <div>
       <QuillNoSSRWrapper
+        value={value}
         theme='snow'
         onChange={handleStateChange}
         modules={modules}
         formats={formats}
-        className={`${isFaq ? ' bg-backColor min-h-[300px] ' : ' '}  text-black  placeholder:text-TextColor3 ${isNotification ? 'min-h-[300px]   text-white ' : 'bg-DarkLight '}`}
-        value={context}
+        style={
+          isNotification
+            ? { height: '300px', fontSize: '20px' }
+            : { height: '850px', fontSize: '50px', }
+
+        }
+        className={`text-black  placeholder:text-TextColor3 ${isNotification ? 'min-h-[300px]   text-white ' : 'bg-DarkLight text-5xl'}`}        
       />
     </div>
   );

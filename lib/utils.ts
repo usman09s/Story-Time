@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { differenceInDays, differenceInMinutes, format } from "date-fns";
 import {  differenceInHours, differenceInMonths } from 'date-fns';
+import { SupportMessage } from "@/types/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -44,4 +45,14 @@ export const formatShortDuration = (date: string | Date) => {
   } else {
     return `${monthsDifference}mo ago`;
   }
+};
+
+
+export const shouldShowDate = (currentIndex: number, messages: SupportMessage[], lastDisplayedDate: string) => {
+  if (currentIndex === 0) {
+    return true;
+  }
+
+  const currentMessageDate = new Date(messages[currentIndex].createdAt).toDateString();
+  return currentMessageDate !== lastDisplayedDate;
 };

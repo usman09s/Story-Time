@@ -43,3 +43,19 @@ export const toggleUserBlock = async (id: string) => {
     };
   }
 }
+
+export const userCount = async () => {
+  try {
+
+    const  {data} = await api.get('/user/user-count');
+    return {
+      success: true,
+      response: data.data,
+    };
+  } catch (error:any) {
+    return{
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    }
+  }
+}

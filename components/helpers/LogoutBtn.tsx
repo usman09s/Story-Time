@@ -8,13 +8,14 @@ import Cookies from "js-cookie";
 export const LogoutBtn = () => {
   const router = useRouter();
   const { setUser } = useAuth();
+  
   const handleLogout = async () => {
 
     setUser(undefined);
     localStorage.removeItem("access-token");
     Cookies.remove("session");
     toast.success("Logged out successfully");
-    router.push("/dashboard");
+    router.push("/");
   };
   return (
     <div className="space-y-3">

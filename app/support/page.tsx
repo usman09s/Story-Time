@@ -7,21 +7,16 @@ import { ArrowDownCircleIcon, Paperclip, Search, SendHorizontal } from "lucide-r
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getChatMessages, getChatsList, sendMessage } from "@/API/chats.api";
 import {
-  ChatListType,
-  ChatMessage,
   ChatTypes,
   ChatsListType,
   SupportChatOverview,
-  SupportMessage,
 } from "@/types/types";
-import { dateFormat } from "@/lib/dateFormat";
 import { ChatListSkeleton } from "@/components/skeletons/ChatListSkeleton";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ChatMessageSkeleton } from "@/components/skeletons/ChatMessageSkeleton";
 import { toast } from "sonner";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { formatDistanceToNow } from "date-fns";
 import { formatDate, formatShortDuration, shouldShowDate, truncateText } from "@/lib/utils";
 import useCurrentChatStore from "@/store/currentChat";
 
@@ -36,7 +31,7 @@ interface Params {
 
 export default function Support({ searchParams }: Params) {
   const queryClient = useQueryClient();
-  const { page, limit, chatId, userId } = searchParams;
+  const { page, limit, chatId  } = searchParams;
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | undefined>();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -46,6 +41,7 @@ export default function Support({ searchParams }: Params) {
     queryKey: ["chats-list"],
     queryFn: () => getChatsList({ page, limit }),
   });
+
 
   // Fetching single chats
   const { data: chat, isLoading: isChatLoading } = useQuery<ChatTypes>({
@@ -76,10 +72,8 @@ export default function Support({ searchParams }: Params) {
     setText("");
     setFile(undefined);
   };
-
-
   const currentChatUser = useCurrentChatStore((state) => state.currentChatUser);
-
+  
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -97,7 +91,7 @@ export default function Support({ searchParams }: Params) {
           <div className="max-w-80 overflow-x-hidden w-full flex flex-col border-2 border-borderCol h-[800px] overflow-y-auto">
             <div className="relative border-b-2 border-borderCol">
               <Input
-                placeholder="Search here"
+                placeholder="Search Message"
                 className="px-16 mt-2 py-9 border-none placeholder:text-lg placeholder:opacity-30"
               />
               <Search className="size-9 text-primaryCol absolute top-7 left-3" />
@@ -108,9 +102,9 @@ export default function Support({ searchParams }: Params) {
               data &&
               data.success &&
               data.response &&
-              data?.response?.supportChats  &&
-              data.response?.supportChats?.length > 0 &&
-              data.response.supportChats.map((chat) => (
+              data?.response?.data &&
+              data.response?.data?.length > 0 &&
+              data.response.data.map((chat) => (
                 <UserMessageList key={chat._id} chat={chat} activeChatId={chatId} />
               ))
             )}
@@ -132,7 +126,7 @@ export default function Support({ searchParams }: Params) {
                       <p className="font-bold text-md">
                         {currentChatUser.firstname} {currentChatUser.lastname}
                       </p>
-                      <p className="text-md text-[#395E66]">#{chat.response.supportMessages[0].chat}</p>
+                      <p className="text-md text-[#395E66]">#{chat.response.data[0].chat}</p>
                     </div>
                   </div>
                   <div className="border-2 py-2 px-5 flex justify-between items-center gap-5 cursor-pointer">
@@ -149,9 +143,9 @@ export default function Support({ searchParams }: Params) {
                         {isChatLoading ? (
                           <ChatMessageSkeleton />
                         ) : (
-                          chat.response.supportMessages.length > 0 && (() => {
+                          chat.response.data.length > 0 && (() => {
                             let lastDisplayedDate = '';
-                            return chat.response.supportMessages.map((msg, index, messages) => {
+                            return chat.response.data.map((msg, index, messages) => {
                               const showDate = shouldShowDate(index, messages, lastDisplayedDate);
                               const messageDate = new Date(msg.createdAt).toDateString();
                               if (showDate) {
@@ -163,7 +157,7 @@ export default function Support({ searchParams }: Params) {
                                   id={msg._id}
                                   content={msg.text}
                                   media={msg.media}
-                                  role={msg.user?._id === userId ? "user" : "admin"}
+                                  isAdmin={msg.isAdmin}
                                   day={showDate ? formatDate(msg.createdAt) : ''}
                                   createdAt={formatShortDuration(msg.createdAt)} />
                               );
@@ -172,7 +166,6 @@ export default function Support({ searchParams }: Params) {
                         )}
                       </div>
                     </div>
-
                     {/* Admin Input Field at the bottom */}
                     <div className="w-full border-1 px-5 border-t-2 mb-2 " >
                       <form
@@ -230,25 +223,22 @@ export default function Support({ searchParams }: Params) {
     </DashboardLayout>
   );
 }
-
 const MessageBox = ({
   content,
   day,
   media,
-  role,
+  isAdmin,
   id,
   createdAt
 }: {
   day: string
   content: string;
   media: string[];
-  role: string;
+  isAdmin: boolean;
   id: string;
   createdAt: string
 }) => {
-
   const currentChatUser = useCurrentChatStore((state) => state.currentChatUser);
-
   return (
     <>
       {day && (
@@ -260,30 +250,27 @@ const MessageBox = ({
       )}
       <div
         className={
-          role === "admin" ? "self-end max-w-[60%]" : "self-start max-w-[60%]"
+          isAdmin === true ? "self-end max-w-[60%]" : "self-start max-w-[60%]"
         }
       >
         <div className="px-7 mb-2">
           <div className="flex gap-3 ">
-
-            {role === "user" && 
-            <Avatar
-              className="w-8 flex justify-end h-full">
-              <AvatarImage
-                src={`http://storytime.yameenyousuf.com/${currentChatUser.profileImage}`}
-                alt="@shadcn"
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>}
+            {isAdmin === false &&
+              <Avatar
+                className="w-8 flex justify-end h-full">
+                <AvatarImage
+                  src={`http://storytime.yameenyousuf.com/${currentChatUser.profileImage}`}
+                  alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>}
             <div
-              className={`${role === "user"
+              className={`${isAdmin === false
                 ? " text-[#808191] bg-[#F1F3F6]"
                 : "bg-primaryCol text-white"
                 } p-4 text-sm rounded-xl`}
             >
-
               {content}
-
               {media &&
                 media.length > 0 &&
                 media.map((img, idx) => (
@@ -296,20 +283,14 @@ const MessageBox = ({
                     className="object-cover rounded-lg size-60 mt-1"
                   />
                 ))}
-
             </div>
-
           </div>
-
-          <p className={`text-xs py-2 text-black  ${role === 'admin' ? 'text-end' : 'px-16'}`}>
+          <p className={`text-xs py-2 text-black  ${isAdmin === true ? 'text-end' : 'px-16'}`}>
             {createdAt}
           </p>
         </div>
-
-
       </div>
     </>
-
   );
 };
 
@@ -317,7 +298,6 @@ function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverview, ac
   const router = useRouter();
   const pathname = usePathname();
   const setCurrentChatUser = useCurrentChatStore((state) => state.setCurrentChatUser);
-
   const openChat = () => {
     setCurrentChatUser({
       firstname: chat.user.firstName,
@@ -343,19 +323,20 @@ function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverview, ac
           </p>
           <div className="flex items-end justify-between w-full">
             <p className="text-xs text-[#09110e80]">
-              {chat.lastMessage && truncateText(chat.lastMessage.text, 3)}
+              {chat.chat.lastMessage && truncateText(chat.chat.lastMessage, 3)}
             </p>
             <p className="text-xs mr-5 text-[#09110e80]">
-              {formatShortDuration(new Date(chat.updatedAt || chat.createdAt),)}
+              {formatShortDuration(new Date(chat.chat.updatedAt || chat.chat.createdAt),)}
             </p>
           </div>
         </div>
         <div className="mt-6 pl-2"></div>
-        {chat.status === "pending" && (
+        {chat.unreadMessages > 0 && (
           <p className="absolute right-2 bg-primaryCol rounded-full text-xs w-6 pt-1 h-6 text-center text-white mt-4 ml-5">
-            2
+            {chat.unreadMessages}
           </p>
         )}
+
       </div>
     </div>
   );

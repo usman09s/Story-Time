@@ -159,20 +159,17 @@ export interface NotificationType {
 
 interface SupportChatOverview {
   _id: string;
-  createdAt: string;
   id: string;
-  lastMessage: {
+  unreadMessages: number,
+  chat: {
     _id: string;
-    chat: string;
-    createdAt: Date;
-
-    media?: string[];
-    text: string;
-    updatedAt?: Date;
     user: string;
+    status: string;
+    lastMessage:string
+    createdAt: Date;
+    updatedAt?: Date;
   };
   status: string;
-  updatedAt?: Date;
   user: {
     _id: string;
     firstName: string;
@@ -185,7 +182,7 @@ interface SupportChatOverview {
 export interface ChatsListType {
   success: boolean;
   response: {
-    supportChats: SupportChatOverview[];
+    data: SupportChatOverview[];
     pagination: PaginationTypes;
   };
 }
@@ -196,6 +193,7 @@ export interface SupportMessage {
   createdAt: Date;
   id: string;
   media: string[];
+  isAdmin:boolean
   text: string;
   updatedAt?: Date;
   user: {
@@ -210,7 +208,7 @@ export interface SupportMessage {
 export interface ChatTypes {
   success: boolean;
   response: {
-    supportMessages: SupportMessage[];
+    data: SupportMessage[];
     pagination: PaginationTypes;
   };
 }

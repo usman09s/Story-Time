@@ -13,15 +13,9 @@ import { useMutation } from "@tanstack/react-query";
 import { resetPass } from "@/API/auth.api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useEffect } from "react";
 
 export default function ResetPasswordPage({params}:{params:{token:string}}) {
 
-  useEffect(() => {
-   localStorage.setItem("access-token", params.token);  
-  }, [])
-  
-  
   const {
     register,
     handleSubmit,
@@ -42,7 +36,8 @@ export default function ResetPasswordPage({params}:{params:{token:string}}) {
     });
     if (!success) return toast.error(response);
     console.log(response);
-    router.push("/dashboard");
+    toast.success("Password reset successfully");
+    router.push("/");
   };
   return (
     <>

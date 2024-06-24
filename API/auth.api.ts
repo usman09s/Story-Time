@@ -96,6 +96,11 @@ export const resetPass = async ({
     const { data } = await api.put("/auth/reset-password", {
       newPassword,
       confirmPassword,
+    },{
+      headers: {
+        resetToken: `${accessToken}`,
+      },
+    
     });
 
     return {

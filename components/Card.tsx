@@ -37,7 +37,7 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
           <Image
             alt={title}
             src={`http://storytime.yameenyousuf.com/${image}`}
-            width={152}
+            width={110}
             height={132}
           />
         </div>

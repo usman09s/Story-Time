@@ -103,7 +103,6 @@ export default function Home() {
               />
             ) : null}
           </div>
-          {/* <AuthButton buttonTitle={"Sign In"} /> */}
           <Button
             className="mt-7 py-7 text-white bg-primaryCol rounded-md text-md w-full hover:bg-[#395e66be]"
             type="submit"

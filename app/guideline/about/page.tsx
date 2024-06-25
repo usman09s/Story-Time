@@ -1,48 +1,13 @@
-"use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { GuidelinesData } from "@/types/types";
-import { Notifications } from "@/components/Notification";
-import { GuidelineEditor } from "@/components/GuidelineEditor";
-import { GuidelineButton } from "@/components/GuidelineButton";
-import DashboardLayout from "@/app/layouts/Dashboard";
-import { getGuideline } from "@/API/guideline.api";
-import { useQuery } from "@tanstack/react-query";
-import GuidelineTabs from "@/app/layouts/GuidelineTabs";
+import GuidelinePageComponent from '@/app/layouts/GuidelineLayout'
+import React from 'react'
 
-export default function GuidelinePage() {
-  const [value, setValue] = useState("");
-
-  // Fetching content
-  const { data, isLoading } = useQuery<GuidelinesData>({
-    queryKey: ["About-US"],
-    queryFn: () => getGuideline("AboutUs"),
-  });
-
-  useEffect(() => {
-  setValue(data?.response.guidelines[0].content || ""); 
-  }, [data])
-  
+export default function page() {
   return (
-    <DashboardLayout active={5} title="Guidelines">
-      <div className="px-10 pb-10">
-      <GuidelineTabs path="/guideline/about"/>
-        <div className="flex gap-4 mt-5">
-        <div className="flex flex-col gap-10 w-[80%] justify-between">
-            <GuidelineEditor setValue={setValue} value={value} />
-            <div className="flex justify-center mt-5">
-            <GuidelineButton value={value} type="AboutUs" title="AboutUs"/>
-            </div>
-          </div>
-          <div className="w-[25%]">
-          <Notifications />
-          </div>
-        </div>
-      </div>
-    </DashboardLayout>
-  );
+    <GuidelinePageComponent
+    tabPath='/guideline/about'
+    title='About Us'
+    type='AboutUs'
+    key={'AboutUs'}
+    />
+  )
 }
-
-
-
-

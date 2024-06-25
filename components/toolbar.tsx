@@ -61,12 +61,7 @@ export const QuillToolbar = ({
       <button className="ql-align mx-1" value="right"></button>
       <button className="ql-align mx-1" value="justify"></button>
       <div className="border-[1.2px] h-7 ml-3 mt-1"></div>
-        {/* <span className="ql-formats">
-          <button className="ql-image"></button>
-        </span> */}
-
     </span>
-  
         <span></span>
         <span></span>
         <span></span>

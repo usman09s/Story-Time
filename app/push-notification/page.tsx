@@ -60,20 +60,20 @@ export default function NotificationPage() {
             />
           </div>
           <div className="mt-2  rounded-md bg-white border-2">
-            <div className="min-h-[530px]   border-[#E4E4E4]">
+            <div className=" border-[#E4E4E4]">
               <QuillToolbar isNotification />
-              <Editor isFaq={false} value="" onStateChange={(value) => setValue(value)} />
+              <Editor isFaq={false} value={value} onStateChange={setValue} />
             </div>
           </div>
           <div className="flex justify-center my-3">
-          <Button
-        onClick={handleSubmit}
-        disabled={isPending}
-        className="bg-primaryCol px-20 py-6 hover:bg-[#395e66b9] flex items-center justify-center"
-      >
-        {isPending ? "Sending..." : "Push Now"}
-        {isPending && <Loader2 className="animate-spin mr-2" />}
-      </Button>
+            <Button
+              onClick={handleSubmit}
+              disabled={isPending}
+              className="bg-primaryCol px-20 py-6 hover:bg-[#395e66b9] flex items-center justify-center"
+            >
+              {isPending ? "Sending..." : "Push Now"}
+              {isPending && <Loader2 className="animate-spin mr-2" />}
+            </Button>
           </div>
         </div>
         <div className="w-2/5 h-[735px]  bg-white mx-2 p-10 mt-1 border-2 border-[#E4E4E4] rounded-lg">
@@ -90,7 +90,7 @@ export default function NotificationPage() {
                 <div key={notif._id} className="flex items-center gap-4 px-3">
                   <p className="text-sm text-[#979797]">{dateFormat(notif.createdAt)}</p>
                   <p className="text-md text-[#979797]">
-                  Notification was sent
+                    Notification was sent
                   </p>
                 </div>
               ))

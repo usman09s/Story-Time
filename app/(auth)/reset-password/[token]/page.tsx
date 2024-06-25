@@ -19,7 +19,7 @@ export default function ResetPasswordPage({params}:{params:{token:string}}) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting,isSubmitted },
+    formState: { errors },
   } = useForm<ResetPassword>({ resolver: zodResolver(ResetPasswordSchema) });
 
   const router = useRouter();

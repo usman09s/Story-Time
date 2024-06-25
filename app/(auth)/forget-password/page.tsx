@@ -18,10 +18,9 @@ const ForgetPassword = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting,isSubmitted },
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm<ForgetFields>({ resolver: zodResolver(ForgetSchema) });
 
-  const router = useRouter();
   const [success, setSuccess] = useState<boolean>(false);
 
   const { mutateAsync, isPending } = useMutation({
@@ -35,7 +34,6 @@ const ForgetPassword = () => {
     if (success) toast.success(response)
     setSuccess(true);
     console.log(response);
-    // router.push("/dashboard");
   };
 
   return (
@@ -58,10 +56,10 @@ const ForgetPassword = () => {
           <ErrorMessage text={errors?.email?.message} />
         )}
         <AuthButton
-        isSubmitting={isSubmitting}
-        isSubmitted={isSubmitted}
-        success={success && isSubmitted}
-        isPending={isPending}
+          isSubmitting={isSubmitting}
+          isSubmitted={isSubmitted}
+          success={success && isSubmitted}
+          isPending={isPending}
           buttonTitle={"Reset Password"}
           isModal={!errors?.email?.message}
         />

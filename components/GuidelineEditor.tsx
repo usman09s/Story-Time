@@ -6,7 +6,7 @@ export const GuidelineEditor = ({ value, setValue }: {
     setValue: (value: string) => void
   }) => {
     return (
-      <div className="border-2 min-h-[850px]">
+      <div className="border-2 min-h-[650px]">
         <div className="border-b-2 mb-2">
           <QuillToolbar />
         </div>

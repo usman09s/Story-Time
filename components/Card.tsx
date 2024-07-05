@@ -3,7 +3,7 @@ import Image from "next/image";
 import { FC, useState } from "react";
 import DeleteCategories from "./DeleteCategories";
 import { useRouter } from "next/navigation";
-import { formatDate } from "@/lib/utils";
+import { formatDate, S3_URL } from "@/lib/utils";
 
 interface card {
   image: string;
@@ -19,6 +19,7 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
     navigation && router.push(`/categories/${id}?name=${title}`);
   };
 
+  
   return (
     <div className="w-64 border-2 border-[#DBDBDB] h-[270px] p-3 rounded-2xl flex flex-col justify-between">
       <div className="flex justify-end">
@@ -36,7 +37,7 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
         <div className={navigation ? "cursor-pointer" : ""} onClick={navigate}>
           <Image
             alt={title}
-            src={`https://storytime-mod-bucket.s3.us-east-2.amazonaws.com/${image}`}
+            src={`${S3_URL}${image}`}
             width={110}
             height={132}
           />

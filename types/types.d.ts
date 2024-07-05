@@ -61,6 +61,7 @@ export interface DashboardUser {
   lastName: string;
   noOfFollowers: number;
   noOfFollowings: number;
+  profileImage:string
   phoneCode: string;
   phoneNo: string;
   role: string;

@@ -1,7 +1,7 @@
 import io, { Socket } from "socket.io-client";
 
-const BASE_SOCKET_CONNECTION = "http://storytime.yameenyousuf.com/"; // local
-// http://storytime.yameenyousuf.com
+const BASE_SOCKET_CONNECTION = "http://3.220.77.34:3021/"; 
+
 class WSService {
   private socket: Socket | null = null;
 
@@ -9,11 +9,6 @@ class WSService {
     try {
       console.log(token);
       this.socket = io(BASE_SOCKET_CONNECTION, {
-
-        // transports: ["websocket"],
-        // query: {
-        //   "access-token": `${token}`,
-        // },
         extraHeaders:{
           "access-token": token
         }

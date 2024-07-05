@@ -1,6 +1,7 @@
 import useCurrentChatStore from "@/store/currentChat";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Image from "next/image";
+import { S3_URL } from "@/lib/utils";
 
 export const MessageBox = ({
     content,
@@ -38,7 +39,8 @@ export const MessageBox = ({
                 <Avatar
                   className="w-8 flex justify-end h-full">
                   <AvatarImage
-                    src={`https://storytime-mod-bucket.s3.us-east-2.amazonaws.com/${currentChatUser.profileImage}`}
+                    src={`${S3_URL}/${currentChatUser.profileImage}`}
+                    
                     alt="@shadcn"
                   />
                   <AvatarFallback>CN</AvatarFallback>
@@ -55,7 +57,7 @@ export const MessageBox = ({
                   media.map((img, idx) => (
                     <Image
                       key={`${id}-image-${idx}-${img}`}
-                      src={`https://storytime-mod-bucket.s3.us-east-2.amazonaws.com/${img}`}
+                      src={`${S3_URL}/${img}`}
                       alt="image"
                       width={400}
                       height={400}

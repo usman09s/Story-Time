@@ -12,10 +12,10 @@ import {
 import { AvatarFallback, AvatarImage, Avatar } from "./ui/avatar";
 import Image from "next/image";
 import { DashboardUser } from "@/types/types";
-import { Button } from "./ui/button";
 import { toggleUserBlock } from "@/API/dashboard.api";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { S3_URL } from "@/lib/utils";
 
 interface DataTableProps {
   TableHeading: string[];
@@ -91,7 +91,7 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
                   <div className="flex gap-2 items-center">
                     <Avatar>
                       <AvatarImage
-                        src="https://github.com/shadcn.png"
+                        src={`${S3_URL}/${row.profileImage}`}
                         alt="@shadcn"
                       />
                       <AvatarFallback>CN</AvatarFallback>

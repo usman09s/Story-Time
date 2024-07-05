@@ -15,6 +15,7 @@ import { UserSkeleton } from "@/components/skeletons/UserSkeleton";
 import { DashboardTypes } from "@/types/types";
 import { CSVLink, CSVDownload } from "react-csv";
 import { headers } from "@/lib/utils";
+import StatesSkeleton from "@/components/stateSkeleton";
 interface Params {
   searchParams: {
     page: number;
@@ -23,15 +24,17 @@ interface Params {
     status: "active" | "inactive" | undefined;
   };
 }
+
 export default function Dashboard({ searchParams }: Params) {
   const { page, limit, search, status } = searchParams;
+  const decodedSearch = decodeURIComponent(search);
 
   const { data, isLoading } = useQuery<DashboardTypes>({
     queryKey: ["users", page, limit, search, status],
     queryFn: () => getUsers({ page, limit, search, status: status || "" }),
   });
 
-  const {data:count} = useQuery({
+  const { data: count, isLoading: loading } = useQuery({
     queryKey: ["user-count"],
     queryFn: userCount
   });
@@ -56,9 +59,22 @@ export default function Dashboard({ searchParams }: Params) {
           <div className="pl-10">
             <section>
               <div className="flex w-full items-center gap-10 my-6">
-                <States iconPath="done" title="total Download" total="1.4k" />
-                <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
-                <States iconPath="star2" title="Premium Users" total={`${count?.response.userCount}`} />
+                {
+                  loading ? 
+                 <>
+                 <StatesSkeleton/>
+                 <StatesSkeleton/>
+                 <StatesSkeleton/>
+                 </>
+                   : (
+                    <>
+                      <States iconPath="done" title="total Download" total="1.4k" />
+                      <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
+                      <States iconPath="star2" title="Premium Users" total={`${count?.response.userCount}`} />
+                    </>
+                  )
+                }
+
               </div>
               <div className="flex gap-10 border-b-2 text-center border-[#E44173] pb-4 relative">
                 <button
@@ -105,7 +121,7 @@ export default function Dashboard({ searchParams }: Params) {
                 className="border-[#395E66] flex gap-2 items-center text-[#395E66]"
               >
                 {data && data.response && (
-                  <CSVLink data={data.response.users}  headers={headers} className="flex gap-2 items-center">Export CSV <Download className="size-5" target="_blank" /></CSVLink>
+                  <CSVLink data={data.response.users} headers={headers} className="flex gap-2 items-center">Export CSV <Download className="size-5" target="_blank" /></CSVLink>
                 )}
               </Button>
             </div>

@@ -19,7 +19,7 @@ export const Notifications = () => {
         <div className="relative">
           <div className="absolute h-full border-2 border-opacity-20 border-secondary top-1"></div>
           {data?.response.data.map((log: any) => (
-              <div className="flex  w-full my-6 -ml-[7px] gap-3">
+              <div className="flex  w-full my-6 -ml-[7px] gap-3" key={log._id}>
               <div className="w-1/12 z-10">
                 <div className="w-5 h-5 bg-[#18243C] rounded-full"></div>
               </div>

@@ -64,3 +64,5 @@ export const shouldShowDate = (currentIndex: number, messages: SupportMessage[],
   const currentMessageDate = new Date(messages[currentIndex].createdAt).toDateString();
   return currentMessageDate !== lastDisplayedDate;
 };
+
+export const S3_URL = 'https://mod-storytime-bucket.s3.amazonaws.com/';

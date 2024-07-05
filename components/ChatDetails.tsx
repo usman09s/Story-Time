@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { formatDate, formatShortDuration, shouldShowDate } from "@/lib/utils";
+import { formatDate, formatShortDuration, S3_URL, shouldShowDate } from "@/lib/utils";
 import { MessageBox } from "@/components/MessageBox";
 import { useChatStore } from "@/store/socket.store";
 import useCurrentChatStore from "@/store/currentChat";
@@ -52,7 +52,7 @@ export default function ChatDetails() {
             <div className="text-sm flex items-center py-3 gap-3">
               <Avatar className="w-12 h-12">
                 <AvatarImage
-                  src={`http://storytime.yameenyousuf.com/${currentChatUser.profileImage}`}
+                  src={`${S3_URL}/${currentChatUser.profileImage}`}
                   alt="@shadcn"
                 />
                 <AvatarFallback>CN</AvatarFallback>

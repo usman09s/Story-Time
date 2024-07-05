@@ -3,17 +3,14 @@ import api from "./middleware";
 export const createGuideline = async ({
   type,
   content,
-  title,
 }: {
   type: string;
   content: string;
-  title: string;
 }) => {
   try {
     const response = await api.post("/guideline", {
       type,
       content,
-      title,
     });
 
     return {

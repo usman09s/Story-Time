@@ -36,7 +36,7 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
         <div className={navigation ? "cursor-pointer" : ""} onClick={navigate}>
           <Image
             alt={title}
-            src={`http://storytime.yameenyousuf.com/${image}`}
+            src={`https://storytime-mod-bucket.s3.us-east-2.amazonaws.com/${image}`}
             width={110}
             height={132}
           />

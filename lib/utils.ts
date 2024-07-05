@@ -47,7 +47,15 @@ export const formatShortDuration = (date: string | Date) => {
   }
 };
 
-
+export const headers = [
+  { label: "First Name", key: "firstName" },
+  { label: "Last Name", key: "lastName" },
+  { label: "Email", key: "email" },
+  { label: "Phone", key: "phone" },
+  { label: "city", key: "city" },
+  { label: "Status", key: "isActive" }
+  
+];
 export const shouldShowDate = (currentIndex: number, messages: SupportMessage[], lastDisplayedDate: string) => {
   if (currentIndex === 0) {
     return true;

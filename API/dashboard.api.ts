@@ -59,3 +59,18 @@ export const userCount = async () => {
     }
   }
 }
+
+export const guidelineLogs = async () => {
+  try {
+    const {data} = await api.get('/guideline/logs');
+    return {
+      success: true,
+      response: data.data,
+    };
+  } catch (error:any) {
+    return{
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    }
+  }
+}

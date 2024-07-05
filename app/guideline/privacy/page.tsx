@@ -6,7 +6,7 @@ export default function page() {
     <GuidelinePageComponent
     tabPath='/guideline/privacy'
     title='Privacy'
-    type='PrivacyPolicy'
+    type='Privacy Policy'
     key={'PrivacyPolicy'}
     />
   )

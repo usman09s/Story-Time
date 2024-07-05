@@ -180,8 +180,7 @@ interface SupportChatOverview {
 }
 
 export interface ChatsListType {
-  success: boolean;
-  response: {
+  data: {
     data: SupportChatOverview[];
     pagination: PaginationTypes;
   };
@@ -205,9 +204,9 @@ export interface SupportMessage {
   };
 }
 
+
 export interface ChatTypes {
-  success: boolean;
-  response: {
+  data: {
     data: SupportMessage[];
     pagination: PaginationTypes;
   };

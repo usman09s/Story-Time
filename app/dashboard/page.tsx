@@ -14,6 +14,7 @@ import { useCallback } from "react";
 import { UserSkeleton } from "@/components/skeletons/UserSkeleton";
 import { DashboardTypes } from "@/types/types";
 import { CSVLink, CSVDownload } from "react-csv";
+import { headers } from "@/lib/utils";
 interface Params {
   searchParams: {
     page: number;
@@ -104,7 +105,7 @@ export default function Dashboard({ searchParams }: Params) {
                 className="border-[#395E66] flex gap-2 items-center text-[#395E66]"
               >
                 {data && data.response && (
-                  <CSVLink data={data.response.users} className="flex gap-2 items-center">Export CSV <Download className="size-5" target="_blank" /></CSVLink>
+                  <CSVLink data={data.response.users}  headers={headers} className="flex gap-2 items-center">Export CSV <Download className="size-5" target="_blank" /></CSVLink>
                 )}
               </Button>
             </div>

@@ -17,9 +17,9 @@ export const GuidelineButton = ({value,type,title}:{value:string,title:string,ty
       const { success, response } = await mutateAsync({
         type,
         content: value,
-        title
       });
       if (!success) return toast.error(response);
+      queryClient.invalidateQueries({ queryKey: ["guidelineLogs"] });
       toast.success("Content updated");
     };
     return (

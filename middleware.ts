@@ -3,8 +3,6 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const publicPaths = ["/", "/forget-password", "/reset-password"];
-  const isPublicPath = publicPaths.includes(path);
 
   const privatePaths = [
     "/about-us",
@@ -15,16 +13,12 @@ export function middleware(request: NextRequest) {
     "/dashboard",
     "/faqs",
     "/guideline",
-    "/push_notification",
+    "/push-notification",
     "/support",
   ];
   const isPrivatePath = privatePaths.includes(path);
 
   const token = request.cookies.get("session")?.value;
-
-  if (isPublicPath && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.nextUrl));
-  }
 
   if (isPrivatePath && !token) {
     return NextResponse.redirect(new URL("/", request.nextUrl));
@@ -33,7 +27,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/",
     "/forget-password",
     "/reset-password",
     "/about-us",

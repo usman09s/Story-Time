@@ -6,7 +6,7 @@ export default function TermsAndCondition() {
     <GuidelinePageComponent
     tabPath='/guideline'
     title='Terms and Conditions'
-    type='TermsAndConditions'
+    type='Terms %26 Conditions'
     key={'Terms'}
     />
 

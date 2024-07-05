@@ -1,6 +1,5 @@
 import Image from "next/image";
-import React, { FC } from "react";
-import backgroundPicture from "@/public/assets/backgroundPicture.png";
+import React,{ FC } from "react";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -10,7 +9,7 @@ interface AuthLayoutProps {
 
 const AuthLayout: FC<AuthLayoutProps> = ({ children, subTitle, title }) => {
   return (
-    <div className="relative w-full h-screen ">
+    <div className="relative w-full h-screen">
       <Image src="/assets/backgroundPicture.png" alt="Background image" fill/>
       <div className="flex">
         <div className="w-1/2 relative z-10 h-screen flex justify-center items-center">
@@ -21,7 +20,7 @@ const AuthLayout: FC<AuthLayoutProps> = ({ children, subTitle, title }) => {
           </div>
         </div>
         <div className="w-1/2 relative z-20 h-screen flex justify-start items-center  ">
-          <Image src={"/assets/logo.svg"} alt="" width={500} height={200} />
+       <Image src={"/assets/logo.svg"} alt="" width={500} height={200} />
         </div>
       </div>
     </div>

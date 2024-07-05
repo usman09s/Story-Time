@@ -6,7 +6,7 @@ export default function page() {
     <GuidelinePageComponent
     tabPath='/guideline/about'
     title='About Us'
-    type='AboutUs'
+    type='About Us'
     key={'AboutUs'}
     />
   )

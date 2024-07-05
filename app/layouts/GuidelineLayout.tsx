@@ -9,6 +9,7 @@ import { GuidelineButton } from "@/components/GuidelineButton";
 import DashboardLayout from "@/app/layouts/Dashboard";
 import { getGuideline } from "@/API/guideline.api";
 import GuidelineTabs from "@/app/layouts/GuidelineTabs";
+import { guidelineLogs } from "@/API/dashboard.api";
 
 export default function GuidelinePageComponent({ type, title, tabPath,children }: {
     type: string;
@@ -17,13 +18,12 @@ export default function GuidelinePageComponent({ type, title, tabPath,children }
     children?: React.ReactNode;
 }) {
     const [value, setValue] = useState("");
-
     // Fetching content
     const { data, isLoading } = useQuery<GuidelinesData>({
         queryKey: [type],
         queryFn: () => getGuideline(type),
     });
-
+   
     useEffect(() => {
         setValue(data?.response.guidelines[0].content || "");
     }, [data]);

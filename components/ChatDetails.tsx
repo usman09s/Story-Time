@@ -27,7 +27,6 @@ export default function ChatDetails() {
 
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | undefined>();
-  const [mediaLink, setMediaLink] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -45,10 +44,9 @@ export default function ChatDetails() {
       image = data.data[0];
     }
     
-    sendMessage(currentChatId, text,image);
+    sendMessage(currentChatId, text,image?image:undefined);
     setText("");
     setFile(undefined);
-    setMediaLink("");
   };
 
   useEffect(() => {

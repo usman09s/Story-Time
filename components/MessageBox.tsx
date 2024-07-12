@@ -18,6 +18,7 @@ export const MessageBox = ({
     id: string;
     createdAt: string
   }) => {
+    
     const currentChatUser = useCurrentChatStore((state) => state.currentChatUser);
     return (
       <>
@@ -54,16 +55,15 @@ export const MessageBox = ({
                 {content}
                 {media &&
                   media.length > 0 &&
-                  media.map((img, idx) => (
                     <Image
-                      key={`${id}-image-${idx}-${img}`}
-                      src={`${S3_URL}/${img}`}
+                      key={`${id}-image-`}
+                      src={`${S3_URL}/${media}`}
                       alt="image"
                       width={400}
                       height={400}
                       className="object-cover rounded-lg size-60 mt-1"
                     />
-                  ))}
+                  }
               </div>
             </div>
             <p className={`text-xs py-2 text-black  ${isAdmin === true ? 'text-end' : 'px-16'}`}>

@@ -37,7 +37,7 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
         <div className={navigation ? "cursor-pointer" : ""} onClick={navigate}>
           <Image
             alt={title}
-            src={`${S3_URL}${image}`}
+            src={`${S3_URL}/${image}`}
             width={110}
             height={132}
           />

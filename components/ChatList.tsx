@@ -4,14 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { UserMessageList } from "@/components/UserMessageList";
 import { ChatListSkeleton } from "@/components/skeletons/ChatListSkeleton";
+import socketServcies from "@/socket/socket";
 
 export default function ChatList() {
   const { chatList,currentChatId,fetchChatList } = useChatStore();
 
   useEffect(() => {
     fetchChatList();
-  }, [fetchChatList]);
-
+ 
+  }, [fetchChatList,currentChatId]);
+  
   return (
     <div className="max-w-80 overflow-x-hidden w-full flex flex-col border-2 border-borderCol h-[800px] overflow-y-auto">
       <div className="relative border-b-2 border-borderCol">

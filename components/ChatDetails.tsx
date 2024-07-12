@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowDownCircleIcon, Paperclip, SendHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -11,29 +11,44 @@ import { useChatStore } from "@/store/socket.store";
 import useCurrentChatStore from "@/store/currentChat";
 import { uploadMedia } from "@/API/chats.api";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+
 export default function ChatDetails() {
   const { currentChatId, chatMessages } = useChatStore();
-  const sendMessage = useChatStore((state) => state.sendMessage);
+  const {sendMessage,closeChat} = useChatStore();
 
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | undefined>();
+  const [mediaLink, setMediaLink] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const currentChatUser = useCurrentChatStore((state) => state.currentChatUser);
 
   const handleSendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Text",text);
-    
+    console.log("Text", text);
+
     if (!text) return toast.error("message can't be empty");
     if (!currentChatId) return toast.error("Please select a chat to send message");
-    if(file){
+    let image = ''
+    if (file) {
       const data = await uploadMedia(file);
-      if(data) setFile(data.data[0])
+      image = data.data[0];
     }
-    sendMessage(currentChatId, text, file);
+    
+    sendMessage(currentChatId, text,image);
     setText("");
     setFile(undefined);
+    setMediaLink("");
   };
 
   useEffect(() => {
@@ -44,6 +59,16 @@ export default function ChatDetails() {
     }
   }, [currentChatId]);
 
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages, currentChatId]);
+
+  const handleChatClose = (chat:string) => {
+    closeChat(chat);
+    console.log("Chat Closed");
+  }
   return (
     <div className="border-2 border-b w-full">
       {currentChatId && (
@@ -55,7 +80,7 @@ export default function ChatDetails() {
                   src={`${S3_URL}/${currentChatUser.profileImage}`}
                   alt="@shadcn"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>C</AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
                 <p className="font-bold text-md">
@@ -64,15 +89,25 @@ export default function ChatDetails() {
                 <p className="text-md text-[#395E66]">#{currentChatId}</p>
               </div>
             </div>
-            <div className="border-2 py-2 px-5 flex justify-between items-center gap-5 cursor-pointer">
-              <p className="text-sm">Mark as </p>
-              <ArrowDownCircleIcon size={15} />
-            </div>
-          </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger >
+                <div className="border-2 py-2 px-5 flex justify-between items-center gap-5 cursor-pointer">
+                  <p className="text-sm">Mark as </p>
+                  <ArrowDownCircleIcon size={15} />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem className="cursor-pointer" onClick={()=>handleChatClose(currentChatId)}>Completed</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
+          </div>
           <div className="flex flex-col justify-between w-full">
             <div className="flex flex-col w-full">
-              <div className="flex-grow p-4 w-full border-gray-300 max-h-[650px] min-h-[650px] overflow-y-auto">
+              <div
+                ref={chatContainerRef}
+                className="flex-grow p-4 w-full border-gray-300 max-h-[650px] min-h-[650px] overflow-y-auto"
+              >
                 <div className="flex flex-col justify-start gap-y-1">
                   {isLoading ? (
                     <div className="text-center">Loading...</div>

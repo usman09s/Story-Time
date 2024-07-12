@@ -7,7 +7,6 @@ class WSService {
 
   initializeSocket = async (token: string): Promise<void> => {
     try {
-      console.log(token);
       this.socket = io(BASE_SOCKET_CONNECTION, {
         extraHeaders:{
           "access-token": token

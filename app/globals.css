@@ -124,6 +124,23 @@ textarea:focus, input:focus{
   display: flex !important;
   vertical-align: middle;
 } 
+textarea:focus{
+  outline: none;
+}
+*:focus {
+  outline: none;
+}
+textarea:focus {
+  border: none !important;
+  overflow: auto !important;
+  outline: none !important;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none; /*remove the resize handle on the bottom right*/
+}
+
 
 ::-webkit-scrollbar {
   width: 12px; /* Set the width of the scrollbar */

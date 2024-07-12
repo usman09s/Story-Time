@@ -4,7 +4,7 @@ import ChatDetails from "@/components/ChatDetails";
 import { useChatStore } from "@/store/socket.store";
 import { useEffect } from "react";
 import DashboardLayout from "../layouts/Dashboard";
-
+import socketServcies from "@/socket/socket";
 interface Params {
   searchParams: {
     chatId: string;
@@ -16,6 +16,15 @@ export default function Support({ searchParams }: Params) {
   const { setCurrentChatId } = useChatStore();
 
   useEffect(() => {
+    const token = localStorage.getItem("access-token");
+    if (!token) return;
+
+    socketServcies.initializeSocket(token);
+
+    socketServcies.on("connect", () => {
+      console.log("Socket connected");
+    });
+    
     setCurrentChatId(initialChatId);
   }, [initialChatId, setCurrentChatId]);
 

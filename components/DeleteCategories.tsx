@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 import { toast } from "sonner";
 
 export default function DeleteCategories({
@@ -30,15 +30,9 @@ export default function DeleteCategories({
   // Delete category
   const { mutateAsync, isPending } = useMutation({
     mutationFn: deleteCategory,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["categories", "sub-categories"],
-      });
-    },
   });
 
-  // Delete handler
-  const handleDelete = async (e: FormEvent) => {
+  const handleDelete = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     if (!id) return toast.error("Category Id is required");
 
@@ -49,8 +43,10 @@ export default function DeleteCategories({
       toast.success("Category deleted");
       setIsDeleteDialogOpen(false);
       setIsSuccessDialogOpen(true);
+      queryClient.invalidateQueries({ queryKey: ["categories"], });
+      queryClient.invalidateQueries({ queryKey: ["sub-categories"], });
     }
-  };
+  }, []);
 
   return (
     <div className="relative bg-white shadow-2xl">

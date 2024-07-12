@@ -39,3 +39,18 @@ export const getGuideline = async (type: string) => {
     };
   }
 };
+
+export const deleteGuideline = async (id: string) => {
+  try {
+    const response = await api.delete(`/guideline/${id}`);
+    return {
+      success: true,
+      response: response,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    };
+  }
+}

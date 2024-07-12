@@ -62,7 +62,7 @@ export const userCount = async () => {
 
 export const guidelineLogs = async () => {
   try {
-    const {data} = await api.get('/guideline/logs');
+    const {data} = await api.get('/guideline/logs?limit=7');
     return {
       success: true,
       response: data.data,

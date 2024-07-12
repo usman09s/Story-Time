@@ -9,7 +9,6 @@ import { GuidelineButton } from "@/components/GuidelineButton";
 import DashboardLayout from "@/app/layouts/Dashboard";
 import { getGuideline } from "@/API/guideline.api";
 import GuidelineTabs from "@/app/layouts/GuidelineTabs";
-import { guidelineLogs } from "@/API/dashboard.api";
 
 export default function GuidelinePageComponent({ type, title, tabPath,children }: {
     type: string;

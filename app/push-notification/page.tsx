@@ -36,6 +36,8 @@ export default function NotificationPage() {
   const handleSubmit = async () => {
     if (!value) return toast.error("Content is required");
     if (!title) return toast.error("Title is required");
+    console.log(value);
+    
     const { success, response } = await mutateAsync({
       title,
       message: value,
@@ -61,8 +63,9 @@ export default function NotificationPage() {
           </div>
           <div className="mt-2  rounded-md bg-white border-2">
             <div className=" border-[#E4E4E4]">
-              <QuillToolbar isNotification />
-              <Editor isFaq={false} value={value} onStateChange={setValue} />
+              <textarea name="" id="" onChange={(e)=>setValue(e.target.value)} value={value} className="!border-none" rows={21} cols={140} placeholder="Write Notification text">
+
+              </textarea>
             </div>
           </div>
           <div className="flex justify-center my-3">

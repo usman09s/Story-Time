@@ -141,7 +141,9 @@ textarea:focus {
   resize: none; /*remove the resize handle on the bottom right*/
 }
 
-
+textarea{
+  resize: none; /*remove the resize handle on the bottom right*/
+}
 ::-webkit-scrollbar {
   width: 12px; /* Set the width of the scrollbar */
 }

@@ -50,7 +50,7 @@ export default function NotificationPage() {
   return (
     <DashboardLayout active={3} title="Push Notification">
   <div className="flex border-[#E4E4E4] rounded-lg border-2 mx-10 mt-5 mb-16">
-    <div className="mt-1 flex-grow ml-1 rounded-lg flex-col border-[#E4E4E4]">
+    <div className="mt-1 flex-grow ml-1 rounded-lg flex-col border-[#E4E4E4]  w-[75%]">
       <div className="bg-white pb-6 rounded-md border-2">
         <PushInfomation
           date={date}
@@ -68,11 +68,11 @@ export default function NotificationPage() {
             id=""
             onChange={(e) => setValue(e.target.value)}
             value={value}
-            className="!border-none"
+            className="!border-none w-[75%]"
             rows={21}
             cols={140}
             placeholder="Write Notification text"
-          ></textarea>
+          />
         </div>
       </div>
       <div className="flex justify-center my-3">
@@ -86,7 +86,7 @@ export default function NotificationPage() {
         </Button>
       </div>
     </div>
-    <div className="w-96 h-[735px] bg-white mx-2 p-10 mt-1 border-2 border-[#E4E4E4] rounded-lg">
+    <div className="w-96 h-[732px] bg-white mx-2 p-10 mt-1 border-2 border-[#E4E4E4] rounded-lg">
       <p className="mb-5 text-lg font-semibold">History</p>
       <div className="flex flex-col space-y-4 border-l-2 border-dashed p-3">
         {isLoading ? (

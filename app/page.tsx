@@ -41,7 +41,7 @@ export default function Home() {
 
     toast.success("Login success");
     setUser(response.user);
-    Cookies.set("session", response.accessToken, { expires: 7 });
+    Cookies.set("session", response.accessToken, { expires: 1 });
     localStorage.setItem("access-token", response.accessToken);
     router.push("/dashboard");
   };

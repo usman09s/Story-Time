@@ -7,6 +7,8 @@ import { Button } from "./ui/button";
 export const GuidelineButton = ({value,type,title}:{value:string,title:string,type:string}) => {
 
     const queryClient = useQueryClient();
+    const decodeType = decodeURIComponent(type);
+
     const { mutateAsync, isPending } = useMutation({
       mutationFn: createGuideline,
       onSuccess: () => queryClient.invalidateQueries({ queryKey: ["terms"] }),
@@ -15,7 +17,7 @@ export const GuidelineButton = ({value,type,title}:{value:string,title:string,ty
     const handleSubmit = async () => {
       if (!value) return toast.error("Content is required");
       const { success, response } = await mutateAsync({
-        type,
+        type:decodeType,
         content: value,
       });
       if (!success) return toast.error(response);

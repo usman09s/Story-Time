@@ -6,15 +6,15 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Trash } from "lucide-react";
+import { Pencil, PencilIcon, Trash } from "lucide-react";
 import { FormEvent, useCallback, useState } from "react";
 import { toast } from "sonner";
+import Link from "next/link";
 
 export default function DeleteCategories({
   id,
@@ -43,16 +43,21 @@ export default function DeleteCategories({
       toast.success("Category deleted");
       setIsDeleteDialogOpen(false);
       setIsSuccessDialogOpen(true);
-      queryClient.invalidateQueries({ queryKey: ["categories"], });
-      queryClient.invalidateQueries({ queryKey: ["sub-categories"], });
     }
   }, []);
 
   return (
     <div className="relative bg-white shadow-2xl">
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogTrigger asChild>
-          <Button className="absolute top-0 right-0 bg-white text-black hover:bg-white shadow-xl items-center p-2 flex gap-3 z-40">
+        <Link href={`/categories/add?id=${id}`}>
+        <Button className="absolute top-5  right-0 bg-white text-black hover:bg-white shadow-xl items-center p-1 flex gap-3 z-40">
+            <PencilIcon className="bg-blue-500 px-1 rounded-lg size-7 text-white" />
+            Update Design
+          </Button>
+        </Link>
+     
+        <AlertDialogTrigger asChild >
+          <Button className="absolute -top-5  right-0 bg-white text-black hover:bg-white shadow-xl items-center p-2 flex gap-3 z-40">
             <Trash className="bg-red-500 px-1 rounded-lg size-7 text-white" />
             Delete Design
           </Button>
@@ -97,7 +102,11 @@ export default function DeleteCategories({
           </AlertDialogHeader>
           <div className="flex items-center justify-center flex-col gap-2">
             <AlertDialogAction
-              onClick={() => setIsSuccessDialogOpen(false)}
+              onClick={() => {
+                setIsSuccessDialogOpen(false)
+                queryClient.invalidateQueries({ queryKey: ["categories"], });
+                queryClient.invalidateQueries({ queryKey: ["sub-categories"], });
+              }}
               className="bg-primaryCol hover:bg-primaryCol w-52"
             >
               Back

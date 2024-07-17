@@ -10,24 +10,29 @@ import DashboardLayout from "@/app/layouts/Dashboard";
 import { getGuideline } from "@/API/guideline.api";
 import GuidelineTabs from "@/app/layouts/GuidelineTabs";
 
-export default function GuidelinePageComponent({ type, title, tabPath,children }: {
+export default function GuidelinePageComponent({ type, title, tabPath, children }: {
     type: string;
     title: string;
     tabPath: string;
     children?: React.ReactNode;
 }) {
     const [value, setValue] = useState("");
+
     // Fetching content
-    const { data, isLoading } = useQuery<GuidelinesData>({
+    const { data, isLoading, isError } = useQuery<GuidelinesData>({
         queryKey: [type],
         queryFn: () => getGuideline(type),
     });
-   
+
     useEffect(() => {
-        setValue(data?.response.guidelines[0].content || "");
+        if (data?.response?.guidelines?.length ?? 0 > 0) {
+            setValue(data?.response.guidelines[0].content || "");
+        }
+
     }, [data]);
 
-    if (isLoading) return <div>loading...</div>;
+    if (isLoading) return <div>Loading...</div>;
+    // if (isError || !data || !data.response || !data.response.guidelines) return <div>Error loading data...</div>;
 
     return (
         <DashboardLayout active={5} title={title}>

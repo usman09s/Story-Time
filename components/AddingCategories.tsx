@@ -9,7 +9,7 @@ import { convertImage } from "@/lib/convertImage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory } from "@/API/categories.api";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function AddingCategories({
   text,
@@ -19,7 +19,8 @@ export default function AddingCategories({
   id?: string;
 }) {
   const queryClient = useQueryClient();
-
+  const searchParams = useSearchParams();
+  const updateId = searchParams.get("id");
   const [image, setImage] = useState<string>("");
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | undefined>(undefined);

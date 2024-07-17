@@ -19,7 +19,6 @@ export const Card: FC<card> = ({ image, status, title, navigation, id }) => {
     navigation && router.push(`/categories/${id}?name=${title}`);
   };
 
-  
   return (
     <div className="w-64 border-2 border-[#DBDBDB] h-[270px] p-3 rounded-2xl flex flex-col justify-between">
       <div className="flex justify-end">

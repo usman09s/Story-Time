@@ -38,8 +38,7 @@ export const getSubCategories = async ({
 }) => {
   try {
     const { data } = await api.get(
-      `/category?parent=${id}&limit=${limit || 15}&page=${page || 1}&search=${
-        search || ""
+      `/category?parent=${id}&limit=${limit || 15}&page=${page || 1}&search=${search || ""
       }`
     );
     return {
@@ -89,3 +88,39 @@ export const deleteCategory = async (id: string) => {
     };
   }
 };
+
+export const fetchSingleCategory = async (categoryId: string) => {
+  if (!categoryId) return;
+  try {
+    const response = await api.get(`/category/${categoryId}`);
+    return {
+      success: true,
+      response: response.data.data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    };
+  }
+}
+
+export const updateCategory = async (formData: FormData, id: string) => {
+  try {
+    const response = await api.put(`/category/update/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return {
+      success: true,
+      response: response,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    };
+  }
+}

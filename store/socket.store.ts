@@ -28,14 +28,16 @@ export const useChatStore = create<ChatState>((set, get) => ({
     socketServices.on("get-chat-list", (data: ChatsListType) => {
       set({ chatList: data });
     });
-
+    socketServcies.on('send-message', (data: SupportMessage) => {
+      console.log("send-message", data);
+    })
     socketServices.emit("get-chat-list", { page: 1, limit: 6 });
   },
 
   fetchChatMessages: (chatId: string) => {
 
     socketServcies.on(`send-message`, (data: SupportMessage) => {
-      console.log("send-message-without-chatid",data);
+      console.log("send-message", data);
     })
 
     socketServices.on(`send-message-${chatId}`, (data: SupportMessage) => {
@@ -63,11 +65,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
         },
       }));
     });
+    
     socketServices.emit("get-chat-messages", { chat: chatId, page: 1, limit: 10000 });
   },
 
   sendMessage: (chatId: string, message: string, file?: string) => {
-
     const payload = { chat: chatId, text: message, media: file };
     socketServices.emit(`send-message`, payload);
   },

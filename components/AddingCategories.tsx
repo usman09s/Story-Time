@@ -1,15 +1,16 @@
 "use client";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import Image from "next/image";
 import { Label } from "./ui/label";
 import { Pencil, X } from "lucide-react";
 import { convertImage } from "@/lib/convertImage";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCategory } from "@/API/categories.api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createCategory, fetchSingleCategory, updateCategory } from "@/API/categories.api";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
+import { S3_URL } from "@/lib/utils";
 
 export default function AddingCategories({
   text,
@@ -21,6 +22,7 @@ export default function AddingCategories({
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const updateId = searchParams.get("id");
+
   const [image, setImage] = useState<string>("");
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | undefined>(undefined);
@@ -42,29 +44,53 @@ export default function AddingCategories({
     setImage("");
   };
 
-  // Creating category
+
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: createCategory,
+    mutationFn: (formData: FormData) => (updateId ? updateCategory(formData, updateId) : createCategory(formData)),
     onSuccess: () => {
       const queryKey = id ? ["sub-categories"] : ["categories"];
       queryClient.invalidateQueries({ queryKey: queryKey });
     },
   });
 
-  // Create handler
+
+  const { data } = useQuery({
+    queryKey: ["single-categories", updateId],
+    queryFn: () => fetchSingleCategory(updateId!),
+    staleTime: 0, 
+    enabled: !!updateId, 
+  });
+
+  useEffect(() => {
+    if (data) {
+      setTitle(data.response.name);
+      setImage(`${S3_URL}/${data.response.image}`);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!updateId) {
+      setTitle("");
+      setImage("");
+      setFile(undefined);
+    }
+  }, [updateId]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!title) return toast.error("Category name is required");
-    if (!file) return toast.error("Picture is required");
+    if (!file && !updateId) return toast.error("Picture is required");
 
     const formData = new FormData();
     formData.append("name", title);
-    formData.append("image", file);
+    if (file) {
+      formData.append("image", file);
+    }
     id && formData.append("parent", id);
 
     const { success, response } = await mutateAsync(formData);
     if (!success) return toast.error(response);
-    toast.success("Category added");
+    toast.success(updateId ? "Category updated" : "Category added");
     router.push("/categories");
   };
 
@@ -73,10 +99,11 @@ export default function AddingCategories({
     setImage("");
     setTitle("");
     setFile(undefined);
-  }
+  };
+
   return (
     <div className="mx-10">
-      <section className="flex justify-end mt-7 h-10  items-center">
+      <section className="flex justify-end mt-7 h-10 items-center">
         <Button
           onClick={handleSubmit}
           disabled={isPending}
@@ -90,7 +117,7 @@ export default function AddingCategories({
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="Title">Title</Label>
             <Input
-              type="email"
+              type="text"
               id="Title"
               placeholder="Placeholder"
               value={title}
@@ -103,13 +130,14 @@ export default function AddingCategories({
           <div className="grid w-full max-w-sm items-center gap-1.5 mt-5">
             <Label htmlFor="IMAGE">IMAGE</Label>
             <div
-              className={`relative w-full h-[178px] rounded-lg  border-[3px] border-spacing-32`}
+              className={`relative w-full h-[178px] rounded-lg border-[3px] border-spacing-32`}
             >
               <label
                 htmlFor="fileInput"
                 className="absolute inset-0 cursor-pointer"
               >
-                <div className="flex-col flex items-center justify-center h-full  bg-white">
+                {!image &&  
+                <div className="flex-col flex items-center justify-center h-full bg-white">
                   <Image
                     className="text-gray-500"
                     src="/assets/upload.png"
@@ -122,6 +150,7 @@ export default function AddingCategories({
                     area
                   </p>
                 </div>
+                }
               </label>
               <Input
                 id="fileInput"
@@ -142,7 +171,7 @@ export default function AddingCategories({
                     fill
                     src={image}
                     alt="Preview"
-                    className="object-cover object-center"
+                    className=""
                   />
                 </div>
               )}

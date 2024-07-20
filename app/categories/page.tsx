@@ -31,7 +31,7 @@ export default function Category({ searchParams }: Params) {
     title="Category"
     >
       <div>
-        <CategoryLayout title="Category" buttonText="Add a Category" isCategory>
+        <CategoryLayout title="Category" buttonText="Add Categories" isCategory>
           {isLoading ? (
             <CardSkeleton />
           ) : (

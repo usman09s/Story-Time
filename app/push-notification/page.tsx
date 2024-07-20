@@ -81,7 +81,7 @@ export default function NotificationPage() {
           disabled={isPending}
           className="bg-primaryCol px-20 py-6 hover:bg-[#395e66b9] flex items-center justify-center"
         >
-          {isPending ? "Sending..." : "Push Now"}
+          {isPending ? "Sending..." : "Push Notification"}
           {isPending && <Loader2 className="animate-spin mr-2" />}
         </Button>
       </div>

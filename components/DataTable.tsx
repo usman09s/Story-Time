@@ -62,16 +62,16 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
                   onChange={() => setSelectAll(!selectAll)}
                 />
                 <label htmlFor="name" className="font-bold text-white">
-                  Profile
+                  PROFILE
                 </label>
               </div>
             </TableHead>
             {TableHeading.map((heading, index) => (
               <TableHead
                 key={`${heading}-${index}`}
-                className="font-bold text-white text-center"
+                className="font-bold text-white text-center "
               >
-                {heading}
+                {heading.toUpperCase()}
               </TableHead>
             ))}
             <TableHead></TableHead>

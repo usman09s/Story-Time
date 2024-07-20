@@ -3,6 +3,7 @@ import { ChatsListType, ChatTypes, SupportMessage } from "@/types/types";
 import socketServices from "@/socket/socket";
 import socketServcies from "@/socket/socket";
 import { toast } from "sonner";
+
 interface ChatState {
   chatList: ChatsListType | null;
   chatMessages: { [key: string]: ChatTypes };
@@ -13,7 +14,6 @@ interface ChatState {
   sendMessage: (chatId: string, message: string, file?: string) => void;
   closeChat: (chatId: string) => void;
 }
-
 export const useChatStore = create<ChatState>((set, get) => ({
   chatList: null,
   chatMessages: {},
@@ -25,12 +25,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
   },
   fetchChatList: () => {
+    
     socketServices.on("get-chat-list", (data: ChatsListType) => {
       set({ chatList: data });
     });
-    socketServcies.on('send-message', (data: SupportMessage) => {
-      console.log("send-message", data);
-    })
+ 
     socketServices.emit("get-chat-list", { page: 1, limit: 6 });
   },
 

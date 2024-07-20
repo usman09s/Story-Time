@@ -13,7 +13,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { UserSkeleton } from "@/components/skeletons/UserSkeleton";
 import { DashboardTypes } from "@/types/types";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 import { headers } from "@/lib/utils";
 import StatesSkeleton from "@/components/stateSkeleton";
 interface Params {
@@ -68,7 +68,7 @@ export default function Dashboard({ searchParams }: Params) {
                  </>
                    : (
                     <>
-                      <States iconPath="done" title="total Download" total="1.4k" />
+                      <States iconPath="done" title="Total Downloads" total="1.4k" />
                       <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
                       <States iconPath="star2" title="Premium Users" total={`${count?.response.userCount}`} />
                     </>

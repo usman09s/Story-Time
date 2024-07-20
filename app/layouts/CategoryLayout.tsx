@@ -21,7 +21,7 @@ export default function CategoryLayout({
    
 
       <div className="flex justify-between my-10">
-        <SearchBar initialValue=""/>
+        <SearchBar initialValue="" placeHolder="Search Categories"/>
         <Link href={isCategory ? "/categories/add" : `/categories/add/${id}`}>
           <Button className={"bg-[#395E66] hover:bg-[#395e66d7]"}>
             {buttonText}

@@ -17,7 +17,7 @@ export default function GuidelineTabs({path}:{path:string}) {
       {tabs.map((tab, index) => (
         <h4
           key={index}
-          className={`font-bold ${path === tab.href ? 'border-b-4 border-[#093732]' : 'opacity-80'}`}
+          className={` ${path === tab.href ? 'border-b-4 border-[#093732] font-semibold' : 'opacity-80 text-gray-400'}`}
         >
           <Link href={tab.href}>{tab.name}</Link>
         </h4>

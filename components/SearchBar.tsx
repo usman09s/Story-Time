@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebounce } from "@uidotdev/usehooks";
 
-export default function SearchBar({ initialValue }: { initialValue: string }) {
+export default function SearchBar({ initialValue,placeHolder }: { initialValue: string,placeHolder?:string }) {
   const [value, setValue] = useState(initialValue);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -35,7 +35,7 @@ export default function SearchBar({ initialValue }: { initialValue: string }) {
   return (
     <div className="w-96 relative">
       <Input
-        placeholder="Search"
+        placeholder={`${placeHolder || "Search"}`}
         className="px-10 border-black placeholder:text-black placeholder:font-semibold focus:border-none placeholder:opacity-70"
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>

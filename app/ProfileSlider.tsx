@@ -80,14 +80,14 @@ export const ProfileSlider = ({}) => {
     <SheetContent className="flex flex-col justify-between">
       <SheetHeader>
         <SheetTitle className="">
-          <div className="flex justify-start items-center gap-24">
+          <div className="flex justify-start items-center gap-20">
             <SheetClose asChild>
               <MoveLeft
                 className="size-6 cursor-pointer"
                 onClick={() => setEditMode(false)}
               />
             </SheetClose>
-            Edit Details
+            Profile Information
           </div>
         </SheetTitle>
         <div className="flex flex-col items-center justify-center">
@@ -117,10 +117,6 @@ export const ProfileSlider = ({}) => {
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">Email</Label>
                 <p className="font-bold text-xl">{user?.email}</p>
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="firstname">Password</Label>
-                <p className="font-bold text-xl">{user?.decryptedPassword}</p>
               </div>
             </div>
           ) : (
@@ -171,17 +167,6 @@ export const ProfileSlider = ({}) => {
                     placeholder="Email"
                     name="email"
                     value={info.email}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    name="password"
-                    value={info.password}
                     onChange={handleChange}
                   />
                 </div>

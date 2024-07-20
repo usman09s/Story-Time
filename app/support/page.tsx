@@ -24,8 +24,14 @@ export default function Support({ searchParams }: Params) {
     socketServcies.on("connect", () => {
       console.log("Socket connected");
     });
-    
     setCurrentChatId(initialChatId);
+
+    // socketServcies.on(`send-message-669a77fef4655307868f35f1`,(data:any)=>{
+    //   console.log("Connected send message");
+    //   console.log(data);
+    // })
+
+    
   }, [initialChatId, setCurrentChatId]);
 
   return (

@@ -52,6 +52,8 @@ export default function Dashboard({ searchParams }: Params) {
     [searchParams]
   );
 
+  console.log(data);
+  
   return (
     <DashboardLayout active={1} title="Dashboard & Users">
       <div className="flex flex-col min-h-screen">

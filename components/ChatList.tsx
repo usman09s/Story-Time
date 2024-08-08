@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { UserMessageList } from "@/components/UserMessageList";
 import { ChatListSkeleton } from "@/components/skeletons/ChatListSkeleton";
 import socketServcies from "@/socket/socket";
+import { SupportChatOverview } from "@/types/types";
 
 export default function ChatList() {
   const { chatList,currentChatId,fetchChatList } = useChatStore();
@@ -12,7 +13,8 @@ export default function ChatList() {
   useEffect(() => {
     fetchChatList();
  
-  }, [fetchChatList,currentChatId]);
+  }, [currentChatId]);
+
   
   return (
     <div className="max-w-80 overflow-x-hidden w-full flex flex-col border-2 border-borderCol h-[800px] overflow-y-auto">
@@ -26,11 +28,12 @@ export default function ChatList() {
       {!chatList ? (
         <ChatListSkeleton />
       ) : (
-        chatList?.data?.data?.length > 0 &&
-        chatList.data.data.map((chatItem:any) => (
+        chatList?.length > 0 &&
+        chatList.map((chatItem:SupportChatOverview) => (
           <UserMessageList
-            key={chatItem._id}
+            // key={chatItem.chat._id + chatItem.chat.createdAt}
             chat={chatItem}
+            
             activeChatId={currentChatId!}
           />
         ))

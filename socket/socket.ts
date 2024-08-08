@@ -56,6 +56,9 @@ class WSService {
       this.socket?.removeAllListeners();
     }
   }
+  hasListeners(event: string): boolean {
+    return this.socket ? this.socket.hasListeners(event) : false;
+  }
 
   disconnect(): void {
     this.socket?.disconnect();

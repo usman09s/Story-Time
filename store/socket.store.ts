@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import { ChatsListType, ChatTypes, SupportMessage } from "@/types/types";
+import { ChatsListType, ChatTypes, SupportChatOverview, SupportMessage } from "@/types/types";
 import socketServices from "@/socket/socket";
 import socketServcies from "@/socket/socket";
 import { toast } from "sonner";
 
 interface ChatState {
-  chatList: ChatsListType | null;
+  chatList: SupportChatOverview[] | [];
   chatMessages: { [key: string]: ChatTypes };
   currentChatId: string | null;
   setCurrentChatId: (chatId: string | null) => void;
@@ -15,7 +15,7 @@ interface ChatState {
   closeChat: (chatId: string) => void;
 }
 export const useChatStore = create<ChatState>((set, get) => ({
-  chatList: null,
+  chatList: [],
   chatMessages: {},
   currentChatId: null,
   setCurrentChatId: (chatId: string | null) => {
@@ -25,11 +25,34 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
   },
   fetchChatList: () => {
-    
-    socketServices.on("get-chat-list", (data: ChatsListType) => {
-      set({ chatList: data });
-    });
- 
+    // Ensure that socket.on is only registered once
+    if (!socketServices.hasListeners('get-chat-list')) {
+      socketServices.on("get-chat-list", (data: ChatsListType) => {
+        set({ chatList: data?.data?.data });
+      });
+    }
+  
+    if (!socketServices.hasListeners('create-chat')) {
+      socketServices.on("create-chat", (data: SupportChatOverview) => {
+        console.log("Create-Chat Support", data);
+        set((state) => {
+        
+          const chatExists = state.chatList.some(
+            (chatItem) => chatItem.chat._id === data.chat._id
+          );
+  
+         
+          if (!chatExists) {
+            return {
+              chatList: [data, ...state.chatList], 
+            };
+          }
+  
+          return state;
+        });
+      });
+    }
+  
     socketServices.emit("get-chat-list", { page: 1, limit: 6 });
   },
 
@@ -69,6 +92,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
 
   sendMessage: (chatId: string, message: string, file?: string) => {
+    // socketServices.on(`send-message-65b8f16082cc449373a6f593`, (data: SupportMessage) => {
+    //   console.log("get-chat-list",data);
+    // })
     const payload = { chat: chatId, text: message, media: file };
     socketServices.emit(`send-message`, payload);
   },

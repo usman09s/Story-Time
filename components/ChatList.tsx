@@ -31,7 +31,7 @@ export default function ChatList() {
         chatList?.length > 0 &&
         chatList.map((chatItem:SupportChatOverview) => (
           <UserMessageList
-            // key={chatItem.chat._id + chatItem.chat.createdAt}
+            key={chatItem.chat._id + chatItem.chat.createdAt}
             chat={chatItem}
             
             activeChatId={currentChatId!}

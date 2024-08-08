@@ -22,7 +22,6 @@ export function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverv
   
   return (
     <div
-    key={chat.chat._id + chat.chat.createdAt}
       onClick={openChat}
       className={`relative py-8 px-5  bg-opacity-10 cursor-pointer ${chat._id === activeChatId ? 'bg-primaryCol' : 'bg-white'}`}
     >

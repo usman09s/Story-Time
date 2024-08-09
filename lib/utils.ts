@@ -51,8 +51,6 @@ export const headers = [
   { label: "First Name", key: "firstName" },
   { label: "Last Name", key: "lastName" },
   { label: "Email", key: "email" },
-  { label: "Phone", key: "completePhone" },
-  { label: "city", key: "city" },
   { label: "Status", key: "isActive" }
   
 ];

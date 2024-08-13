@@ -20,8 +20,6 @@ export function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverv
     router.push(`${pathname}?chatId=${chat._id}&userId=${chat.user._id}`);
   };
 
-  console.log("UserMessageList ", chat);
-  
   return (
     <div
       onClick={openChat}
@@ -53,7 +51,6 @@ export function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverv
             {chat.unreadMessages}
           </p>
         )}
-
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent, FormEvent, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowDownCircleIcon, Paperclip, SendHorizontal } from "lucide-react";
+import { ArrowDownCircleIcon, Loader2, Paperclip, SendHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -22,8 +22,7 @@ import {
 
 
 export default function ChatDetails() {
-  const { currentChatId, chatMessages } = useChatStore();
-  const {sendMessage,closeChat} = useChatStore();
+  const { currentChatId, chatMessages,loader,sendMessage,closeChat } = useChatStore();
 
   const [text, setText] = useState("");
   const [file, setFile] = useState<File | undefined>();
@@ -68,7 +67,7 @@ export default function ChatDetails() {
     console.log("Chat Closed");
   }
   return (
-    <div className="border-2 border-b w-full">
+    <div className="border border-b w-full">
       {currentChatId && (
         <>
           <div className="flex gap-1 w-full border-b items-center justify-between px-10">
@@ -100,6 +99,10 @@ export default function ChatDetails() {
             </DropdownMenu>
 
           </div>
+          {loader ?  
+          <div className="flex justify-center items-center">
+            <Loader2 className="animate-spin"/> 
+          </div> :
           <div className="flex flex-col justify-between w-full">
             <div className="flex flex-col w-full">
               <div
@@ -167,7 +170,7 @@ export default function ChatDetails() {
                     type="text"
                     id="link"
                     placeholder="Write your message here"
-                    className="flex-grow mr-2 border-none px-2"
+                    className="flex-grow mr-2 border-none px-2  focus-visible:ring-transparent"
                     value={text}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
                   />
@@ -182,6 +185,7 @@ export default function ChatDetails() {
               </div>
             </div>
           </div>
+            }
         </>
       )}
     </div>

@@ -42,6 +42,14 @@ class WSService {
     this.socket?.on(event, cb);
   }
 
+  off(event: string, cb?: (...args: any[]) => void): void {
+    if (cb) {
+      this.socket?.off(event, cb);
+    } else {
+      this.socket?.off(event); // Removes all listeners for the event if no callback is provided
+    }
+  }
+  
   removeListener(
     listenerName: string,
     listener: (...args: any[]) => void

@@ -13,11 +13,14 @@ interface ChatState {
   fetchChatMessages: (chatId: string) => void;
   sendMessage: (chatId: string, message: string, file?: string) => void;
   closeChat: (chatId: string) => void;
+  loader: boolean;
 }
 export const useChatStore = create<ChatState>((set, get) => ({
   chatList: [],
   chatMessages: {},
   currentChatId: null,
+  loader: false,
+
   setCurrentChatId: (chatId: string | null) => {
     set({ currentChatId: chatId });
     if (chatId && !get().chatMessages[chatId]) {
@@ -25,45 +28,46 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
   },
   fetchChatList: () => {
-    // Ensure that socket.on is only registered once
     if (!socketServices.hasListeners('get-chat-list')) {
+      socketServices.off('get-chat-list');
       socketServices.on("get-chat-list", (data: ChatsListType) => {
         set({ chatList: data?.data?.data });
       });
     }
-  
+ 
     if (!socketServices.hasListeners('create-chat')) {
+      socketServices.off('create-chat');
       socketServices.on("create-chat", (data: SupportChatOverview) => {
         console.log("Create-Chat Support", data);
         set((state) => {
-        
           const chatExists = state.chatList.some(
             (chatItem) => chatItem.chat._id === data.chat._id
           );
-  
-         
+ 
           if (!chatExists) {
             return {
-              chatList: [data, ...state.chatList], 
+              chatList: [data, ...state.chatList],
             };
           }
-  
+ 
           return state;
         });
       });
     }
-  
+ 
     socketServices.emit("get-chat-list", { page: 1, limit: 6 });
-  },
+ },
+ 
 
   fetchChatMessages: (chatId: string) => {
-
-    socketServcies.on(`send-message`, (data: SupportMessage) => {
-      console.log("send-message", data);
-    })
-
-    socketServices.on(`send-message-${chatId}`, (data: SupportMessage) => {
-      console.log("send-message-SOCKET-ChatID", data);
+    const sendMessageEvent = `send-message-${chatId}`;
+    const getChatMessagesEvent = `get-chat-messages-${chatId}`;
+ 
+    socketServices.off(sendMessageEvent);
+    socketServices.off(getChatMessagesEvent);
+    set({ loader: true });
+    socketServices.on(sendMessageEvent, (data: SupportMessage) => {
+      
       set((state) => ({
         chatMessages: {
           ...state.chatMessages,
@@ -76,10 +80,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
           },
         },
       }));
+      console.log("messages", data);
     });
-
-    socketServices.on(`get-chat-messages-${chatId}`, (data: ChatTypes) => {
-      console.log("get-chat-messages-SOCKET", data);
+ 
+    socketServices.on(getChatMessagesEvent, (data: ChatTypes) => {
+      
       set((state) => ({
         chatMessages: {
           ...state.chatMessages,
@@ -87,9 +92,19 @@ export const useChatStore = create<ChatState>((set, get) => ({
         },
       }));
     });
-    
-    socketServices.emit("get-chat-messages", { chat: chatId, page: 1, limit: 10000 });
+ 
+    socketServices.emit("get-chat-messages", { chat: chatId, page: 1, limit: 20 });
+
+    setTimeout(() => {
+      set((state) => {
+        if (state.loader) {
+          return { loader: false };
+        }
+        return state;
+      });
+    }, 5000);
   },
+ 
 
   sendMessage: (chatId: string, message: string, file?: string) => {
     // socketServices.on(`send-message-65b8f16082cc449373a6f593`, (data: SupportMessage) => {

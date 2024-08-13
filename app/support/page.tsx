@@ -25,19 +25,12 @@ export default function Support({ searchParams }: Params) {
       console.log("Socket connected");
     });
     setCurrentChatId(initialChatId);
-
-    // socketServcies.on(`send-message-669a77fef4655307868f35f1`,(data:any)=>{
-    //   console.log("Connected send message");
-    //   console.log(data);
-    // })
-
-    
   }, [initialChatId, setCurrentChatId]);
 
   return (
     <DashboardLayout active={4} title="Support">
       <section className="px-10 mb-20">
-        <div className="border-2 border-borderCol mt-10 h-[800px] flex">
+        <div className="border border-borderCol mt-10 h-[800px] flex">
           <ChatList />
           <ChatDetails />
         </div>

@@ -2,7 +2,9 @@ import useCurrentChatStore from "@/store/currentChat";
 import { SupportChatOverview } from "@/types/types";
 import { usePathname, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import picture from "@/public/assets/dummy-user.webp";
 import { formatShortDuration, S3_URL, truncateText } from "@/lib/utils";
+import Image from "next/image";
 
 export function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverview, activeChatId: string }) {
   const router = useRouter();
@@ -30,7 +32,7 @@ export function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverv
           <AvatarImage
             src={`${S3_URL}/${chat.user.profileImage}`}
             alt={chat.user.username} />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback><Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full"/></AvatarFallback>
         </Avatar>
         <div className="flex flex-col  gap-1 w-full">
           <p className="font-bold text-md">

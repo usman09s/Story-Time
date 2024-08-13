@@ -34,7 +34,7 @@ export default function Editor({ value, isFaq, isNotification, onStateChange }: 
         style={
           isNotification
             ? { height: '300px', fontSize: '20px',padding: '15px'}
-            : { height: '485px', fontSize: '50px',padding: '15px' }
+            : { height: '595px', fontSize: '50px',padding: '15px' }
 
         }
         className={`text-black  placeholder:text-TextColor3 ${isNotification ? 'min-h-[300px]   text-white ' : 'bg-DarkLight text-5xl'}`}        

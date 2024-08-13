@@ -17,11 +17,11 @@ export default function ChatList() {
 
   
   return (
-    <div className="max-w-80 overflow-x-hidden w-full flex flex-col border-2 border-borderCol h-[800px] overflow-y-auto">
+    <div className="max-w-80 w-full flex flex-col border-2 border-borderCol h-[800px] ">
       <div className="relative border-b-2 border-borderCol">
         <Input
           placeholder="Search Message"
-          className="px-16 mt-2 py-9 border-none placeholder:text-lg placeholder:opacity-30"
+          className="px-16 mt-2 py-8 border-none placeholder:text-lg placeholder:opacity-30"
         />
         <Search className="size-9 text-primaryCol absolute top-7 left-3" />
       </div>

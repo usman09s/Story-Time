@@ -25,6 +25,7 @@ export const loginMutate = async ({
       response: data.data,
     };
   } catch (error: any) {
+    console.log(error);
     return {
       success: false,
       response: error?.response?.data?.message || "Something went wrong",

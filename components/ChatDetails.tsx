@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent, FormEvent, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowDownCircleIcon, Loader2, Paperclip, SendHorizontal } from "lucide-react";
+import { ArrowDownCircleIcon, Loader2, Paperclip, SendHorizontal, XCircle, XCircleIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -16,13 +16,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
+} from "@/components/ui/dropdown-menu";
 
 export default function ChatDetails() {
-  const { currentChatId, chatMessages,loader,sendMessage,closeChat } = useChatStore();
+  const { currentChatId, chatMessages, loader, sendMessage, closeChat } = useChatStore();
 
   const [text, setText] = useState("");
+  const [imagePreview, setImagePreview] = useState<string | null>(null); // New state for image preview
   const [file, setFile] = useState<File | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -33,17 +33,19 @@ export default function ChatDetails() {
     e.preventDefault();
     console.log("Text", text);
 
-    if(!text && !file) return toast.error("Please enter a message to send");
+    if (!text && !file) return toast.error("Please enter a message to send");
     if (!currentChatId) return toast.error("Please select a chat to send message");
-    let image = ''
+    
+    let image = '';
     if (file) {
       const data = await uploadMedia(file);
       image = data.data[0];
     }
     
-    sendMessage(currentChatId, text,image?image:undefined);
+    sendMessage(currentChatId, text, image ? image : undefined);
     setText("");
     setFile(undefined);
+    setImagePreview(null); // Reset the image preview after sending the message
   };
 
   useEffect(() => {
@@ -60,10 +62,24 @@ export default function ChatDetails() {
     }
   }, [chatMessages, currentChatId]);
 
-  const handleChatClose = (chat:string) => {
+  const handleChatClose = (chat: string) => {
     closeChat(chat);
     console.log("Chat Closed");
-  }
+  };
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setImagePreview(URL.createObjectURL(selectedFile)); // Set the image preview URL
+    }
+  };
+
+  const handleCancelPreview = () => {
+    setImagePreview(null);
+    setFile(undefined); // Reset the file input
+  };
+
   return (
     <div className="border border-b w-full">
       {currentChatId && (
@@ -85,17 +101,16 @@ export default function ChatDetails() {
               </div>
             </div>
             <DropdownMenu>
-              <DropdownMenuTrigger >
+              <DropdownMenuTrigger>
                 <div className="border-2 py-2 px-5 flex justify-between items-center gap-5 cursor-pointer">
                   <p className="text-sm">Mark as </p>
                   <ArrowDownCircleIcon size={15} />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem className="cursor-pointer" onClick={()=>handleChatClose(currentChatId)}>Completed</DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={() => handleChatClose(currentChatId)}>Completed</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
           </div>
           {loader ?  
           <div className="flex justify-center items-center">
@@ -136,6 +151,24 @@ export default function ChatDetails() {
                       );
                     })()
                   )}
+                  {imagePreview && (
+                    <div className="flex justify-end pr-5 w-full relative">
+                      <button
+                        type="button"
+                        onClick={handleCancelPreview}
+                        className="absolute -top-2 right-1 p-1  text-white bg-red-600 rounded-full"
+                      >
+                        <XCircleIcon size={24} className="text-white"/>
+                      </button>
+                      <Image
+                        src={imagePreview}
+                        alt="Preview"
+                        width={400}
+                        height={400}
+                        className="object-cover rounded-lg size-60 mt-1"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="w-full border-1 px-5 border-t-2 mb-2">
@@ -161,19 +194,18 @@ export default function ChatDetails() {
                       id="picture"
                       accept="image/*"
                       className="hidden"
-                      onChange={(e) => setFile(e.target.files?.[0])}
+                      onChange={(e) => handleImageChange(e)}
                     />
                   </div>
                   <Input
                     type="text"
                     id="link"
                     placeholder="Write your message here"
-                    className="flex-grow mr-2 border-none px-2  focus-visible:ring-transparent"
+                    className="flex-grow mr-2 border-none px-2 focus-visible:ring-transparent"
                     value={text}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
                   />
                   <Button
-                    // disabled={isPending}
                     type="submit"
                     className="size-12 bg-primaryCol hover:bg-primaryCol rounded-full"
                   >
@@ -183,7 +215,7 @@ export default function ChatDetails() {
               </div>
             </div>
           </div>
-            }
+          }
         </>
       )}
     </div>

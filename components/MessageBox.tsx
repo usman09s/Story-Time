@@ -2,6 +2,16 @@ import useCurrentChatStore from "@/store/currentChat";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Image from "next/image";
 import { S3_URL } from "@/lib/utils";
+import picture from "@/public/assets/dummy-user.webp";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 
 export const MessageBox = ({
   content,
@@ -42,7 +52,7 @@ export const MessageBox = ({
                   src={`${S3_URL}/${currentChatUser.profileImage}`}
                   alt="@shadcn"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback><Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full" /></AvatarFallback>
               </Avatar>
             )}
             <div
@@ -52,18 +62,32 @@ export const MessageBox = ({
                 } p-4 text-sm rounded-xl`}
             >
               {content}
-                
-             
+
+
               {media && media.length > 0 && (
                 <div className="mt-2">
-                  <Image
-                    key={`${id}-image-`}
-                    src={`${S3_URL}/${media[0]}`} // Assuming media is an array of image URLs
-                    alt="image"
-                    width={200}
-                    height={200}
-                    className="object-cover rounded-lg size-60 mt-1"
-                  />
+                  <Dialog >
+                    <DialogTrigger>
+                      <Image
+                        key={`${id}-image-`}
+                        src={`${S3_URL}/${media[0]}`}
+                        alt="image"
+                        width={200}
+                        height={200}
+                        className="object-cover rounded-lg size-60 mt-1"
+                      />
+                    </DialogTrigger>
+                    <DialogContent className="">
+                      <Image
+                        key={`${id}-image-`}
+                        src={`${S3_URL}/${media[0]}`}
+                        alt="image"
+                        width={1100}
+                        height={1100}
+                        className="rounded-lg"
+                      />
+                    </DialogContent>
+                  </Dialog>
                 </div>
               )}
             </div>

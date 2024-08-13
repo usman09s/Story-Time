@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/table";
 import { AvatarFallback, AvatarImage, Avatar } from "./ui/avatar";
 import Image from "next/image";
+import picture from "@/public/assets/dummy-user.webp";
+
 import { DashboardUser } from "@/types/types";
 import { toggleUserBlock } from "@/API/dashboard.api";
 import { toast } from "sonner";
@@ -42,9 +44,9 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
   };
 
   const toggleUser = async (id: string) => {
-    const {success, response} = await toggleUserBlock(id);
-    if(!success) return toast.error(response);
-    if(success)  toast.success(response);
+    const { success, response } = await toggleUserBlock(id);
+    if (!success) return toast.error(response);
+    if (success) toast.success(response);
     queryClient.invalidateQueries({ queryKey: ['users'] })
   }
   return (
@@ -69,7 +71,7 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
             {TableHeading.map((heading, index) => (
               <TableHead
                 key={`${heading}-${index}`}
-                className="font-bold text-white text-center "
+                className="font-semibold text-white text-center "
               >
                 {heading.toUpperCase()}
               </TableHead>
@@ -94,7 +96,7 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
                         src={`${S3_URL}/${row.profileImage}`}
                         alt="@shadcn"
                       />
-                      <AvatarFallback>CN</AvatarFallback>
+                      <AvatarFallback><Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full" /></AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col gap-1">
                       <p className="font-bold text-start">{row.firstName}</p>
@@ -105,20 +107,19 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
               </TableCell>
               <TableCell className="w-60">
                 <div className="inline-block text-center space-y-2">
-                  <p className="py-1 rounded-full bg-[#F2F0F9] inline text-center font-bold px-1">
-                    {row.videoStoriesCount} video stories
+                  <p className="py-1 rounded-full bg-[#F2F0F9] inline text-center font-semibold px-1">
+                    {row.videoStoriesCount} video
                   </p>
-                  <p className="py-1 rounded-full bg-[#F2F0F9] px-2 text-center font-bold">
-                    {row.textStoriesCount} text stories
+                  <p className="py-1 rounded-full bg-[#F2F0F9] px-2 text-center font-semibold">
+                    {row.textStoriesCount} voice to text
                   </p>
                 </div>
               </TableCell>
               <TableCell>{row.username}</TableCell>
               <TableCell>
                 <p
-                  className={`${
-                    row.isActive ? "text-green-500" : "text-red-600"
-                  } font-semibold`}
+                  className={`${row.isActive ? "text-green-500" : "text-red-600"
+                    } font-semibold`}
                 >
                   {row.isActive ? "Active" : "Inactive"}
                 </p>
@@ -140,14 +141,14 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
               {showModalRowIndex === index && (
                 <div className="absolute z-50 right-20 mt-2 w-36 bg-white shadow-lg p-4">
                   <div className="flex flex-col gap-2">
-                    <div className="flex gap-2 cursor-pointer" onClick={()=>toggleUser(row._id)}>
-                      <Image src={'/assets/Disable.png'} alt="Disable Button Picture" width={20} height={20}/>
+                    <div className="flex gap-2 cursor-pointer" onClick={() => toggleUser(row._id)}>
+                      <Image src={'/assets/Disable.png'} alt="Disable Button Picture" width={20} height={20} />
                       <p className="text-xs ">Disable User</p>
-                      </div>
-                      <div className="flex gap-2 cursor-pointer" onClick={()=>toggleUser(row._id)}>
-                      <Image src={'/assets/Enable.png'} alt="Disable Button Picture" width={20} height={20}/>
+                    </div>
+                    <div className="flex gap-2 cursor-pointer" onClick={() => toggleUser(row._id)}>
+                      <Image src={'/assets/Enable.png'} alt="Disable Button Picture" width={20} height={20} />
                       <p className="text-xs ">Enable User</p>
-                      </div>
+                    </div>
                   </div>
                 </div>
               )}

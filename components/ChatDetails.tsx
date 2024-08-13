@@ -10,6 +10,7 @@ import { MessageBox } from "@/components/MessageBox";
 import { useChatStore } from "@/store/socket.store";
 import useCurrentChatStore from "@/store/currentChat";
 import { uploadMedia } from "@/API/chats.api";
+import picture from "@/public/assets/dummy-user.webp";
 
 import {
   DropdownMenu,
@@ -35,13 +36,13 @@ export default function ChatDetails() {
 
     if (!text && !file) return toast.error("Please enter a message to send");
     if (!currentChatId) return toast.error("Please select a chat to send message");
-    
+
     let image = '';
     if (file) {
       const data = await uploadMedia(file);
       image = data.data[0];
     }
-    
+
     sendMessage(currentChatId, text, image ? image : undefined);
     setText("");
     setFile(undefined);
@@ -91,7 +92,8 @@ export default function ChatDetails() {
                   src={`${S3_URL}/${currentChatUser.profileImage}`}
                   alt="@shadcn"
                 />
-                <AvatarFallback>C</AvatarFallback>
+                <AvatarFallback><Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full" /></AvatarFallback>
+
               </Avatar>
               <div className="flex flex-col">
                 <p className="font-bold text-md">
@@ -112,109 +114,109 @@ export default function ChatDetails() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          {loader ?  
-          <div className="flex justify-center items-center">
-            <Loader2 className="animate-spin"/> 
-          </div> :
-          <div className="flex flex-col justify-between w-full">
-            <div className="flex flex-col w-full">
-              <div
-                ref={chatContainerRef}
-                className="flex-grow p-4 w-full border-gray-300 max-h-[650px] min-h-[650px] overflow-y-auto"
-              >
-                <div className="flex flex-col justify-start gap-y-1">
-                  {isLoading ? (
-                    <div className="text-center">Loading...</div>
-                  ) : (
-                    (chatMessages[currentChatId]?.data?.data?.length ?? 0) > 0 &&
-                    (() => {
-                      let lastDisplayedDate = "";
-                      return chatMessages[currentChatId]?.data?.data?.map(
-                        (msg, index, messages) => {
-                          const showDate = shouldShowDate(index, messages, lastDisplayedDate);
-                          const messageDate = new Date(msg.createdAt).toDateString();
-                          if (showDate) {
-                            lastDisplayedDate = messageDate;
+          {loader ?
+            <div className="flex justify-center items-center">
+              <Loader2 className="animate-spin" />
+            </div> :
+            <div className="flex flex-col justify-between w-full">
+              <div className="flex flex-col w-full">
+                <div
+                  ref={chatContainerRef}
+                  className="flex-grow p-4 w-full border-gray-300 max-h-[650px] min-h-[650px] overflow-y-auto"
+                >
+                  <div className="flex flex-col justify-start gap-y-1">
+                    {isLoading ? (
+                      <div className="text-center">Loading...</div>
+                    ) : (
+                      (chatMessages[currentChatId]?.data?.data?.length ?? 0) > 0 &&
+                      (() => {
+                        let lastDisplayedDate = "";
+                        return chatMessages[currentChatId]?.data?.data?.map(
+                          (msg, index, messages) => {
+                            const showDate = shouldShowDate(index, messages, lastDisplayedDate);
+                            const messageDate = new Date(msg.createdAt).toDateString();
+                            if (showDate) {
+                              lastDisplayedDate = messageDate;
+                            }
+                            return (
+                              <MessageBox
+                                key={msg._id}
+                                id={msg._id}
+                                content={msg.text}
+                                media={msg.media}
+                                isAdmin={msg.isAdmin}
+                                day={showDate ? formatDate(msg.createdAt) : ""}
+                                createdAt={formatShortDuration(msg.createdAt)}
+                              />
+                            );
                           }
-                          return (
-                            <MessageBox
-                              key={msg._id}
-                              id={msg._id}
-                              content={msg.text}
-                              media={msg.media}
-                              isAdmin={msg.isAdmin}
-                              day={showDate ? formatDate(msg.createdAt) : ""}
-                              createdAt={formatShortDuration(msg.createdAt)}
-                            />
-                          );
-                        }
-                      );
-                    })()
-                  )}
-                  {imagePreview && (
-                    <div className="flex justify-end pr-5 w-full relative">
-                      <button
-                        type="button"
-                        onClick={handleCancelPreview}
-                        className="absolute -top-2 right-1 p-1  text-white bg-red-600 rounded-full"
-                      >
-                        <XCircleIcon size={24} className="text-white"/>
-                      </button>
-                      <Image
-                        src={imagePreview}
-                        alt="Preview"
-                        width={400}
-                        height={400}
-                        className="object-cover rounded-lg size-60 mt-1"
+                        );
+                      })()
+                    )}
+                    {imagePreview && (
+                      <div className="flex justify-end pr-5 w-full relative">
+                        <button
+                          type="button"
+                          onClick={handleCancelPreview}
+                          className="absolute -top-2 right-1 p-1  text-white bg-red-600 rounded-full"
+                        >
+                          <XCircleIcon size={24} className="text-white" />
+                        </button>
+                        <Image
+                          src={imagePreview}
+                          alt="Preview"
+                          width={400}
+                          height={400}
+                          className="object-cover rounded-lg size-60 mt-1"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="w-full border-1 px-5 border-t-2 mb-2">
+                  <form
+                    onSubmit={handleSendMessage}
+                    className="flex items-center gap-2 relative justify-center pt-[10px]"
+                  >
+                    <div className="flex items-center gap-2">
+                      <label htmlFor="link">
+                        <Paperclip className="cursor-pointer text-gray-500" />
+                      </label>
+                      <label htmlFor="picture">
+                        <Image
+                          src={"/assets/Picture.png"}
+                          alt="Picture Icon"
+                          width={30}
+                          height={30}
+                          className="cursor-pointer"
+                        />
+                      </label>
+                      <input
+                        type="file"
+                        id="picture"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleImageChange(e)}
                       />
                     </div>
-                  )}
+                    <Input
+                      type="text"
+                      id="link"
+                      placeholder="Write your message here"
+                      className="flex-grow mr-2 border-none px-2 focus-visible:ring-transparent"
+                      value={text}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
+                    />
+                    <Button
+                      type="submit"
+                      className="size-12 bg-primaryCol hover:bg-primaryCol rounded-full"
+                    >
+                      <SendHorizontal className="size-16 text-white" />
+                    </Button>
+                  </form>
                 </div>
               </div>
-              <div className="w-full border-1 px-5 border-t-2 mb-2">
-                <form
-                  onSubmit={handleSendMessage}
-                  className="flex items-center gap-2 relative justify-center pt-[10px]"
-                >
-                  <div className="flex items-center gap-2">
-                    <label htmlFor="link">
-                      <Paperclip className="cursor-pointer text-gray-500" />
-                    </label>
-                    <label htmlFor="picture">
-                      <Image
-                        src={"/assets/Picture.png"}
-                        alt="Picture Icon"
-                        width={30}
-                        height={30}
-                        className="cursor-pointer"
-                      />
-                    </label>
-                    <input
-                      type="file"
-                      id="picture"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => handleImageChange(e)}
-                    />
-                  </div>
-                  <Input
-                    type="text"
-                    id="link"
-                    placeholder="Write your message here"
-                    className="flex-grow mr-2 border-none px-2 focus-visible:ring-transparent"
-                    value={text}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
-                  />
-                  <Button
-                    type="submit"
-                    className="size-12 bg-primaryCol hover:bg-primaryCol rounded-full"
-                  >
-                    <SendHorizontal className="size-16 text-white" />
-                  </Button>
-                </form>
-              </div>
             </div>
-          </div>
           }
         </>
       )}

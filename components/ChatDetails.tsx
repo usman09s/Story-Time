@@ -35,7 +35,7 @@ export default function ChatDetails() {
     e.preventDefault();
     console.log("Text", text);
 
-    if (!text) return toast.error("message can't be empty");
+    if(!text && !file) return toast.error("Please enter a message to send");
     if (!currentChatId) return toast.error("Please select a chat to send message");
     let image = ''
     if (file) {

@@ -3,14 +3,11 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/Dashboard";
 import PushInfomation from "@/components/PushInfomation";
 import { Button } from "@/components/ui/button";
-// import Editor from "@/components/Editor";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getNotifications, pushNotification } from "@/API/notiifications";
 import { dateFormat } from "@/lib/dateFormat";
 import { NotificationType } from "@/types/types";
-import Editor from "@/components/Editor";
-import QuillToolbar from "@/components/toolbar";
 import { Loader2 } from "lucide-react";
 
 export default function NotificationPage() {
@@ -22,7 +19,7 @@ export default function NotificationPage() {
 
   // Fetching all notifications
   const { data, isLoading } = useQuery<NotificationType>({
-    queryKey: ["notifications"],
+    queryKey: ["notifications-events"],
     queryFn: () => getNotifications(),
   });
 
@@ -30,7 +27,7 @@ export default function NotificationPage() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: pushNotification,
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["notifications"] }),
+      queryClient.invalidateQueries({ queryKey: ["notifications-events"] }),
   });
 
   const handleSubmit = async () => {
@@ -49,9 +46,9 @@ export default function NotificationPage() {
 
   return (
     <DashboardLayout active={3} title="Push Notification">
-  <div className="flex border-[#E4E4E4] rounded-lg border-2 mx-10 mt-5 mb-16">
-    <div className="mt-1 flex-grow ml-1 rounded-lg flex-col border-[#E4E4E4]  w-[75%]">
-      <div className="bg-white pb-6 rounded-md border-2">
+  <div className="flex border-[#E4E4E4] rounded-lg border mx-10 mt-5 mb-16 p-2 gap-2">
+    <div className=" flex-grow  rounded-lg flex-col border-[#E4E4E4]  w-[75%]">
+      <div className="bg-white pb-6 rounded-md border">
         <PushInfomation
           date={date}
           sendToAll={sendToAll}
@@ -61,7 +58,7 @@ export default function NotificationPage() {
           title={title}
         />
       </div>
-      <div className="mt-2 rounded-md bg-white border-2">
+      <div className="mt-2 rounded-md bg-white border">
         <div className="border-[#E4E4E4]">
           <textarea
             name=""
@@ -86,9 +83,9 @@ export default function NotificationPage() {
         </Button>
       </div>
     </div>
-    <div className="w-96 h-[732px] bg-white mx-2 p-10 mt-1 border-2 border-[#E4E4E4] rounded-lg">
+    <div className="w-96 h-[732px] bg-white  p-10  border border-[#E4E4E4] rounded-lg">
       <p className="mb-5 text-lg font-semibold">History</p>
-      <div className="flex flex-col space-y-4 border-l-2 border-dashed p-3">
+      <div className="flex flex-col space-y-4 border-l border-dashed p-3">
         {isLoading ? (
           <p>Loading...</p>
         ) : (

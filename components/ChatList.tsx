@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { useChatStore } from "@/store/socket.store";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -8,15 +8,16 @@ import { SupportChatOverview } from "@/types/types";
 
 const ChatList = memo(function ChatList() {
   const { chatList, currentChatId, fetchChatList } = useChatStore();
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
-    fetchChatList();
+    fetchChatList(search);
   }, [currentChatId]);
 
   return (
     <div className="max-w-80 w-full flex flex-col border border-borderCol h-[800px] overflow-y-hidden">
       <div className="relative border-b border-borderCol">
         <Input
+          onChange={(e) => setSearch(e.target.value)}
           placeholder="Search Messages"
           className="px-16 mt-2 py-7 mb-2 placeholder:text-lg placeholder:opacity-30 border-none   focus-visible:ring-transparent"
         />

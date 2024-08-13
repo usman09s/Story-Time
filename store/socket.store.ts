@@ -9,7 +9,7 @@ interface ChatState {
   chatMessages: { [key: string]: ChatTypes };
   currentChatId: string | null;
   setCurrentChatId: (chatId: string | null) => void;
-  fetchChatList: () => void;
+  fetchChatList: (search:string) => void;
   fetchChatMessages: (chatId: string) => void;
   sendMessage: (chatId: string, message: string, file?: string) => void;
   closeChat: (chatId: string) => void;
@@ -27,7 +27,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       get().fetchChatMessages(chatId);
     }
   },
-  fetchChatList: () => {
+  fetchChatList: (search) => {
     if (!socketServices.hasListeners('get-chat-list')) {
       socketServices.off('get-chat-list');
       socketServices.on("get-chat-list", (data: ChatsListType) => {
@@ -55,7 +55,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       });
     }
  
-    socketServices.emit("get-chat-list", { page: 1, limit: 6 });
+    socketServices.emit("get-chat-list", { page: 1, limit: 6,search });
  },
  
 

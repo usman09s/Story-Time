@@ -83,7 +83,7 @@ export default function NotificationPage() {
         </Button>
       </div>
     </div>
-    <div className="w-96 h-[732px] bg-white  p-10  border border-[#E4E4E4] rounded-lg">
+    <div className="w-96 h-[727.5px] bg-white  p-10  border border-[#E4E4E4] rounded-lg">
       <p className="mb-5 text-lg font-semibold">History</p>
       <div className="flex flex-col space-y-4 border-l border-dashed p-3">
         {isLoading ? (

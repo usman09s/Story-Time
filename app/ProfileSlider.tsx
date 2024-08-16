@@ -7,14 +7,8 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/store/AuthProvider";
 import { MoveLeft } from "lucide-react";
-import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateProfile } from "@/API/auth.api";
 
 export const ProfileSlider = ({}) => {
   const { user } = useAuth();

@@ -65,7 +65,7 @@ export const MessageBox = ({
 
 
               {media && media.length > 0 && (
-                <div className="mt-2">
+                <div className="mt-2 ">
                   <Dialog >
                     <DialogTrigger>
                       <Image

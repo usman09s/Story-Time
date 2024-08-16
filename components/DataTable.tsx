@@ -60,7 +60,7 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
                   type="checkbox"
                   id="name"
                   checked={selectAll}
-                  className="cursor-pointer h-4 w-4 rounded-3xl shadow checked:bg-[#439A86]  focus:ring-0 checked:text-[#439A86]"
+                  className="cursor-pointer h-4 w-4 shadow border-[#E8E8E8] checked:bg-[#439A86]  focus:ring-0 checked:text-[#439A86]"
                   onChange={() => setSelectAll(!selectAll)}
                 />
                 <label htmlFor="name" className="font-bold text-white">
@@ -88,7 +88,7 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading }) => {
                     type="checkbox"
                     checked={selectAll || selectedRows.includes(index)}
                     onChange={() => handleCheckboxChange(index)}
-                    className="h-4 w-4 rounded-3xl shadow checked:bg-[#439A86] focus:ring-0 checked:text-[#439A86]"
+                    className="h-4 w-4 border-[#E8E8E8] shadow checked:bg-[#439A86] focus:ring-0 checked:text-[#439A86]"
                   />
                   <div className="flex gap-2 items-center">
                     <Avatar>

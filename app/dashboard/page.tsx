@@ -27,7 +27,6 @@ interface Params {
 
 export default function Dashboard({ searchParams }: Params) {
   const { page, limit, search, status } = searchParams;
-  const decodedSearch = decodeURIComponent(search);
 
   const { data, isLoading } = useQuery<DashboardTypes>({
     queryKey: ["users", page, limit, search, status],
@@ -52,8 +51,8 @@ export default function Dashboard({ searchParams }: Params) {
     [searchParams]
   );
 
-  console.log(data);
-  
+  console.log("~ count", count);
+
   return (
     <DashboardLayout active={1} title="Dashboard & Users">
       <div className="flex flex-col min-h-screen">
@@ -62,19 +61,19 @@ export default function Dashboard({ searchParams }: Params) {
             <section>
               <div className="flex w-full items-center gap-10 my-6">
                 {
-                  loading ? 
-                 <>
-                 <StatesSkeleton/>
-                 <StatesSkeleton/>
-                 <StatesSkeleton/>
-                 </>
-                   : (
+                  loading ?
                     <>
-                      <States iconPath="done" title="Total Downloads" total="1.4k" />
-                      <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
-                      <States iconPath="star2" title="Premium Users" total={`${count?.response.userCount}`} />
+                      <StatesSkeleton />
+                      <StatesSkeleton />
+                      <StatesSkeleton />
                     </>
-                  )
+                    : (
+                      <>
+                        <States iconPath="done" title="Total Downloads" total="1.4k" />
+                        <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
+                        <States iconPath="star2" title="Premium Users" total={`${count?.response.PremiumUserCount}`} />
+                      </>
+                    )
                 }
 
               </div>
@@ -118,14 +117,15 @@ export default function Dashboard({ searchParams }: Params) {
           <div className="flex justify-between px-10 mt-5 my-2">
             <SearchBar initialValue={search || ""} placeHolder="Search users" />
             <div>
-              <Button
-                variant={"outline"}
-                className="border-[#395E66] flex gap-2 items-center text-[#395E66]"
-              >
-                {data && data.response && (
+              {data && data.response && (
+                <Button
+                  variant={"outline"}
+                  className="border-[#395E66] flex gap-2 items-center text-[#395E66]"
+                >
+
                   <CSVLink data={data.response.users} headers={headers} className="flex gap-2 items-center">Export CSV <Download className="size-5" target="_blank" /></CSVLink>
-                )}
-              </Button>
+                </Button>
+              )}
             </div>
           </div>
           <div className="mx-10">

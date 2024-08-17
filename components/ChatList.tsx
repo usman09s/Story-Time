@@ -11,7 +11,9 @@ const ChatList = memo(function ChatList() {
   const [search, setSearch] = useState("");
   useEffect(() => {
     fetchChatList(search);
-  }, [currentChatId]);
+    console.log("USE EFFECT CALLED");
+    
+  }, [currentChatId,search]);
 
   return (
     <div className="max-w-80 w-full flex flex-col border border-borderCol h-[800px] overflow-y-hidden">

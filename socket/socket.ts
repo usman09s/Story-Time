@@ -1,4 +1,5 @@
 import io, { Socket } from "socket.io-client";
+import { toast } from "sonner";
 
 const BASE_SOCKET_CONNECTION = "https://backend.storytime.social"; 
 
@@ -26,7 +27,8 @@ class WSService {
         console.log(err, "socket connection error");
       });
 
-      this.socket.on("error", (data: any) => {
+      this.socket.on("socket-error", (data: any) => {
+        toast.error(data.message);
         console.log("socket error", data);
       });
     } catch (error) {

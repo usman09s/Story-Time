@@ -1,5 +1,4 @@
 import io, { Socket } from "socket.io-client";
-import { toast } from "sonner";
 
 const BASE_SOCKET_CONNECTION = "https://backend.storytime.social"; 
 
@@ -47,7 +46,7 @@ class WSService {
     if (cb) {
       this.socket?.off(event, cb);
     } else {
-      this.socket?.off(event); // Removes all listeners for the event if no callback is provided
+      this.socket?.off(event); 
     }
   }
   
@@ -74,6 +73,6 @@ class WSService {
   }
 }
 
-const socketServcies = new WSService();
+const socketService  = new WSService();
 
-export default socketServcies;
+export default socketService;

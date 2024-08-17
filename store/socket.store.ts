@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { ChatsListType, ChatTypes, SupportChatOverview, SupportMessage } from "@/types/types";
+
 import socketServices from "@/socket/socket";
-import socketServcies from "@/socket/socket";
 import { toast } from "sonner";
 
 interface ChatState {

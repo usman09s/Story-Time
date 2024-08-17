@@ -4,6 +4,7 @@ import "./globals.css";
 import ReactQueryProvider from "@/store/ReactQueryProvider";
 import { AuthProvider } from "@/store/AuthProvider";
 import { Toaster } from "sonner";
+import ResponsiveWrapper from "./layouts/ResponsiveWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,17 +17,22 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+  
+}>
+) {
   return (
     <html lang="en">
       <ReactQueryProvider>
         <AuthProvider>
           <body className={inter.className}>
             <Toaster position="top-right" richColors />
+            <ResponsiveWrapper>
             {children}
+            </ResponsiveWrapper>
           </body>
         </AuthProvider>
       </ReactQueryProvider>
     </html>
+
   );
 }

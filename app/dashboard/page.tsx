@@ -15,7 +15,7 @@ import { UserSkeleton } from "@/components/skeletons/UserSkeleton";
 import { DashboardTypes } from "@/types/types";
 import { CSVLink } from "react-csv";
 import { headers } from "@/lib/utils";
-import StatesSkeleton from "@/components/stateSkeleton";
+import Count from "@/components/Count";
 interface Params {
   searchParams: {
     page: number;
@@ -33,10 +33,7 @@ export default function Dashboard({ searchParams }: Params) {
     queryFn: () => getUsers({ page, limit, search, status: status || "" }),
   });
 
-  const { data: count, isLoading: loading } = useQuery({
-    queryKey: ["user-count"],
-    queryFn: userCount
-  });
+
 
   const pathname = usePathname();
   const urlSearchParams = useSearchParams();
@@ -51,7 +48,6 @@ export default function Dashboard({ searchParams }: Params) {
     [searchParams]
   );
 
-  console.log("~ count", count);
 
   return (
     <DashboardLayout active={1} title="Dashboard & Users">
@@ -59,24 +55,7 @@ export default function Dashboard({ searchParams }: Params) {
         <div className="flex-1 overflow-y-auto">
           <div className="pl-10">
             <section>
-              <div className="flex w-full items-center gap-10 my-6">
-                {
-                  loading ?
-                    <>
-                      <StatesSkeleton />
-                      <StatesSkeleton />
-                      <StatesSkeleton />
-                    </>
-                    : (
-                      <>
-                        <States iconPath="done" title="Total Downloads" total="1.4k" />
-                        <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
-                        <States iconPath="star2" title="Premium Users" total={`${count?.response.premiumUsersCount}`} />
-                      </>
-                    )
-                }
-
-              </div>
+              <Count/>
               <div className="flex gap-10 border-b-2 text-center border-[#E44173] pb-4 relative">
                 <button
                   className={`${!status ? "font-bold text-primaryCol" : "opacity-50"

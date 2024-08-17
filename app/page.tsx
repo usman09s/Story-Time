@@ -16,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useAuth } from "@/store/AuthProvider";
+import ResponsiveWrapper from "./layouts/ResponsiveWrapper";
 
 export default function Home() {
   const router = useRouter();
@@ -47,7 +48,6 @@ export default function Home() {
   };
 
   return (
-    <>
       <AuthLayout title="Sign in to manage" subTitle="Enter your details below">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-4 grid w-full max-w-sm items-center gap-1.5">
@@ -112,6 +112,5 @@ export default function Home() {
           </Button>
         </form>
       </AuthLayout>
-    </>
   );
 }

@@ -28,7 +28,6 @@ class WSService {
       });
 
       this.socket.on("socket-error", (data: any) => {
-        toast.error(data.message);
         console.log("socket error", data);
       });
     } catch (error) {

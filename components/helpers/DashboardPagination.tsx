@@ -31,7 +31,10 @@ export const DashboardPagination = ({ data: { currentPage, hasNextPage, hasPrevP
     const queryString = queryParams.toString();
     router.push(`${pathname}?${queryString}`, { scroll: false });
   }
-  
+
+  const startItem = (currentPage - 1) * perPage + 1;
+   const endItem = Math.min(currentPage * perPage, totalItems);
+
   return (
     <div className="flex justify-end items-center gap-10">
       <div>
@@ -53,7 +56,7 @@ export const DashboardPagination = ({ data: { currentPage, hasNextPage, hasPrevP
         </div>
       </div>
       <div>
-        <h1> of {totalItems}</h1>
+      <h1>{startItem}-{endItem} of {totalItems}</h1>
       </div>
       <div className="flex gap-6 mr-16">
         <button

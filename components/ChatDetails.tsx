@@ -140,6 +140,7 @@ export default function ChatDetails() {
                             }
                             return (
                               <MessageBox
+                                isFirstMessage={index === 0}
                                 key={msg._id}
                                 id={msg._id}
                                 content={msg.text}
@@ -147,6 +148,7 @@ export default function ChatDetails() {
                                 isAdmin={msg.isAdmin}
                                 day={showDate ? formatDate(msg.createdAt) : ""}
                                 createdAt={formatShortDuration(msg.createdAt)}
+                                supportTicket={currentChatId}
                               />
                             );
                           }

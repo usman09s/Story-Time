@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import DashboardLayout from "../layouts/Dashboard";
 import PushInfomation from "@/components/PushInfomation";
 import { Button } from "@/components/ui/button";
@@ -58,14 +58,14 @@ export default function NotificationPage() {
           title={title}
         />
       </div>
-      <div className="mt-2 rounded-md bg-white border">
+      <div className="mt-2 rounded-md bg-white border ">
         <div className="border-[#E4E4E4]">
           <textarea
             name=""
             id=""
             onChange={(e) => setValue(e.target.value)}
             value={value}
-            className="!border-none w-[75%]"
+            className="!border-none w-[75%] px-7 pt-5"
             rows={21}
             cols={140}
             placeholder="Write Notification text"
@@ -83,9 +83,9 @@ export default function NotificationPage() {
         </Button>
       </div>
     </div>
-    <div className="w-96 h-[727.5px] bg-white  p-10  border border-[#E4E4E4] rounded-lg">
-      <p className="mb-5 text-lg font-semibold">History</p>
-      <div className="flex flex-col space-y-4 border-l border-dashed p-3">
+    <div className="w-96 h-[739px] bg-white  p-10  border border-[#E4E4E4] rounded-lg">
+      <p className="mb-3  text-md font-medium text-[#50555C] mx-5">History</p>
+      <div className="flex flex-col space-y-4 border-l-2 border-[#D9D9D9] border-dashed p-2">
         {isLoading ? (
           <p>Loading...</p>
         ) : (

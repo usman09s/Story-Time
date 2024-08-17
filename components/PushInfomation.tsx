@@ -31,7 +31,7 @@ export default function PushInfomation({
                 <input
                   type="checkbox"
                   id="all-users"
-                   className="rounded-sm text-[#395E66] focus:ring-[#395e66ca] h-5 w-5"
+                   className="rounded-sm text-[#395E66] focus:ring-[#395e66ca] h-5 w-5 "
                   checked={sendToAll}
                   onChange={() => setSendToAll(true)}
                 />
@@ -65,7 +65,7 @@ export default function PushInfomation({
             <Input
               type="text"
               placeholder="Title here"
-              className="h-16 rounded-lg bg-InputFieldColor pt-7 text-gray-400 bg-[#EFEFEF] "
+              className="h-16 rounded-lg bg-InputFieldColor pt-7 text-gray-400 bg-[#EFEFEF] focus-visible:ring-transparent focus:border-[#252525] "
               value={title}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setTitle(e.target.value)

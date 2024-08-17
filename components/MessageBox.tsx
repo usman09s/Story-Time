@@ -6,11 +6,11 @@ import picture from "@/public/assets/dummy-user.webp";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Download } from "lucide-react";
+import { toast } from "sonner";
+import axios from "axios";
 
 
 export const MessageBox = ({
@@ -20,6 +20,8 @@ export const MessageBox = ({
   isAdmin,
   id,
   createdAt,
+  isFirstMessage,
+  supportTicket
 }: {
   day: string;
   content: string;
@@ -27,8 +29,33 @@ export const MessageBox = ({
   isAdmin: boolean;
   id: string;
   createdAt: string;
+  isFirstMessage: boolean,
+  supportTicket: string;
 }) => {
   const currentChatUser = useCurrentChatStore((state) => state.currentChatUser);
+
+  const downloadImage = async (url: string) => {
+    try {
+      const encodedUrl = encodeURI(url);
+      const response = await axios.get(encodedUrl, {
+        responseType: 'blob', 
+      });
+
+      console.log("response",response);
+      
+      const blob = new Blob([response.data]);
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = url.split('/').pop() || "download"; // Sets the filename for download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href); // Clean up the object URL
+    } catch (error) {
+      toast.error("Download failed");
+      console.error("Download failed", error);
+    }
+  };
 
   return (
     <>
@@ -61,20 +88,23 @@ export const MessageBox = ({
                 : "bg-primaryCol text-white"
                 } p-4 text-sm rounded-xl`}
             >
+              {isFirstMessage && (
+                <p className="mb-4 text-[#082748]">
+                  Open a Support Ticket <span className="font-bold">#{supportTicket}</span>
+                </p>
+              )}
               {content}
-
-
               {media && media.length > 0 && (
-                <div className="mt-2 ">
+                <div className="mt-2 flex items-center justify-start gap-2">
                   <Dialog >
                     <DialogTrigger>
                       <Image
                         key={`${id}-image-`}
                         src={`${S3_URL}/${media[0]}`}
                         alt="image"
-                        width={200}
+                        width={250}
                         height={200}
-                        className="object-cover rounded-lg size-60 mt-1"
+                        className=" rounded-lg  mt-1"
                       />
                     </DialogTrigger>
                     <DialogContent className="">
@@ -88,6 +118,10 @@ export const MessageBox = ({
                       />
                     </DialogContent>
                   </Dialog>
+                  {
+                    isAdmin === false && (
+                      <Download className="text-black cursor-pointer" onClick={() => downloadImage(`${S3_URL}/${media[0]}`)}/>
+                    )}
                 </div>
               )}
             </div>

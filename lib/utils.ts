@@ -13,8 +13,8 @@ export const formatDate = (date: Date | undefined): string => {
   return `${format(date, 'dd MMM yyyy')}`; // Format as "Uploaded last 28 Aug 2023"
 };
 
-export const truncateText = (text: string, maxLength: number = 15) => {
-  const minDisplayLength = 10;
+export const truncateText = (text: string, maxLength: number = 30) => {
+  const minDisplayLength = 20;
 
   if (text.length <= maxLength) {
     return text;

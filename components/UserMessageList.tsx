@@ -23,7 +23,7 @@ export function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverv
   return (
     <div
       onClick={openChat}
-      className={`relative py-8 px-5  bg-opacity-10 cursor-pointer ${chat._id === activeChatId ? 'bg-primaryCol' : 'bg-white'}`}
+      className={`relative py-8 px-5  bg-opacity-10 cursor-pointer ${chat._id === activeChatId ? 'bg-primaryCol' : 'bg-white'} border-b border-borderCol`}
     >
       <div className="flex gap-2 w-full">
         <Avatar className="w-14 h-14">
@@ -38,7 +38,7 @@ export function UserMessageList({ chat, activeChatId }: { chat: SupportChatOverv
           </p>
           <div className="flex items-end justify-between w-full">
             <p className="text-xs text-[#09110e80]">
-              {chat.chat.lastMessage && truncateText(chat.chat.lastMessage, 3)}
+              {chat.chat.lastMessage && truncateText(chat.chat.lastMessage, 7)}
             </p>
             <p className="text-xs mr-5 text-[#09110e80]">
               {formatShortDuration(new Date(chat.chat.updatedAt || chat.chat.createdAt),)}

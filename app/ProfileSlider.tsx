@@ -38,19 +38,19 @@ export const ProfileSlider = ({}) => {
             <div className="flex flex-col gap-6 mt-20 w-64">
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">First Name</Label>
-                <p className="font-bold text-xl">{user?.firstName}</p>
+                <p className="font-medium text-xl">{user?.firstName}</p>
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">Last Name</Label>
-                <p className="font-bold text-xl">{user?.lastName}</p>
+                <p className="font-medium text-xl">{user?.lastName}</p>
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">Username</Label>
-                <p className="font-bold text-xl">{user?.username}</p>
+                <p className="font-medium text-xl">{user?.username}</p>
               </div>
               <div className="grid w-full max-w-sm items-center gap-1.5">
                 <Label htmlFor="firstname">Email</Label>
-                <p className="font-bold text-xl">{user?.email}</p>
+                <p className="font-medium text-xl">{user?.email}</p>
               </div>
             </div>
         </div>

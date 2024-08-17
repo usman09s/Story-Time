@@ -71,7 +71,7 @@ export default function Dashboard({ searchParams }: Params) {
                       <>
                         <States iconPath="done" title="Total Downloads" total="1.4k" />
                         <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
-                        <States iconPath="star2" title="Premium Users" total={`${count?.response.PremiumUserCount}`} />
+                        <States iconPath="star2" title="Premium Users" total={`${count?.response.premiumUsersCount}`} />
                       </>
                     )
                 }
@@ -122,7 +122,6 @@ export default function Dashboard({ searchParams }: Params) {
                   variant={"outline"}
                   className="border-[#395E66] flex gap-2 items-center text-[#395E66]"
                 >
-
                   <CSVLink data={data.response.users} headers={headers} className="flex gap-2 items-center">Export CSV <Download className="size-5" target="_blank" /></CSVLink>
                 </Button>
               )}

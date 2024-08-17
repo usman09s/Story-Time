@@ -115,10 +115,19 @@ export default function AddingCategories({
       <div className="flex w-full">
         <div className="bg-[#F3F3F3] flex-grow h-80 p-4 mt-10 rounded-md">
           <div className="grid w-full max-w-sm items-center gap-1.5">
+            <div className="flex items-center justify-start gap-1">
             <Label htmlFor="Title">Title</Label>
+          <Image
+            src={'/assets/world.svg'}
+            alt="World Icon"
+            width={15}
+            height={15}
+          />
+            </div>
             <Input
               type="text"
               id="Title"
+              className="border-[#AAAAAA] rounded-lg p-3  px-2 focus-visible:ring-transparent focus:border-[#252525]"
               placeholder="Placeholder"
               value={title}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -130,14 +139,14 @@ export default function AddingCategories({
           <div className="grid w-full max-w-sm items-center gap-1.5 mt-5">
             <Label htmlFor="IMAGE">IMAGE</Label>
             <div
-              className={`relative w-full h-[178px] rounded-lg border-[3px] border-spacing-32`}
+              className={`relative w-full h-[178px] rounded-md border-[#AAAAAA] border p-3 `}
             >
               <label
                 htmlFor="fileInput"
                 className="absolute inset-0 cursor-pointer"
               >
                 {!image &&  
-                <div className="flex-col flex items-center justify-center h-full bg-white">
+                <div className="flex-col flex items-center justify-center h-full bg-white rounded-md">
                   <Image
                     className="text-gray-500"
                     src="/assets/upload.png"
@@ -155,7 +164,7 @@ export default function AddingCategories({
               <Input
                 id="fileInput"
                 type="file"
-                className="hidden"
+                className="hidden border-[#AAAAAA] rounded-lg p-3 "
                 accept="image/jpeg, image/png"
                 onChange={(e) => handleFileChange(e.target.files?.[0])}
               />

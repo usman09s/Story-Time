@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from "react";
 import { useChatStore } from "@/store/socket.store";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { UserMessageList } from "@/components/UserMessageList";
+import UserMessageList  from "@/components/UserMessageList";
 import { ChatListSkeleton } from "@/components/skeletons/ChatListSkeleton";
 import { SupportChatOverview } from "@/types/types";
 

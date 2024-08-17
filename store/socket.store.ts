@@ -99,7 +99,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         }
         return state;
       });
-    }, 5000);
+    }, 1000);
   },
  
 

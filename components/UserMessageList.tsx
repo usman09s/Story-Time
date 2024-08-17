@@ -67,4 +67,5 @@ import clsx from "clsx";
   );
 });
 
-export default UserMessageList
+UserMessageList.displayName = "UserMessageList";
+export default UserMessageList;

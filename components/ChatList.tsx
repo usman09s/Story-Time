@@ -11,8 +11,6 @@ const ChatList = memo(function ChatList() {
   const [search, setSearch] = useState("");
   useEffect(() => {
     fetchChatList(search);
-    console.log("USE EFFECT CALLED");
-    
   }, [currentChatId,search]);
 
   return (

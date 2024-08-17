@@ -80,11 +80,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
           },
         },
       }));
-      console.log("messages", data);
     });
  
     socketServices.on(getChatMessagesEvent, (data: ChatTypes) => {
-      
       set((state) => ({
         chatMessages: {
           ...state.chatMessages,
@@ -94,7 +92,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
     });
  
     socketServices.emit("get-chat-messages", { chat: chatId, page: 1, limit: 20 });
-
     setTimeout(() => {
       set((state) => {
         if (state.loader) {
@@ -107,9 +104,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
  
 
   sendMessage: (chatId: string, message: string, file?: string) => {
-    // socketServices.on(`send-message-65b8f16082cc449373a6f593`, (data: SupportMessage) => {
-    //   console.log("get-chat-list",data);
-    // })
     const payload = { chat: chatId, text: message, media: file };
     socketServices.emit(`send-message`, payload);
   },

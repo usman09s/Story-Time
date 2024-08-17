@@ -50,14 +50,6 @@ export default function ChatDetails() {
   };
 
   useEffect(() => {
-    if (!currentChatId) {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [currentChatId]);
-
-  useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }

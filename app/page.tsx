@@ -62,7 +62,7 @@ export default function Home() {
               type="email"
               id="email"
               placeholder="Type here"
-              className="py-6"
+              className="py-6  "
             />
           </div>
 

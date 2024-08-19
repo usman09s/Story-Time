@@ -76,6 +76,7 @@ export default function AddingCategories({
     }
   }, [updateId]);
 
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!title) return toast.error("Category name is required");
@@ -95,7 +96,6 @@ export default function AddingCategories({
   };
 
   const handleDelete = () => {
-    console.log("Delete");
     setImage("");
     setTitle("");
     setFile(undefined);
@@ -103,17 +103,8 @@ export default function AddingCategories({
 
   return (
     <div className="mx-10">
-      <section className="flex justify-end mt-7 h-10 items-center">
-        <Button
-          onClick={handleSubmit}
-          disabled={isPending}
-          className={"bg-primaryCol hover:bg-[#395e66d7] px-7 py-6"}
-        >
-          Save
-        </Button>
-      </section>
       <div className="flex w-full">
-        <div className="bg-[#F3F3F3] flex-grow h-80 p-4 mt-10 rounded-md">
+        <div className="bg-[#F3F3F3] flex-grow h-80 p-4 mt-4 rounded-md">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <div className="flex items-center justify-start gap-1">
             <Label htmlFor="Title">Title</Label>
@@ -187,7 +178,7 @@ export default function AddingCategories({
             </div>
           </div>
         </div>
-        <div className="mt-10 flex flex-col justify-start ml-5">
+        <div className="mt-5 flex flex-col justify-start ml-5">
           <Button
             variant={"outline"}
             className="border-[#AAAAAA] py-7 flex gap-2 items-center"

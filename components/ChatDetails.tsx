@@ -10,6 +10,7 @@ import { MessageBox } from "@/components/MessageBox";
 import { useChatStore } from "@/store/socket.store";
 import useCurrentChatStore from "@/store/currentChat";
 import { uploadMedia } from "@/API/chats.api";
+import pdfIcon from "@/public/assets/pdf-icon.png";
 import picture from "@/public/assets/dummy-user.webp";
 
 import {
@@ -32,7 +33,6 @@ export default function ChatDetails() {
 
   const handleSendMessage = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Text", text);
 
     if (!text && !file) return toast.error("Please enter a message to send");
     if (!currentChatId) return toast.error("Please select a chat to send message");
@@ -40,6 +40,7 @@ export default function ChatDetails() {
     let image = '';
     if (file) {
       const data = await uploadMedia(file);
+      console.log(data);
       image = data.data[0];
     }
 
@@ -60,17 +61,22 @@ export default function ChatDetails() {
     console.log("Chat Closed");
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>,isPDF:boolean) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
-      setImagePreview(URL.createObjectURL(selectedFile)); // Set the image preview URL
+      if(isPDF){
+        setImagePreview(pdfIcon.src);
+      }
+      else{
+        setImagePreview(URL.createObjectURL(selectedFile)); // Set the image preview URL
+      }
     }
   };
 
   const handleCancelPreview = () => {
     setImagePreview(null);
-    setFile(undefined); // Reset the file input
+    setFile(undefined); 
   };
 
   return (
@@ -175,6 +181,13 @@ export default function ChatDetails() {
                     <div className="flex items-center gap-2">
                       <label htmlFor="link">
                         <Paperclip className="cursor-pointer text-gray-500" />
+                        <input
+                          type="file"
+                          id="link"
+                          accept=".pdf"
+                          className="hidden"
+                          onChange={(e) => handleImageChange(e,true)}
+                        />
                       </label>
                       <label htmlFor="picture">
                         <Image
@@ -190,7 +203,7 @@ export default function ChatDetails() {
                         id="picture"
                         accept="image/*"
                         className="hidden"
-                        onChange={(e) => handleImageChange(e)}
+                        onChange={(e) => handleImageChange(e,false)}
                       />
                     </div>
                     <Input

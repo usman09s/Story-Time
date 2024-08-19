@@ -8,6 +8,7 @@ import ResponsiveWrapper from "./layouts/ResponsiveWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 const quicksand =  Quicksand({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
   title: "Story Time ",
   description: "Admin Panel of Story Time",
@@ -24,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <ReactQueryProvider>
         <AuthProvider>
-          <body className={inter.className + quicksand.className}>
+          <body className={inter.className}>
             <Toaster position="top-right" richColors />
             <ResponsiveWrapper>
             {children}

@@ -9,20 +9,28 @@ import { getCurrentUser } from "@/API/auth.api";
 import { useEffect } from "react";
 import { useAuth } from "@/store/AuthProvider";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Cookies from "js-cookie";
 import { DashboardTypes } from "@/types/types";
+import { Button } from "@/components/ui/button";
+import { Quicksand } from "next/font/google";
+
+const quicksand =  Quicksand({ subsets: ["latin"] });
 
 export default function DashboardLayout({
   active,
   title,
   children,
+  handleSubmit
 }: {
   children?: React.ReactNode;
   active?: number;
-  title:string
+  title: string,
+  handleSubmit?: () => void
 }) {
+  
   const router = useRouter();
+  const pathname = usePathname();
   const { user, setUser } = useAuth();
   // Fetching current User
   const { data, isLoading } = useQuery<DashboardTypes>({
@@ -30,7 +38,7 @@ export default function DashboardLayout({
     queryFn: () => getCurrentUser(),
     initialData: user ? { success: true, response: user } : undefined,
   });
-
+  
   if (!isLoading && data && !data.success) {
     localStorage.removeItem("access-token");
     Cookies.remove("session");
@@ -42,6 +50,7 @@ export default function DashboardLayout({
       setUser(data.response);
     }
   }, [data]);
+
 
   return (
     <>
@@ -72,7 +81,7 @@ export default function DashboardLayout({
                     className="fill-red-700"
                     style={{ fill: "red", color: "red" }}
                   />{" "}
-                  <span className={`mx-2 text-lg font-medium `}>
+                  <span className={`mx-2 text-lg font-medium ${quicksand.className}`}>
                     {item.category}
                   </span>
                 </Link>
@@ -91,8 +100,16 @@ export default function DashboardLayout({
             <Image src={"/assets/bell.png"} alt="Icon" width={30} height={20} />
             <AdminProfile />
           </div>
-          <div className="px-[265px] pt-6">
+          <div className="pl-[265px] pt-6 flex justify-between">
             <h1 className="text-5xl font-bold text-[#093732]">{title}</h1>
+            {pathname === "/categories/add" && (
+              <Button
+                onClick={()=> handleSubmit && handleSubmit()}
+                className={"bg-primaryCol hover:bg-[#395e66d7] px-7 py-6"}
+              >
+                Save
+              </Button>
+            )}
           </div>
         </nav>
         <div className="flex-1 overflow-x-hidden overflow-y-auto ml-64 bg-backGroundColor  ">

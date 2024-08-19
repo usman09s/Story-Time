@@ -29,6 +29,10 @@ export default function Support({ searchParams }: Params) {
       console.log("Socket connected");
     });
 
+    return () => {
+      socketServices.disconnect();
+    }
+    
   }, []);
 
   return (

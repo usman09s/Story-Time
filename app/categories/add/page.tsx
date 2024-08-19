@@ -9,7 +9,7 @@ const AddCategories = () => {
   const updateId = searchParams.get("id");
 
   return (
-    <DashboardLayout active={2} title={`${updateId ? 'Update a Category' : 'Create a Category'}`}>
+    <DashboardLayout active={2} title={`${updateId ? 'Update a Category' : 'Create a Category'}`} >
       <Suspense fallback={<div>Loading...</div>}>
         <AddingCategories text="Create a Category" />
       </Suspense>

@@ -83,6 +83,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     });
  
     socketServices.on(getChatMessagesEvent, (data: ChatTypes) => {
+      console.log("get-chat-messages", data);
       set((state) => ({
         chatMessages: {
           ...state.chatMessages,
@@ -90,7 +91,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         },
       }));
     });
- 
+    
     socketServices.emit("get-chat-messages", { chat: chatId, page: 1, limit: 20 });
     setTimeout(() => {
       set((state) => {

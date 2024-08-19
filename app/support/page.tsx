@@ -16,16 +16,20 @@ export default function Support({ searchParams }: Params) {
   const { setCurrentChatId } = useChatStore();
 
   useEffect(() => {
+    setCurrentChatId(initialChatId);
+  }, [initialChatId, setCurrentChatId]);
+
+  useEffect(() => {
     const token = localStorage.getItem("access-token");
     if (!token) return;
 
     socketServices.initializeSocket(token);
-
+  
     socketServices.on("connect", () => {
       console.log("Socket connected");
     });
-    setCurrentChatId(initialChatId);
-  }, [initialChatId, setCurrentChatId]);
+
+  }, []);
 
   return (
     <DashboardLayout active={4} title="Support">

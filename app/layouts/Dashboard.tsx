@@ -72,7 +72,7 @@ export default function DashboardLayout({
                     className="fill-red-700"
                     style={{ fill: "red", color: "red" }}
                   />{" "}
-                  <span className={`mx-2 text-lg font-medium`}>
+                  <span className={`mx-2 text-lg font-medium `}>
                     {item.category}
                   </span>
                 </Link>

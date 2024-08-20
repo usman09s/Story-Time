@@ -11,6 +11,7 @@ import { createCategory, fetchSingleCategory, updateCategory } from "@/API/categ
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { S3_URL } from "@/lib/utils";
+import { useCategoryStore } from "@/store/category.store";
 
 export default function AddingCategories({
   text,
@@ -28,6 +29,7 @@ export default function AddingCategories({
   const [file, setFile] = useState<File | undefined>(undefined);
 
   const router = useRouter();
+  const setHandleSubmit = useCategoryStore((state) => state.setHandleSubmit);
 
   const handleFileChange = async (file: any) => {
     try {
@@ -100,6 +102,10 @@ export default function AddingCategories({
     setTitle("");
     setFile(undefined);
   };
+
+  useEffect(() => {
+    setHandleSubmit(handleSubmit); // Store the handleSubmit method in the Zustand store
+  }, [handleSubmit, setHandleSubmit]);
 
   return (
     <div className="mx-10">

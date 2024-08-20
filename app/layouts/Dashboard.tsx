@@ -14,6 +14,7 @@ import Cookies from "js-cookie";
 import { DashboardTypes } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import { Quicksand } from "next/font/google";
+import { useCategoryStore } from "@/store/category.store";
 
 const quicksand =  Quicksand({ subsets: ["latin"] });
 
@@ -21,17 +22,17 @@ export default function DashboardLayout({
   active,
   title,
   children,
-  handleSubmit
 }: {
   children?: React.ReactNode;
   active?: number;
   title: string,
-  handleSubmit?: () => void
 }) {
   
   const router = useRouter();
   const pathname = usePathname();
   const { user, setUser } = useAuth();
+  const handleSubmit = useCategoryStore((state) => state.handleSubmit);
+
   // Fetching current User
   const { data, isLoading } = useQuery<DashboardTypes>({
     queryKey: ["current-user"],
@@ -51,6 +52,7 @@ export default function DashboardLayout({
     }
   }, [data]);
 
+  const path = pathname.startsWith("/categories/add")
 
   return (
     <>
@@ -102,9 +104,9 @@ export default function DashboardLayout({
           </div>
           <div className="pl-[265px] pt-6 flex justify-between">
             <h1 className="text-5xl font-bold text-[#093732]">{title}</h1>
-            {pathname === "/categories/add" && (
+            {path  && (
               <Button
-                onClick={()=> handleSubmit && handleSubmit()}
+                onClick={(e)=>handleSubmit && handleSubmit(e)}
                 className={"bg-primaryCol hover:bg-[#395e66d7] px-7 py-6"}
               >
                 Save

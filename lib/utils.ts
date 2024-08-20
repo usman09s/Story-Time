@@ -63,4 +63,14 @@ export const shouldShowDate = (currentIndex: number, messages: SupportMessage[],
   return currentMessageDate !== lastDisplayedDate;
 };
 
+export const getFileType = (fileName:string) => {
+  const extension = fileName?.split('.').pop()?.toLowerCase() || '';
+  switch (extension) {
+    case 'pdf':
+      return 'pdf';
+      default:
+        return 'image';
+  }
+};
+
 export const S3_URL = 'https://mod-storytime-bucket.s3.amazonaws.com';

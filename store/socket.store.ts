@@ -107,7 +107,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
     });
  
     socketServices.on(getChatMessagesEvent, (data: ChatTypes) => {
-      console.log("get-chat-messages", data);
       set((state) => ({
         chatMessages: {
           ...state.chatMessages,

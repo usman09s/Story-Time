@@ -1,17 +1,11 @@
 import useCurrentChatStore from "@/store/currentChat";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Image from "next/image";
-import { S3_URL } from "@/lib/utils";
+import { getFileType, S3_URL } from "@/lib/utils";
 import picture from "@/public/assets/dummy-user.webp";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Download } from "lucide-react";
-import { toast } from "sonner";
-import axios from "axios";
-
+import { downloadImage } from "@/API/chats.api";
 
 export const MessageBox = ({
   content,
@@ -29,31 +23,72 @@ export const MessageBox = ({
   isAdmin: boolean;
   id: string;
   createdAt: string;
-  isFirstMessage: boolean,
+  isFirstMessage: boolean;
   supportTicket: string;
 }) => {
   const currentChatUser = useCurrentChatStore((state) => state.currentChatUser);
 
-  const downloadImage = async (url: string) => {
-    try {
-      const encodedUrl = encodeURI(url);
-      const response = await axios.get(encodedUrl, {
-        responseType: 'blob', 
-      });
+ 
+  
+  const renderMedia = (file: string) => {
+    const fileType = getFileType(file);
 
-      console.log("response",response);
-      
-      const blob = new Blob([response.data]);
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = url.split('/').pop() || "download"; // Sets the filename for download
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href); // Clean up the object URL
-    } catch (error) {
-      toast.error("Download failed");
-      console.error("Download failed", error);
+    if (fileType === 'image') {
+      return (
+        <div className="flex gap-2 items-center">
+        <Dialog>
+          <DialogTrigger>
+            <Image
+              key={`${file}-thumbnail`}
+              src={`${S3_URL}/${file}`}
+              alt="image"
+              width={250}
+              height={200}
+              className="rounded-lg mt-1 cursor-pointer"
+            />
+          </DialogTrigger>
+          <DialogContent>
+            <Image
+              key={`${file}-fullsize`}
+              src={`${S3_URL}/${file}`}
+              alt="image"
+              width={1100}
+              height={1100}
+              className="rounded-lg"
+            />
+          </DialogContent>
+        </Dialog>
+        {!isAdmin && 
+        <Download className="text-black cursor-pointer" onClick={()=>downloadImage(media[0])}/>
+        }
+        </div>
+      );
+    } else if (fileType === 'pdf') {
+      return (
+        <Dialog>
+          <DialogTrigger>
+            <div className="pdf-icon-container">
+              <img
+                src="/assets/pdf-icon.png" // Replace with the path to your PDF icon
+                alt="PDF icon"
+                width={250}
+                height={200}
+                className="rounded-lg mt-1 cursor-pointer"
+              />
+            </div>
+          </DialogTrigger>
+          <DialogContent>
+            <iframe
+              src={`${S3_URL}/${file}`}
+              width="100%"
+              height="800px"
+              title="PDF Viewer"
+            />
+          </DialogContent>
+        </Dialog>
+      );
+    } else {
+      return <div>Unsupported media type</div>;
     }
   };
 
@@ -68,22 +103,24 @@ export const MessageBox = ({
       )}
       <div
         className={
-          isAdmin === true ? "self-end max-w-[60%]" : "self-start max-w-[60%]"
+          isAdmin ? "self-end max-w-[60%]" : "self-start max-w-[60%]"
         }
       >
         <div className="px-7 mb-2">
           <div className="flex gap-3">
-            {isAdmin === false && (
+            {!isAdmin && (
               <Avatar className="w-8 flex justify-end h-full">
                 <AvatarImage
                   src={`${S3_URL}/${currentChatUser.profileImage}`}
                   alt="@shadcn"
                 />
-                <AvatarFallback><Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full" /></AvatarFallback>
+                <AvatarFallback>
+                  <Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full" />
+                </AvatarFallback>
               </Avatar>
             )}
             <div
-              className={`${isAdmin === false
+              className={`${!isAdmin
                 ? "text-[#808191] bg-[#F1F3F6]"
                 : "bg-primaryCol text-white"
                 } p-4 text-sm rounded-xl`}
@@ -93,40 +130,17 @@ export const MessageBox = ({
                   Open a Support Ticket <span className="font-bold">#{supportTicket}</span>
                 </p>
               )}
-              {content}
+              <p>{content}</p>
               {media && media.length > 0 && (
-                <div className="mt-2 flex items-center justify-start gap-2">
-                  <Dialog >
-                    <DialogTrigger>
-                      <Image
-                        key={`${id}-image-`}
-                        src={`${S3_URL}/${media[0]}`}
-                        alt="image"
-                        width={250}
-                        height={200}
-                        className=" rounded-lg  mt-1"
-                      />
-                    </DialogTrigger>
-                    <DialogContent className="">
-                      <Image
-                        key={`${id}-image-`}
-                        src={`${S3_URL}/${media[0]}`}
-                        alt="image"
-                        width={1100}
-                        height={1100}
-                        className="rounded-lg"
-                      />
-                    </DialogContent>
-                  </Dialog>
-                  {
-                    isAdmin === false && (
-                      <Download className="text-black cursor-pointer" onClick={() => downloadImage(`${S3_URL}/${media[0]}`)}/>
-                    )}
-                </div>
+                media.map((file, index) => (
+                  <div key={index}>
+                    {renderMedia(file)}
+                  </div>
+                ))
               )}
             </div>
           </div>
-          <p className={`text-xs py-2 text-black ${isAdmin === true ? 'text-end' : 'px-16'}`}>
+          <p className={`text-xs py-2 text-black ${isAdmin ? 'text-end' : 'px-16'}`}>
             {createdAt}
           </p>
         </div>

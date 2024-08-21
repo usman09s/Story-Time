@@ -37,8 +37,9 @@ export default function ChatDetails() {
     if (!text && !file) return toast.error("Please enter a message to send");
     if (!currentChatId) return toast.error("Please select a chat to send message");
     
+  
     const fileType = file?.type.split("/")[0];
-    if (fileType !== "image" && fileType !== "application") {
+    if (file && fileType !== "image" && fileType !== "application") {
       return toast.error("Invalid file type. Please upload an image or PDF file");
     }
 

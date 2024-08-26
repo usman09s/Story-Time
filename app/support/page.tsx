@@ -25,10 +25,6 @@ export default function Support({ searchParams }: Params) {
 
     socketServices.initializeSocket(token);
   
-    socketServices.on("connect", () => {
-      console.log("Socket connected");
-    });
-
     return () => {
       socketServices.disconnect();
     }

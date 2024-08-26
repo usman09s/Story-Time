@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 import api from "./middleware";
+import axios from "axios";
 
 
 export const uploadMedia = async (file: File) => {
@@ -20,7 +21,7 @@ export const uploadMedia = async (file: File) => {
 
 export const downloadImage = async (key:string) => {
     try {
-        const response = await api.post('/image-download', { key }, {
+        const response = await api.post(`/image-download`, {key}, {
             responseType: 'blob' 
         });
         const blob = new Blob([response.data], { type: response.headers['content-type'] || 'application/octet-stream' });

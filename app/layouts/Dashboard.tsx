@@ -15,6 +15,7 @@ import { DashboardTypes } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import { Quicksand } from "next/font/google";
 import { useCategoryStore } from "@/store/category.store";
+import NotificationMessageSheet from "@/components/NotificationMessageSheet";
 
 const quicksand =  Quicksand({ subsets: ["latin"] });
 
@@ -99,7 +100,7 @@ export default function DashboardLayout({
         {/* Your main content goes here */}
         <nav className="relative gap-7 px-9 pt-9  mr-1 pb-2 bg-[#FAFAFA] h-44">
           <div className="flex justify-end items-center gap-5">
-            <Image src={"/assets/bell.png"} alt="Icon" width={30} height={20} />
+            <NotificationMessageSheet/>
             <AdminProfile />
           </div>
           <div className="pl-[265px] pt-6 flex justify-between">

@@ -1,7 +1,7 @@
 import io, { Socket } from "socket.io-client";
 
-const BASE_SOCKET_CONNECTION = "https://backend.storytime.social"; 
-
+const BASE_SOCKET_CONNECTION = "https://backend.storytime.social";
+// const BASE_SOCKET_CONNECTION = "http://localhost:3021";
 class WSService {
   private socket: Socket | null = null;
 

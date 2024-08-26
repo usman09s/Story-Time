@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { getNotifications, pushNotification } from "@/API/notiifications";
 import { dateFormat } from "@/lib/dateFormat";
 import { NotificationType } from "@/types/types";
-import { Loader2 } from "lucide-react";
+import { BellOff, Loader2 } from "lucide-react";
 
 export default function NotificationPage() {
   const queryClient = useQueryClient();
@@ -20,7 +20,7 @@ export default function NotificationPage() {
   // Fetching all notifications
   const { data, isLoading } = useQuery<NotificationType>({
     queryKey: ["notifications-events"],
-    queryFn: () => getNotifications(),
+    queryFn: () => getNotifications('ADMIN_NOTIFICATION'),
   });
 
   // Pushing Notification
@@ -45,9 +45,9 @@ export default function NotificationPage() {
   };
 
   return (
-    <DashboardLayout active={3} title="Push Notification">
+<DashboardLayout active={3} title="Push Notification">
   <div className="flex border-[#E4E4E4] rounded-lg border mx-10 mt-5 mb-16 p-2 gap-2">
-    <div className=" flex-grow  rounded-lg flex-col border-[#E4E4E4]  w-[75%]">
+    <div className="flex-grow rounded-lg flex-col border-[#E4E4E4] w-[75%]">
       <div className="bg-white pb-6 rounded-md border">
         <PushInfomation
           date={date}
@@ -58,14 +58,14 @@ export default function NotificationPage() {
           title={title}
         />
       </div>
-      <div className="mt-2 rounded-md bg-white border ">
+      <div className="mt-2 rounded-md bg-white border">
         <div className="border-[#E4E4E4]">
           <textarea
             name=""
             id=""
             onChange={(e) => setValue(e.target.value)}
             value={value}
-            className="!border-none w-[75%] px-7 pt-5"
+            className="!border-none w-full px-7 pt-5" // Adjusted to w-full for full width
             rows={21}
             cols={140}
             placeholder="Write Notification text"
@@ -83,24 +83,29 @@ export default function NotificationPage() {
         </Button>
       </div>
     </div>
-    <div className="w-96 h-[739px] bg-white  p-10  border border-[#E4E4E4] rounded-lg">
-      <p className="mb-3  text-md font-medium text-[#50555C] mx-5">History</p>
-      <div className="flex flex-col space-y-4 border-l-2 border-[#D9D9D9] border-dashed p-2">
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          data &&
-          data.success &&
-          data.response &&
-          data.response.notifications.length > 0 &&
-          data.response.notifications.map((notif) => (
-            <div key={notif._id} className="flex items-center gap-4 px-3">
-              <p className="text-sm text-[#979797]">{dateFormat(notif.createdAt)}</p>
-              <p className="text-sm text-[#979797]">Notification was sent</p>
-            </div>
-          ))
-        )}
-      </div>
+    
+    {/* Conditional rendering of the history section */}
+    <div className="w-96 h-[739px] bg-white p-10 border border-[#E4E4E4] rounded-lg">
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : data && data.response &&  data?.response?.notifications?.length > 0 ? (
+        <>
+          <p className="mb-3 text-md font-medium text-[#50555C] mx-5">History</p>
+          <div className="flex flex-col space-y-4 border-l-2 border-[#D9D9D9] border-dashed p-2">
+            {data.response.notifications.map((notif) => (
+              <div key={notif._id} className="flex items-center gap-4 px-3">
+                <p className="text-sm text-[#979797]">{dateFormat(notif.createdAt)}</p>
+                <p className="text-sm text-[#979797]">Notification was sent</p>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center h-full">
+          <BellOff className="text-[#50555C] mb-3" size={32} />
+          <p className="text-md font-medium text-[#50555C]">Notification not found</p>
+        </div>
+      )}
     </div>
   </div>
 </DashboardLayout>

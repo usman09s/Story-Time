@@ -212,3 +212,29 @@ export interface ChatTypes {
     pagination: PaginationTypes;
   };
 }
+
+interface NotificationSender {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+}
+
+interface Notification {
+  _id: string;
+  isReceiverAdmin: boolean;
+  sender: NotificationSender;
+  type: string;
+  title: string;
+  body: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+interface NotificationResponse {
+  statusCode: number;
+  message: string;
+  response: {
+    data: Notification[];
+  }
+}

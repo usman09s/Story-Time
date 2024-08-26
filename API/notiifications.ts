@@ -27,9 +27,9 @@ export const pushNotification = async ({
   }
 };
 
-export const getNotifications = async () => {
+export const getNotifications = async (type:string):Promise<any> => {
   try {
-    const { data } = await api.get(`/notification`);
+    const { data } = await api.get(`/notification?type=${type}`);
     return {
       success: true,
       response: data.data,

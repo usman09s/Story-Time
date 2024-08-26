@@ -28,21 +28,16 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
   },
   fetchChatList: (search) => {
-    // Check and set up listener for 'get-chat-list' if not already set up
     if (!socketServices.hasListeners('get-chat-list')) {
       socketServices.off('get-chat-list');
       socketServices.on("get-chat-list", (data: ChatsListType) => {
-        // Update chat list in state
         set({ chatList: data?.data?.data });
   
-        // Set up listeners for unread count for each chat
         data && data.data && data.data.data.forEach(chat => {
-          // Assumes chat._id is the unique identifier for the chat
           const chatId = chat.chat._id;
           if (!socketServices.hasListeners(`unread-count-${chatId}`)) {
             socketServices.on(`unread-count-${chatId}`, (unreadCountData: any) => {
               console.log(`Unread count for chat ${chatId}:`, unreadCountData);
-              // Update the state with the unread count
               set(state => {
                 return {
                   chatList: state.chatList.map(chatItem => 

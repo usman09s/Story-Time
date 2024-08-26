@@ -9,10 +9,7 @@ export const modules = {
   },
 };
 
-// const LinkChange = () => {
-//   this,quill.format.
-// }
-// Formats objects for setting up the Quill editor
+
 export const formats = [
   "bold",
   "italic",

@@ -1,4 +1,5 @@
 import io, { Socket } from "socket.io-client";
+import { toast } from "sonner";
 
 const BASE_SOCKET_CONNECTION = "https://backend.storytime.social";
 // const BASE_SOCKET_CONNECTION = "http://localhost:3021";
@@ -8,10 +9,9 @@ class WSService {
   initializeSocket = async (token: string): Promise<void> => {
     try {
       this.socket = io(BASE_SOCKET_CONNECTION, {
-        extraHeaders:{
-          "access-token": token
-        }
-
+        extraHeaders: {
+          "access-token": token,
+        },
       });
 
       this.socket.on("connection", () => {
@@ -28,6 +28,7 @@ class WSService {
 
       this.socket.on("socket-error", (data: any) => {
         console.log("socket error", data);
+        toast.error(data.message);
       });
     } catch (error) {
       console.log("socket is not initialized", error);
@@ -46,10 +47,10 @@ class WSService {
     if (cb) {
       this.socket?.off(event, cb);
     } else {
-      this.socket?.off(event); 
+      this.socket?.off(event);
     }
   }
-  
+
   removeListener(
     listenerName: string,
     listener: (...args: any[]) => void
@@ -73,6 +74,6 @@ class WSService {
   }
 }
 
-const socketService  = new WSService();
+const socketService = new WSService();
 
 export default socketService;

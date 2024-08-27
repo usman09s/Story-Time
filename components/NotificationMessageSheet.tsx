@@ -16,8 +16,10 @@ import { Notification, NotificationResponse } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import { formatShortDuration } from "@/lib/utils";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function NotificationMessageSheet() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   // Use the useQuery hook to fetch data
@@ -27,11 +29,23 @@ export default function NotificationMessageSheet() {
     enabled: open,
   });
 
+  const handleRidirect = (userId: string, chatId: string) => {
+    router.push(`/support?chatId=${chatId}&userId=${userId}`);
+    setOpen(false);
+  };
+
+  console.log(data);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-            <Image src={'/assets/bell.png'} alt="Notification Icon" width={30} height={10} className="cursor-pointer"/>
+        <Image
+          src={"/assets/bell.png"}
+          alt="Notification Icon"
+          width={30}
+          height={10}
+          className="cursor-pointer"
+        />
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-md">
         <SheetHeader className="border-b pb-4 mb-4">
@@ -68,24 +82,29 @@ export default function NotificationMessageSheet() {
             </div>
           ) : data && data.response && data.response.data?.length === 0 ? (
             <div className="flex justify-center items-center h-full">
-            {/* No data available */}
-            <div className="flex flex-col items-center justify-center h-full w-full text-center text-muted-foreground">
-              <Info className="mx-auto mb-2" />
-              <p>No notifications available.</p>
+              {/* No data available */}
+              <div className="flex flex-col items-center justify-center h-full w-full text-center text-muted-foreground">
+                <Info className="mx-auto mb-2" />
+                <p>No notifications available.</p>
+              </div>
             </div>
-          </div>
           ) : (
-            data?.response?.data?.map((message:Notification) => (
+            data?.response?.data?.map((message: Notification) => (
               <div
                 key={message._id}
                 className={`mb-4 flex items-start space-x-4 rounded-lg p-4 transition-all hover:bg-accent cursor-pointer ${
                   message.isRead ? "bg-accent/50" : ""
                 }`}
+                onClick={() => handleRidirect(message.sender._id, "xxx-xx")}
               >
                 <Avatar className="h-10 w-10">
-                  <AvatarImage src={message?.sender?.profilePicture} alt={"Profile Picture"} />
+                  <AvatarImage
+                    src={message?.sender?.profilePicture}
+                    alt={"Profile Picture"}
+                  />
                   <AvatarFallback>
-                    {message?.sender?.firstName[0] + message?.sender?.lastName[0]}
+                    {message?.sender?.firstName[0] +
+                      message?.sender?.lastName[0]}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 space-y-1">
@@ -100,10 +119,7 @@ export default function NotificationMessageSheet() {
                       {formatShortDuration(message.createdAt)}
                     </p>
                     {!message.isRead && (
-                      <Badge
-                        variant="secondary"
-                        className="ml-2 text-[10px]"
-                      >
+                      <Badge variant="secondary" className="ml-2 text-[10px]">
                         New
                       </Badge>
                     )}

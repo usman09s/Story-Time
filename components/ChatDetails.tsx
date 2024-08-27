@@ -1,11 +1,21 @@
 import { useState, useEffect, ChangeEvent, FormEvent, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowDownCircleIcon, Loader2, Paperclip, SendHorizontal, XCircle, XCircleIcon } from "lucide-react";
+import {
+  ArrowDownCircleIcon,
+  Paperclip,
+  SendHorizontal,
+  XCircleIcon,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { formatDate, formatShortDuration, S3_URL, shouldShowDate } from "@/lib/utils";
+import {
+  formatDate,
+  formatShortDuration,
+  S3_URL,
+  shouldShowDate,
+} from "@/lib/utils";
 import { MessageBox } from "@/components/MessageBox";
 import { useChatStore } from "@/store/socket.store";
 import useCurrentChatStore from "@/store/currentChat";
@@ -19,9 +29,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { MessagesSkeleton } from "./skeletons/MessagesSkeleton";
 
 export default function ChatDetails() {
-  const { currentChatId, chatMessages, loader, sendMessage, closeChat } = useChatStore();
+  const { currentChatId, chatMessages, loader, sendMessage, closeChat } =
+    useChatStore();
 
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null); // New state for image preview
@@ -35,20 +47,21 @@ export default function ChatDetails() {
     e.preventDefault();
 
     if (!text && !file) return toast.error("Please enter a message to send");
-    if (!currentChatId) return toast.error("Please select a chat to send message");
-    
-  
+    if (!currentChatId)
+      return toast.error("Please select a chat to send message");
+
     const fileType = file?.type.split("/")[0];
     if (file && fileType !== "image" && fileType !== "application") {
-      return toast.error("Invalid file type. Please upload an image or PDF file");
+      return toast.error(
+        "Invalid file type. Please upload an image or PDF file"
+      );
     }
 
-    let image = '';
+    let image = "";
     if (file) {
-
       const data = await uploadMedia(file);
-      console.log("Data",data);
-      if(data){
+      console.log("Data", data);
+      if (data) {
         image = data.data[0];
       }
     }
@@ -61,7 +74,8 @@ export default function ChatDetails() {
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [chatMessages, currentChatId]);
 
@@ -70,14 +84,16 @@ export default function ChatDetails() {
     console.log("Chat Closed");
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>,isPDF:boolean) => {
+  const handleImageChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    isPDF: boolean
+  ) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
-      if(isPDF){
+      if (isPDF) {
         setImagePreview(pdfIcon.src);
-      }
-      else{
+      } else {
         setImagePreview(URL.createObjectURL(selectedFile)); // Set the image preview URL
       }
     }
@@ -85,12 +101,17 @@ export default function ChatDetails() {
 
   const handleCancelPreview = () => {
     setImagePreview(null);
-    setFile(undefined); 
+    setFile(undefined);
   };
 
   return (
     <div className="border border-b w-full">
-      {currentChatId && (
+      {!currentChatId ? (
+        // Show this message when no chat is selected
+        <div className="flex items-center justify-center h-[650px]">
+          <p className="text-lg">Select a chat to view messages</p>
+        </div>
+      ) : (
         <>
           <div className="flex gap-1 w-full border-b items-center justify-between px-10">
             <div className="text-sm flex items-center py-3 gap-3">
@@ -99,8 +120,15 @@ export default function ChatDetails() {
                   src={`${S3_URL}/${currentChatUser.profileImage}`}
                   alt="@shadcn"
                 />
-                <AvatarFallback><Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full" /></AvatarFallback>
-
+                <AvatarFallback>
+                  <Image
+                    src={picture}
+                    width={52}
+                    height={44}
+                    alt="User-Profile"
+                    className="rounded-full"
+                  />
+                </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
                 <p className="font-bold text-md">
@@ -117,14 +145,18 @@ export default function ChatDetails() {
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem className="cursor-pointer" onClick={() => handleChatClose(currentChatId)}>Completed</DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => handleChatClose(currentChatId)}
+                >
+                  Completed
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          {loader ?
-            <div className="flex justify-center items-center">
-              <Loader2 className="animate-spin" />
-            </div> :
+          {loader ? (
+            <MessagesSkeleton />
+          ) : (
             <div className="flex flex-col justify-between w-full">
               <div className="flex flex-col w-full">
                 <div
@@ -135,13 +167,20 @@ export default function ChatDetails() {
                     {isLoading ? (
                       <div className="text-center">Loading...</div>
                     ) : (
-                      (chatMessages[currentChatId]?.data?.data?.length ?? 0) > 0 &&
+                      (chatMessages[currentChatId]?.data?.data?.length ?? 0) >
+                        0 &&
                       (() => {
                         let lastDisplayedDate = "";
                         return chatMessages[currentChatId]?.data?.data?.map(
                           (msg, index, messages) => {
-                            const showDate = shouldShowDate(index, messages, lastDisplayedDate);
-                            const messageDate = new Date(msg.createdAt).toDateString();
+                            const showDate = shouldShowDate(
+                              index,
+                              messages,
+                              lastDisplayedDate
+                            );
+                            const messageDate = new Date(
+                              msg.createdAt
+                            ).toDateString();
                             if (showDate) {
                               lastDisplayedDate = messageDate;
                             }
@@ -167,7 +206,7 @@ export default function ChatDetails() {
                         <button
                           type="button"
                           onClick={handleCancelPreview}
-                          className="absolute -top-2 right-1 p-1  text-white bg-red-600 rounded-full"
+                          className="absolute -top-2 right-1 p-1 text-white bg-red-600 rounded-full"
                         >
                           <XCircleIcon size={24} className="text-white" />
                         </button>
@@ -195,7 +234,7 @@ export default function ChatDetails() {
                           id="link"
                           accept=".pdf"
                           className="hidden"
-                          onChange={(e) => handleImageChange(e,true)}
+                          onChange={(e) => handleImageChange(e, true)}
                         />
                       </label>
                       <label htmlFor="picture">
@@ -212,7 +251,7 @@ export default function ChatDetails() {
                         id="picture"
                         accept="image/*"
                         className="hidden"
-                        onChange={(e) => handleImageChange(e,false)}
+                        onChange={(e) => handleImageChange(e, false)}
                       />
                     </div>
                     <Input
@@ -221,7 +260,9 @@ export default function ChatDetails() {
                       placeholder="Write your message here"
                       className="flex-grow mr-2 border-none px-2 focus-visible:ring-transparent"
                       value={text}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                        setText(e.target.value)
+                      }
                     />
                     <Button
                       type="submit"
@@ -233,7 +274,7 @@ export default function ChatDetails() {
                 </div>
               </div>
             </div>
-          }
+          )}
         </>
       )}
     </div>

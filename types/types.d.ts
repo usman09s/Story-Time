@@ -61,7 +61,7 @@ export interface DashboardUser {
   lastName: string;
   noOfFollowers: number;
   noOfFollowings: number;
-  profileImage:string
+  profileImage: string;
   phoneCode: string;
   phoneNo: string;
   role: string;
@@ -161,12 +161,12 @@ export interface NotificationType {
 interface SupportChatOverview {
   _id: string;
   id: string;
-  unreadMessages: number,
+  unreadMessages: number;
   chat: {
     _id: string;
     user: string;
     status: string;
-    lastMessage:string
+    lastMessage: string;
     createdAt: Date;
     updatedAt?: Date;
   };
@@ -175,7 +175,7 @@ interface SupportChatOverview {
     _id: string;
     firstName: string;
     lastName: string;
-    profileImage:string
+    profileImage: string;
     username: string;
   };
 }
@@ -193,18 +193,17 @@ export interface SupportMessage {
   createdAt: Date;
   id: string;
   media: string[];
-  isAdmin:boolean
+  isAdmin: boolean;
   text: string;
   updatedAt?: Date;
   user: {
     _id: string;
     firstName: string;
     lastName: string;
-    profileImage:string
+    profileImage: string;
     username: string;
   };
 }
-
 
 export interface ChatTypes {
   data: {
@@ -236,5 +235,5 @@ interface NotificationResponse {
   message: string;
   response: {
     data: Notification[];
-  }
+  };
 }

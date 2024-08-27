@@ -2,16 +2,19 @@ import { memo, useEffect, useState } from "react";
 import { useChatStore } from "@/store/socket.store";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import UserMessageList  from "@/components/UserMessageList";
+import UserMessageList from "@/components/UserMessageList";
 import { ChatListSkeleton } from "@/components/skeletons/ChatListSkeleton";
 import { SupportChatOverview } from "@/types/types";
 
 const ChatList = memo(function ChatList() {
-  const { chatList, currentChatId, fetchChatList } = useChatStore();
+  const { chatList, currentChatId, fetchChatList, isChatListLoading } =
+    useChatStore();
   const [search, setSearch] = useState("");
   useEffect(() => {
     fetchChatList(search);
-  }, [currentChatId,search]);
+  }, [currentChatId, search]);
+
+  console.log("chatList:", chatList);
 
   return (
     <div className="max-w-80 w-full flex flex-col border border-borderCol h-[800px] overflow-y-hidden">
@@ -23,18 +26,20 @@ const ChatList = memo(function ChatList() {
         />
         <Search className="size-9 text-primaryCol absolute top-6 left-5" />
       </div>
-      {!chatList ? (
-        <ChatListSkeleton />
-      ) : (
-        chatList?.length > 0 &&
-        chatList.map((chatItem: SupportChatOverview) => (
-          <UserMessageList
-            key={chatItem.chat._id + chatItem.chat.createdAt}
-            chat={chatItem}
-            activeChatId={currentChatId!}
-          />
-        ))
-      )}
+      <div>
+        {isChatListLoading ? (
+          <ChatListSkeleton />
+        ) : (
+          chatList?.length > 0 &&
+          chatList.map((chatItem: SupportChatOverview) => (
+            <UserMessageList
+              key={chatItem.chat._id + chatItem.chat.createdAt}
+              chat={chatItem}
+              activeChatId={currentChatId!}
+            />
+          ))
+        )}
+      </div>
     </div>
   );
 });

@@ -60,9 +60,9 @@ export default function NotificationMessageSheet() {
 
     socketServices.initializeSocket(token);
   
-    // return () => {
-    //   socketServices.disconnect();
-    // }
+    return () => {
+      socketServices.disconnect();
+    }
     
   }, []);
 
@@ -157,7 +157,7 @@ export default function NotificationMessageSheet() {
                 </Avatar>
                 <div className="flex-1 space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    {message.sender.firstName} {message.sender.lastName}
+                    {message?.sender?.firstName} {message?.sender?.lastName}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {message.body}

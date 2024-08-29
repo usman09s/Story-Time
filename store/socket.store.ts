@@ -49,7 +49,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (true) {
       socketServices.off("get-chat-list");
       socketServices.on("get-chat-list", (data: ChatsListType) => {
-        console.log("Chat socket List", data);
+
         set({
           chatList: data?.data?.data,
           isChatListLoading: false,

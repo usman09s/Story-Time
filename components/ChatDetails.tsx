@@ -117,7 +117,7 @@ export default function ChatDetails() {
             <div className="text-sm flex items-center py-3 gap-3">
               <Avatar className="w-12 h-12">
                 <AvatarImage
-                  src={`${S3_URL}/${currentChatUser.profileImage}`}
+                  src={`${S3_URL}/${currentChatUser?.profileImage}`}
                   alt="@shadcn"
                 />
                 <AvatarFallback>
@@ -132,7 +132,7 @@ export default function ChatDetails() {
               </Avatar>
               <div className="flex flex-col">
                 <p className="font-bold text-md">
-                  {currentChatUser.firstname} {currentChatUser.lastname}
+                  {currentChatUser?.firstname} {currentChatUser?.lastname}
                 </p>
                 <p className="text-md text-[#395E66]">#{currentChatId}</p>
               </div>

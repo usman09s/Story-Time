@@ -19,18 +19,6 @@ export default function Support({ searchParams }: Params) {
     setCurrentChatId(initialChatId);
   }, [initialChatId, setCurrentChatId]);
 
-  useLayoutEffect(() => {
-    const token = localStorage.getItem("access-token");
-    if (!token) return;
-
-    socketServices.initializeSocket(token);
-  
-    return () => {
-      socketServices.disconnect();
-    }
-    
-  }, []);
-
   return (
     <DashboardLayout active={4} title="Support">
       <section className="px-10 mb-20">

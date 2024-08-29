@@ -9,6 +9,7 @@ import { getNotifications, pushNotification } from "@/API/notiifications";
 import { dateFormat } from "@/lib/dateFormat";
 import { NotificationType } from "@/types/types";
 import { BellOff, Loader2 } from "lucide-react";
+import { PushNotificationsSkeleton } from "@/components/skeletons/PushNotificationsSkeleton";
 
 export default function NotificationPage() {
   const queryClient = useQueryClient();
@@ -22,8 +23,6 @@ export default function NotificationPage() {
     queryKey: ["notifications-events"],
     queryFn: () => getNotifications("ADMIN_NOTIFICATION"),
   });
-
-  console.log(data);
 
   // Pushing Notification
   const { mutateAsync, isPending } = useMutation({
@@ -89,17 +88,17 @@ export default function NotificationPage() {
         {/* Conditional rendering of the history section */}
         <div className="w-96 h-[739px] bg-white p-10 border border-[#E4E4E4] rounded-lg">
           {isLoading ? (
-            <p>Loading...</p>
+            <PushNotificationsSkeleton />
           ) : data &&
             data.response &&
-            data?.response?.notifications?.length > 0 ? (
+            data?.response?.data?.length > 0 ? (
             <>
-              <p className="mb-3 text-md font-medium text-[#50555C] mx-5">
+              <p className="mb-3 text-lg font-medium text-[#50555C] mx-5">
                 History
               </p>
-              <div className="flex flex-col space-y-4 border-l-2 border-[#D9D9D9] border-dashed p-2">
-                {data.response.notifications.map((notif) => (
-                  <div key={notif._id} className="flex items-center gap-4 px-3">
+              <div className="flex flex-col space-y-4 border-l-2 border-[#D9D9D9] border-dashed px-2 pb-2">
+                {data?.response?.data.map((notif) => (
+                  <div key={notif._id} className="flex items-center gap-3 pl-3">
                     <p className="text-sm text-[#979797]">
                       {dateFormat(notif.createdAt)}
                     </p>

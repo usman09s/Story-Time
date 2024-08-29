@@ -147,7 +147,7 @@ export interface GuidelinesData {
 export interface NotificationType {
   success: boolean;
   response: {
-    notifications: {
+    data: {
       _id: string;
       title: string;
       message: string;
@@ -216,7 +216,7 @@ interface NotificationSender {
   _id: string;
   firstName: string;
   lastName: string;
-  profilePicture: string;
+  profileImage: string;
 }
 
 interface Notification {
@@ -226,6 +226,7 @@ interface Notification {
   type: string;
   title: string;
   body: string;
+  chatId: string;
   isRead: boolean;
   createdAt: string;
 }

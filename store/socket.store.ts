@@ -15,11 +15,13 @@ interface ChatState {
   isInitialLoad: boolean;
   chatMessages: { [key: string]: ChatTypes };
   currentChatId: string | null;
+  unreadNotificationsCount: number;
   setCurrentChatId: (chatId: string | null) => void;
   fetchChatList: (search: string) => void;
   fetchChatMessages: (chatId: string) => void;
   sendMessage: (chatId: string, message: string, file?: string) => void;
   closeChat: (chatId: string) => void;
+  fetchUnreadNotificationCount: () => void;
   loader: boolean;
 }
 
@@ -30,6 +32,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   chatMessages: {},
   currentChatId: null,
   loader: false,
+  unreadNotificationsCount: 0,
 
   setCurrentChatId: (chatId: string | null) => {
     set({ currentChatId: chatId });
@@ -43,9 +46,10 @@ export const useChatStore = create<ChatState>((set, get) => ({
       set({ isChatListLoading: true });
     }
 
-    if (!socketServices.hasListeners("get-chat-list")) {
+    if (true) {
       socketServices.off("get-chat-list");
       socketServices.on("get-chat-list", (data: ChatsListType) => {
+        console.log("Chat socket List", data);
         set({
           chatList: data?.data?.data,
           isChatListLoading: false,
@@ -152,6 +156,14 @@ export const useChatStore = create<ChatState>((set, get) => ({
         return state;
       });
     }, 1000);
+  },
+
+  fetchUnreadNotificationCount: () => {
+    socketServices.off("unread-notifications-count");
+    socketServices.on("unread-notifications-count", (data: any) => {
+      console.log("Unread Notifications Count", data["unreadCount"]);
+      set({ unreadNotificationsCount: data["unreadCount"] }); 
+    });
   },
 
   sendMessage: (chatId: string, message: string, file?: string) => {

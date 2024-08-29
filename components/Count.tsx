@@ -24,6 +24,7 @@ export default function Count() {
                             <States iconPath="done" title="Total Downloads" total="1.4k" />
                             <States iconPath="mark2" title="Guests" total={`${count?.response.guestCount}`} />
                             <States iconPath="star2" title="Premium Users" total={`${count?.response.premiumUsersCount}`} />
+                            <States iconPath="star2" title="Non-Premium Users" total={`${count?.response.nonPremiumUsersCount}`} />
                         </>
                     )
             }

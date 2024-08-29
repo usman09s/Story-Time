@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Bell, X, ArrowRight, Info } from "lucide-react"; // Added Info icon for no data
 import { Button } from "@/components/ui/button";
 import {
@@ -9,16 +9,23 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "./ui/badge";
 import { getNotifications } from "@/API/notiifications";
 import { Notification, NotificationResponse } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
-import { formatShortDuration } from "@/lib/utils";
+import { formatShortDuration, S3_URL } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useChatStore } from "@/store/socket.store";
+import useCurrentChatStore from "@/store/currentChat";
+
+import socketServices from "@/socket/socket";
+import { PushNotificationsSkeleton } from "./skeletons/PushNotificationsSkeleton";
+
 
 export default function NotificationMessageSheet() {
+  const { unreadNotificationsCount, fetchUnreadNotificationCount, setCurrentChatId } = useChatStore();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
@@ -29,23 +36,57 @@ export default function NotificationMessageSheet() {
     enabled: open,
   });
 
-  const handleRidirect = (userId: string, chatId: string) => {
+  const setCurrentChatUser = useCurrentChatStore((state) => state.setCurrentChatUser);
+
+  const handleRidirect = (userId: string, chatId: string, firstName: string, lastName: string, avatar: string) => {
+    setCurrentChatUser({
+      firstname: firstName,
+      lastname: lastName,
+      profileImage: avatar,
+      username: "",
+    });
+    setCurrentChatId(chatId);
     router.push(`/support?chatId=${chatId}&userId=${userId}`);
     setOpen(false);
   };
 
-  console.log(data);
+  useEffect(() => {
+    fetchUnreadNotificationCount();
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access-token");
+    if (!token) return;
+
+    socketServices.initializeSocket(token);
+  
+    // return () => {
+    //   socketServices.disconnect();
+    // }
+    
+  }, []);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Image
-          src={"/assets/bell.png"}
-          alt="Notification Icon"
-          width={30}
-          height={10}
-          className="cursor-pointer"
-        />
+        {unreadNotificationsCount > 0 ? (
+          <Image
+            src={"/assets/bell.png"}
+            alt="Notification Icon"
+            width={30}
+            height={10}
+            className="cursor-pointer"
+          />
+        ) : (
+          <Image
+            src={"/assets/Notification.png"}
+            alt="Notification Icon"
+            width={21}
+            height={10}
+            className="cursor-pointer"
+          />
+        )}
+        
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-md">
         <SheetHeader className="border-b pb-4 mb-4">
@@ -69,9 +110,7 @@ export default function NotificationMessageSheet() {
         </div>
         <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
           {isLoading ? (
-            <div className="flex justify-center items-center h-full">
-              <div className="animate-spin h-8 w-8 border-4 border-blue-500 rounded-full border-t-transparent"></div>
-            </div>
+            <PushNotificationsSkeleton />
           ) : isError ? (
             <div className="flex justify-center items-center h-full">
               {/* Error state if fetching fails */}
@@ -95,17 +134,26 @@ export default function NotificationMessageSheet() {
                 className={`mb-4 flex items-start space-x-4 rounded-lg p-4 transition-all hover:bg-accent cursor-pointer ${
                   message.isRead ? "bg-accent/50" : ""
                 }`}
-                onClick={() => handleRidirect(message.sender._id, "xxx-xx")}
+                onClick={() => handleRidirect(
+                  message?.sender?._id, message?.chatId, 
+                  message?.sender?.firstName, 
+                  message?.sender?.lastName, 
+                  message?.sender?.profileImage
+                )}
               >
                 <Avatar className="h-10 w-10">
-                  <AvatarImage
-                    src={message?.sender?.profilePicture}
-                    alt={"Profile Picture"}
-                  />
-                  <AvatarFallback>
-                    {message?.sender?.firstName[0] +
-                      message?.sender?.lastName[0]}
-                  </AvatarFallback>
+                  {message?.sender?.profileImage ? (
+                    <AvatarImage
+                      src={`${S3_URL}/${message?.sender?.profileImage}`}
+                      alt={"Profile Picture"}
+                    />
+                    ):(
+                      <AvatarImage
+                        src="/assets/dummy-user.webp"
+                        alt={"Profile Picture"}
+                      />
+                  )}
+                    
                 </Avatar>
                 <div className="flex-1 space-y-1">
                   <p className="text-sm font-medium leading-none">

@@ -12,12 +12,7 @@ const ChatList = memo(function ChatList() {
   const [search, setSearch] = useState("");
   useEffect(() => {
     fetchChatList(search);
-    console.log("current chat id:", currentChatId);
   }, [currentChatId, search]);
-
-  // console.log("chatList:", chatList);
-
-  // console.log("loading state:", isChatListLoading);
 
   return (
     <div className="max-w-80 w-full flex flex-col border border-borderCol h-[800px] overflow-y-hidden">

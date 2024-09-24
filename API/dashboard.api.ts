@@ -5,17 +5,20 @@ export const getUsers = async ({
   limit,
   search,
   status,
+  month,
 }: {
   page: number;
   limit: number;
   search: string;
   status: string;
+  month: string;
 }) => {
   try {
     const { data } = await api.get(
-      `/user/get-users?limit=${limit || 15}&page=${page || 1}&search=${
+      `/story/admin/most-liked?limit=${limit || 15}&page=${page || 1}&search=${
         search || ""
-      }&status=${status}`
+      }&status=${status}&month=${month}`
+
     );
     return {
       success: true,

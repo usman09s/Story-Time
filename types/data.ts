@@ -1,5 +1,5 @@
-export const Heading = ["Posts", "Username", "Account Status"];
-
+export const Heading = ["Posts", "Number of Likes","Username", "Account Status",""];
+export const CategoryHeading = ["Total Likes"];
 export const navLinks = [
   {
     Logo: "/assets/dashboard.svg",

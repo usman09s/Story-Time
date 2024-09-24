@@ -34,6 +34,7 @@ export interface CategoryType {
   parent: string | null;
   updatedAt: Date;
   createdAt: Date;
+  totalLikes: number;
 }
 
 export interface CategoryData {
@@ -77,6 +78,40 @@ export interface DashboardUser {
   videoStoriesCount: number;
   zipCode: string;
 }
+// Interface for Creator
+interface Creator {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  isActive: boolean;
+  profileImage: string;
+}
+
+// Interface for Story
+export enum StoryType {
+  TEXT = "text",
+  VIDEO = "video",
+}
+
+export interface Story {
+  _id: string;
+  type: StoryType;
+  creator: Creator;
+  createdAt: string;
+  updatedAt: string;
+  category: string;
+  categoryImage:string
+  likesCount: number;
+}
+export interface MostLikedPosts {
+  success: boolean;
+  response: {
+    stories: Story[];
+    pagination: PaginationTypes;
+  };
+} 
 
 export interface DashboardTypes {
   success: boolean;
@@ -84,6 +119,13 @@ export interface DashboardTypes {
     users: DashboardUser[];
     pagination: PaginationTypes;
   };
+}
+interface MostLikedCategories {
+  success: boolean;
+  response:{
+      data: CategoryType[];      
+      pagination: Pagination; 
+  }
 }
 
 export interface ChatListType {

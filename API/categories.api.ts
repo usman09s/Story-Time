@@ -124,3 +124,31 @@ export const updateCategory = async (formData: FormData, id: string) => {
     };
   }
 }
+
+export const mostLikedCategories = async ({
+  page,
+  limit,
+  search,
+  month,
+}: {
+  page: number;
+  limit: number;
+  search: string;
+  month: string;
+}) => {
+  try {
+
+    let queryString = `/category/likes?search=${search || ""}&month=${month || ""}`;
+    const { data } = await api.get(queryString);
+
+    return {
+      success: true,
+      response: data.data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    };
+  }
+};

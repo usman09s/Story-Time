@@ -187,7 +187,7 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
                   </div>
                 </div>
               </TableCell>
-              <TableCell className="flex justify-end">
+              <TableCell className="flex justify-end px-14">
                 <div className="inline-block text-center space-y-2 items-center">
                   {(row as CategoryType).totalLikes || 0}
                 </div>

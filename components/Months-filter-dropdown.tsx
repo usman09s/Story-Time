@@ -42,7 +42,7 @@ export default function MonthFilterDropdown() {
                         variant={"outline"}
                         className="border-[#395E66] flex w-32 justify-between items-center text-[#395E66]"
                     >
-                        {selectedMonth || "Months"} 
+                        {selectedMonth || "Monthly"} 
                         <Image
                             src={dropDownIcon}
                             alt='down'

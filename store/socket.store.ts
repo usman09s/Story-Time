@@ -159,9 +159,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
 
   fetchUnreadNotificationCount: () => {
-    socketServices.off("unread-notifications-count");
     socketServices.on("unread-notifications-count", (data: any) => {
-      console.log("Unread Notifications Count", data["unreadCount"]);
       set({ unreadNotificationsCount: data["unreadCount"] }); 
     });
   },

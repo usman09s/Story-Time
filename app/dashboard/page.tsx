@@ -12,9 +12,9 @@ import { DashboardPagination } from "@/components/helpers/DashboardPagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { UserSkeleton } from "@/components/skeletons/UserSkeleton";
-import { CategoryType, MostLikedCategories, MostLikedPosts, Story } from "@/types/types";
+import { MostLikedCategories, MostLikedPosts } from "@/types/types";
 import { CSVLink } from "react-csv";
-import { headers } from "@/lib/utils";
+import { categoryHeaders, headers } from "@/lib/utils";
 import Count from "@/components/Count";
 import MonthFilterDropdown from "@/components/Months-filter-dropdown";
 import { mostLikedCategories } from "@/API/categories.api";
@@ -71,9 +71,9 @@ export default function Dashboard({ searchParams }: Params) {
     { label: "Most Selected Categories", value: "category" },
   ];
 
-  // console.log("~ stories", data?.response?.stories);
-  console.log("~ category", category);
-  console.log(status)
+  const csvData = status === 'category' ? category?.response?.data || [] : data?.response?.stories || [];
+  const csvHeader = status === 'category' ? categoryHeaders : headers;
+
   return (
     <DashboardLayout active={1} title="Dashboard & Users">
       <div className="flex flex-col min-h-screen">
@@ -98,18 +98,23 @@ export default function Dashboard({ searchParams }: Params) {
           <div className="flex justify-between px-10 mt-5 my-2">
             <SearchBar initialValue={search || ""} placeHolder="Search users" />
             <div className="flex justify-center gap-5 items-center">
-              {data?.response && (
+              {csvData.length > 0 && (
                 <Button
-                  variant={"outline"}
+                  variant="outline"
                   className="border-[#395E66] flex gap-2 items-center text-[#395E66]"
                 >
-                  <CSVLink data={data.response.stories} headers={headers} className="flex gap-2 items-center">
+                  <CSVLink
+                    data={csvData}
+                    headers={csvHeader}
+                    className="flex gap-2 items-center"
+                  >
                     Export CSV <Download className="size-5" target="_blank" />
                   </CSVLink>
                 </Button>
               )}
               <MonthFilterDropdown />
             </div>
+
           </div>
 
           <div className="mx-10">
@@ -150,8 +155,12 @@ export default function Dashboard({ searchParams }: Params) {
         </div>
 
         <footer className="bg-[#395E66] text-white text-center py-4 w-full mx-10">
-          {data?.success && data.response?.pagination && (
-            <DashboardPagination data={status == 'category' ? category?.response?.pagination : data.response?.pagination} />
+          {(status === 'category' ? category?.response?.pagination : data?.response?.pagination) && (
+            <DashboardPagination
+              data={status === 'category'
+                ? category?.response?.pagination || {}
+                : data?.response?.pagination || {}}
+            />
           )}
         </footer>
       </div>

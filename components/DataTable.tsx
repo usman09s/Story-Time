@@ -18,7 +18,6 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { S3_URL } from "@/lib/utils";
 import CategoryBox from "./category-box";
-import { stat } from "fs";
 
 interface DataTableProps {
   TableHeading: string[];
@@ -54,14 +53,13 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
     queryClient.invalidateQueries({ queryKey: ['users'] });
   };
 
-  console.log("~ TableData", TableData);
-  
+
   return (
     <div>
       <Table className="mt-3">
         <TableHeader>
           <TableRow className="bg-[#395E66] hover:bg-[#395e66e2] w-full rounded-sm h-5">
-         
+
             <TableHead className="w-96">
               <div className="flex items-center gap-6">
                 <input
@@ -84,16 +82,16 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
 
           {status != 'category' && TableData.map((row, index) => (
             <TableRow key={row._id} className="text-center relative">
-              {status !== 'category' && 
-              <TableCell className="w-52">
-                <div className="flex items-center gap-6">
-                  <input
-                    type="checkbox"
-                    checked={selectAll || selectedRows.includes(index)}
-                    onChange={() => handleCheckboxChange(index)}
-                    className="h-4 w-4 border-[#E8E8E8] shadow checked:bg-[#439A86] focus:ring-0 checked:text-[#439A86]"
-                  />
-                  <div className="flex gap-2 items-center">
+              {status !== 'category' &&
+                <TableCell className="w-52">
+                  <div className="flex items-center gap-6">
+                    <input
+                      type="checkbox"
+                      checked={selectAll || selectedRows.includes(index)}
+                      onChange={() => handleCheckboxChange(index)}
+                      className="h-4 w-4 border-[#E8E8E8] shadow checked:bg-[#439A86] focus:ring-0 checked:text-[#439A86]"
+                    />
+                    <div className="flex gap-2 items-center">
                       <>
                         {/* Assuming row is of type Story in this case */}
                         <Avatar>
@@ -110,13 +108,13 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
                           <p>{(row as Story).creator?.email || "No email"}</p> {/* User Email */}
                         </div>
                       </>
+                    </div>
                   </div>
-                </div>
-              </TableCell>
-                }
+                </TableCell>
+              }
               <TableCell className="w-60">
                 <div className="inline-block text-center space-y-2">
-                    <CategoryBox category={(row as Story).category} image={(row as Story).categoryImage} type={(row as Story).type} />
+                  <CategoryBox category={(row as Story).category} image={(row as Story).categoryImage} type={(row as Story).type} />
                 </div>
               </TableCell>
               <TableCell className="w-60">
@@ -156,10 +154,9 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
               )}
             </TableRow>
           ))}
-
           {status == 'category' && TableData.map((row, index) => (
             <TableRow key={row._id} className="">
- <TableCell className="w-52">
+              <TableCell className="w-52">
                 <div className="flex items-center gap-6">
                   <input
                     type="checkbox"
@@ -168,22 +165,21 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
                     className="h-4 w-4 border-[#E8E8E8] shadow checked:bg-[#439A86] focus:ring-0 checked:text-[#439A86]"
                   />
                   <div className="flex gap-2 items-center">
-                      <>
-                        {/* Assuming row is of type Story in this case */}
-                        <Avatar>
-                          <AvatarImage
-                            src={`${S3_URL}/${(row as CategoryType).image || ""}`}
-                            alt="@shadcn"
-                          />
-                          <AvatarFallback>
-                            <Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full" />
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col gap-1">
-                          <p className="font-bold text-start">{(row as CategoryType).name || "N/A"}</p> {/* User Name */}
-                          {/* <p>{(row as Story).creator?.email || "No email"}</p> User Email */}
-                        </div>
-                      </>
+                    <>
+                      {/* Assuming row is of type Story in this case */}
+                      <Avatar>
+                        <AvatarImage
+                          src={`${S3_URL}/${(row as CategoryType).image || ""}`}
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>
+                          <Image src={picture} width={52} height={44} alt="User-Profile" className="rounded-full" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col gap-1">
+                        <p className="font-bold text-start">{(row as CategoryType).name || "N/A"}</p>
+                      </div>
+                    </>
                   </div>
                 </div>
               </TableCell>

@@ -48,12 +48,21 @@ export const formatShortDuration = (date: string | Date) => {
 };
 
 export const headers = [
-  { label: "First Name", key: "firstName" },
-  { label: "Last Name", key: "lastName" },
-  { label: "Email", key: "email" },
-  { label: "Status", key: "isActive" }
-  
+  { label: "First Name", key: "creator.firstName" },
+  { label: "Last Name", key: "creator.lastName" },
+  { label: "Email", key: "creator.email" },
+  { label: "Status", key: "creator.isActive" },
+  { label: "Username", key: "creator.username" },
+  { label: "Likes", key: "likesCount" },
+  {label:"Story Type", key:"type"}
+
 ];
+
+export const categoryHeaders = [
+  { label: "Category", key: "name" },
+  { label: "Number of Stories", key: "totalLikes" }
+]
+
 export const shouldShowDate = (currentIndex: number, messages: SupportMessage[], lastDisplayedDate: string) => {
   if (currentIndex === 0) {
     return true;

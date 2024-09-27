@@ -25,11 +25,10 @@ import { PushNotificationsSkeleton } from "./skeletons/PushNotificationsSkeleton
 
 
 export default function NotificationMessageSheet() {
-  const { unreadNotificationsCount, fetchUnreadNotificationCount, setCurrentChatId } = useChatStore();
+  const { unreadNotificationsCount, fetchUnreadNotificationCount, setCurrentChatId, } = useChatStore();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  // Use the useQuery hook to fetch data
   const { data, isLoading, isError } = useQuery<NotificationResponse>({
     queryKey: ["notifications-events"],
     queryFn: () => getNotifications("SUPPORT_MESSAGE"),
@@ -51,10 +50,6 @@ export default function NotificationMessageSheet() {
   };
 
   useEffect(() => {
-    fetchUnreadNotificationCount();
-  }, []);
-
-  useEffect(() => {
     const token = localStorage.getItem("access-token");
     if (!token) return;
 
@@ -65,6 +60,12 @@ export default function NotificationMessageSheet() {
     }
     
   }, []);
+
+  useEffect(() => {
+    fetchUnreadNotificationCount();
+  }, []);
+
+ 
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

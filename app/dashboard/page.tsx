@@ -1,5 +1,4 @@
 "use client";
-
 import DashboardLayout from "../layouts/Dashboard";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/DataTable";
@@ -26,11 +25,12 @@ interface Params {
     search: string;
     status: "active" | "inactive" | "category" | undefined;
     month: string;
+    sort:string
   };
 }
 
 export default function Dashboard({ searchParams }: Params) {
-  const { page, limit, search, status = "", month } = searchParams;
+  const { page, limit, search, status = "", month,sort } = searchParams;
 
   const { data, isLoading } = useQuery<MostLikedPosts>({
     queryKey: ["users", page, limit, search, status, month],
@@ -39,11 +39,10 @@ export default function Dashboard({ searchParams }: Params) {
   });
 
   const { data: category, isLoading: categoryLoading } = useQuery<MostLikedCategories>({
-    queryKey: ["category-most-liked", page, limit, search, month],
-    queryFn: () => mostLikedCategories({ page, limit, search, month }),
+    queryKey: ["category-most-liked", page, limit, search, month,sort],
+    queryFn: () => mostLikedCategories({ page, limit, search, month,sort }),
     enabled: status == "category",
   });
-
 
   const pathname = usePathname();
   const urlSearchParams = useSearchParams();

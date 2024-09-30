@@ -2,7 +2,9 @@ import io, { Socket } from "socket.io-client";
 import { toast } from "sonner";
 
 const BASE_SOCKET_CONNECTION = "http://storytime.yameenyousuf.com";
+// const BASE_SOCKET_CONNECTION = 'https://backend.storytime.social';
 // const BASE_SOCKET_CONNECTION = "http://localhost:3021";
+
 class WSService {
   private socket: Socket | null = null;
 

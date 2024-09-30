@@ -130,15 +130,17 @@ export const mostLikedCategories = async ({
   limit,
   search,
   month,
+  sort
 }: {
   page: number;
   limit: number;
   search: string;
   month: string;
+  sort:string
 }) => {
   try {
 
-    let queryString = `/category/likes?search=${search || ""}&month=${month || ""}`;
+    let queryString = `/category/likes?search=${search || ""}&month=${month || ""}&sortOrder=${sort? sort:'-1'}&page=${page?page:'1'}&limit=${limit?limit:'10'}`;
     const { data } = await api.get(queryString);
 
     return {

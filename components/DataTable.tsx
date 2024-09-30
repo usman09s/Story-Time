@@ -18,10 +18,11 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { S3_URL } from "@/lib/utils";
 import CategoryBox from "./category-box";
+import CategoryFilter from "./category-filter";
 
 interface DataTableProps {
   TableHeading: string[];
-  TableData: (Story | CategoryType)[]; // Allow both types
+  TableData: (Story | CategoryType)[]; 
   status: string
 }
 
@@ -53,7 +54,6 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
     queryClient.invalidateQueries({ queryKey: ['users'] });
   };
 
-
   return (
     <div>
       <Table className="mt-3">
@@ -72,8 +72,13 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
               </div>
             </TableHead>
             {TableHeading.map((heading, index) => (
-              <TableHead key={`${heading}-${index}`} className={`font-semibold text-white text-center ${status == 'category' ? 'flex justify-end pt-3' : null}`}>
+              <TableHead key={`${heading}-${index}`} className={`font-semibold text-white text-center ${status == 'category' ? 'flex justify-end gap-3 ' : null}`}>
+                <div className={`${status == 'category' ? 'flex gap-2 items-center': null}`}>
+                <p >
                 {heading.toUpperCase()}
+                </p>
+                {status == 'category' && <CategoryFilter/>}
+                </div>
               </TableHead>
             ))}
           </TableRow>
@@ -93,7 +98,6 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
                     />
                     <div className="flex gap-2 items-center">
                       <>
-                        {/* Assuming row is of type Story in this case */}
                         <Avatar>
                           <AvatarImage
                             src={`${S3_URL}/${(row as Story).creator?.profileImage || ""}`}
@@ -104,8 +108,8 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col gap-1">
-                          <p className="font-bold text-start">{(row as Story).creator?.firstName || "N/A"}</p> {/* User Name */}
-                          <p>{(row as Story).creator?.email || "No email"}</p> {/* User Email */}
+                          <p className="font-bold text-start">{(row as Story).creator?.firstName || "N/A"}</p> 
+                          <p>{(row as Story).creator?.email || "No email"}</p> 
                         </div>
                       </>
                     </div>
@@ -114,18 +118,18 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
               }
               <TableCell className="w-60">
                 <div className="inline-block text-center space-y-2">
-                  <CategoryBox category={(row as Story).category} image={(row as Story).categoryImage} type={(row as Story).type} />
+                  <CategoryBox category={(row as Story).category} image={(row as Story).categoryImage} type={(row as Story).type} story={(row as Story)._id} />
                 </div>
               </TableCell>
               <TableCell className="w-60">
                 <div className="inline-block text-center space-y-2">
-                  {(row as Story).likesCount || 0} {/* Type assertion here */}
+                  {(row as Story).likesCount || 0} 
                 </div>
               </TableCell>
-              <TableCell>{(row as Story).creator?.username || "Unknown User"}</TableCell> {/* Type assertion here */}
+              <TableCell>{(row as Story).creator?.username || "Unknown User"}</TableCell>
               <TableCell>
                 <p className={`${(row as Story).creator?.isActive ? "text-green-500" : "text-red-600"} font-semibold`}>
-                  {(row as Story).creator?.isActive ? "Active" : "Inactive"} {/* Type assertion here */}
+                  {(row as Story).creator?.isActive ? "Active" : "Inactive"} 
                 </p>
               </TableCell>
               <TableCell>

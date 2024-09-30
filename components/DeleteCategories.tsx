@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Pencil, PencilIcon, Trash } from "lucide-react";
+import {  PencilIcon, Trash } from "lucide-react";
 import { FormEvent, useCallback, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -91,7 +91,6 @@ export default function DeleteCategories({
 
       <AlertDialog open={isSuccessDialogOpen} onOpenChange={setIsSuccessDialogOpen}>
         <AlertDialogTrigger asChild>
-          {/* This button is hidden, only used to open the dialog programmatically */}
           <div></div>
         </AlertDialogTrigger>
         <AlertDialogContent className="w-64 h-32">

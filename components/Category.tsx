@@ -27,6 +27,7 @@ function CategoryPage({
   parentId,
   name,
 }: props) {
+  
   const { data, isLoading } = useQuery<CategoryData>({
     queryKey,
     queryFn,

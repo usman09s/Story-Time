@@ -103,6 +103,11 @@ export interface Story {
   updatedAt: string;
   category: string;
   categoryImage:string
+  subCategory:{
+    name:string,
+    image:string
+  }
+  content:string
   likesCount: number;
 }
 export interface MostLikedPosts {

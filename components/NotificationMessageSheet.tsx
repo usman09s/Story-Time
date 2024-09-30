@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Bell, X, ArrowRight, Info } from "lucide-react"; // Added Info icon for no data
+import React, { useEffect,  useState } from "react";
+import {  X, Info } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import {
   Sheet,

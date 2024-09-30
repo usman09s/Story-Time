@@ -20,10 +20,14 @@ export const GuidelineButton = ({value,type,title}:{value:string,title:string,ty
         type:decodeType,
         content: value,
       });
+      
       if (!success) return toast.error(response);
+
       queryClient.invalidateQueries({ queryKey: ["guidelineLogs"] });
       toast.success("Content updated");
+
     };
+
     return (
       <Button
         onClick={handleSubmit}

@@ -9,8 +9,9 @@ interface props {
 }
 
 export default function StorySheet({ setOpen,story }: props): JSX.Element {
+    // TODO fix this component for video
     return (
-        <SheetContent className="w-full sm:max-w-md">
+        <SheetContent className="w-full sm:max-w-md"> 
             <SheetHeader className="border-b pb-4 mb-4">
                 <SheetTitle className="font-bold flex items-center">
                     <MoveLeft onClick={() => setOpen(false)} className='cursor-pointer' />

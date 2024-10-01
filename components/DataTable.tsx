@@ -145,11 +145,11 @@ export const DataTable: FC<DataTableProps> = ({ TableData, TableHeading, status 
               {showModalRowIndex === index && (
                 <div className="absolute z-50 right-20 mt-2 w-36 bg-white shadow-lg p-4">
                   <div className="flex flex-col gap-2">
-                    <div className="flex gap-2 cursor-pointer" onClick={() => toggleUser(row._id)}>
+                    <div className="flex gap-2 cursor-pointer" onClick={() => toggleUser((row as Story).creator._id)}>
                       <Image src="/assets/Disable.png" alt="Disable User" width={20} height={20} />
                       <p className="text-xs">Disable User</p>
                     </div>
-                    <div className="flex gap-2 cursor-pointer" onClick={() => toggleUser(row._id)}>
+                    <div className="flex gap-2 cursor-pointer" onClick={() => toggleUser((row as Story).creator._id)}>
                       <Image src="/assets/Enable.png" alt="Enable User" width={20} height={20} />
                       <p className="text-xs">Enable User</p>
                     </div>

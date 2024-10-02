@@ -21,7 +21,6 @@ export default function Story({id}:props) {
     
     if(isLoading) return <Skeleton className='h-[400px] w-[400px]'></Skeleton>
     if(!storyData) return <div>Something Went Wrong</div>
-    
     return (   
         <div className='relative'>
             <Image
@@ -35,7 +34,7 @@ export default function Story({id}:props) {
                 <StoryTitle category={storyData?.subCategory.name} image={storyData?.subCategory.image} hasBorder />
                 </div>
                 <ScrollArea className="h-72 px-3">
-                    <p className='  text-white'>{storyData.content}</p>
+                    <p className='  text-white text-wrap w-72'>{storyData.content}</p>
                 </ScrollArea>
             </div>
         </div>

@@ -57,7 +57,7 @@ export default function DeleteCategories({
         </Link>
      
         <AlertDialogTrigger asChild >
-          <Button className="absolute -top-5  right-0 bg-white text-black hover:bg-white shadow-xl items-center p-2 flex gap-3 z-40">
+          <Button className="absolute -top-5  right-0 bg-white text-black hover:bg-white shadow-xl items-center p-2 flex gap-3 z-40" disabled>
             <Trash className="bg-red-500 px-1 rounded-lg size-7 text-white" />
             Delete Design
           </Button>

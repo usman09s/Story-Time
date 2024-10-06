@@ -18,10 +18,10 @@ export default function Story({id}:props) {
         queryKey:["story",id],
         queryFn:()=>fetchStory(id),
     })
-    
+
     if(isLoading) return <Skeleton className='h-[400px] w-[400px]'></Skeleton>
     if(!storyData) return <div>Something Went Wrong</div>
-    return (   
+    return (
         <div className='relative'>
             <Image
                 src={storyFrame}
@@ -31,11 +31,20 @@ export default function Story({id}:props) {
             />
             <div className='absolute top-0 text-xs  mt-10 mx-10'>
                 <div className='justify-center flex mb-3'>
-                <StoryTitle category={storyData?.subCategory.name} image={storyData?.subCategory.image} hasBorder />
+                    <StoryTitle category={storyData?.subCategory.name} image={storyData?.subCategory.image} hasBorder />
                 </div>
-                <ScrollArea className="h-72 px-3">
-                    <p className='  text-white text-wrap w-72'>{storyData.content}</p>
-                </ScrollArea>
+                {
+                storyData.type == 'text' 
+                    ?
+                    <ScrollArea className="h-72 px-3">
+                        <p className=' text-white text-wrap w-72'>{storyData.content}</p>
+                    </ScrollArea>
+                    : <video 
+                        src={storyData.content}
+                        controls
+                        className="w-[400px] h-[300px]"
+                    />
+                }
             </div>
         </div>
     )

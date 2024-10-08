@@ -77,3 +77,18 @@ export const guidelineLogs = async () => {
     }
   }
 }
+
+export const totalDownloads = async () => {
+  try {
+    const {data} = await api.get('/user/total-downloads');
+    return {
+      success:true,
+      response:data.data
+    }
+  } catch (error:any) {
+    return{
+      success: false,
+      response: error?.response?.data?.message || "Something went wrong",
+    }
+  }
+}
